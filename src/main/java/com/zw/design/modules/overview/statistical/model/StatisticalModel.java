@@ -11,5 +11,6 @@ public class StatisticalModel implements Serializable {
     private Integer finishedCount;
     private Integer unFinishedCount;
     private Integer cancelCount;
+    private String groupCount;
 
 }

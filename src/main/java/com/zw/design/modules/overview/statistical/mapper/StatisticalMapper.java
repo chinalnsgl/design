@@ -18,6 +18,9 @@ public interface StatisticalMapper {
     // 年度项目完成数量
     Integer countFinishedProjectByYear(@Param("year")Integer year);
 
+    // 查完成项目哪年创建多少个
+    String countFinishedProjectByYearGroupCreateTime(@Param("year") Integer year);
+
     // 年度项目未完成数量
     Integer countUnFinishedProjectByYear(@Param("year")Integer year);
 
@@ -26,6 +29,9 @@ public interface StatisticalMapper {
 
     // 项目设计任务年度完成数量
     Integer countDesignFinishedProjectByYear(@Param("year")Integer year);
+
+    // 查设计完成项目哪年创建多少个
+    String countDesignFinishedProjectByYearGroupCreateTime(@Param("year") Integer year);
 
     // 年度项目设计未完成数量
     Integer countDesignUnFinishedProjectByYear(@Param("year")Integer year);
@@ -36,11 +42,17 @@ public interface StatisticalMapper {
     // 项目工艺任务年度完成数量
     Integer countProcessFinishedProjectByYear(@Param("year")Integer year);
 
+    // 查工艺完成项目哪年创建多少个
+    String countProcessFinishedProjectByYearGroupCreateTime(@Param("year") Integer year);
+
     // 年度项目生产未完成数量
     Integer countProduceUnFinishedProjectByYear(@Param("year")Integer year);
 
     // 项目生产任务年度完成数量
     Integer countProduceFinishedProjectByYear(@Param("year")Integer year);
+
+    // 查生产完成项目哪年创建多少个
+    String countProduceFinishedProjectByYearGroupCreateTime(@Param("year") Integer year);
 
     // 月份项目总数量
     Integer countProjectTotalByMonth(@Param("month")Integer month);

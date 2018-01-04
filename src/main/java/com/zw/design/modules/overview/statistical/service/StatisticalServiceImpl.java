@@ -103,6 +103,12 @@ public class StatisticalServiceImpl implements StatisticalService {
         return statisticalMapper.countFinishedProjectByYear(year);
     }
 
+    // 查完成项目哪年创建多少个
+    @Override
+    public String countFinishedProjectByYearGroupCreateTime(Integer year) {
+        return statisticalMapper.countFinishedProjectByYearGroupCreateTime(year);
+    }
+
     // 按年份查询未完成项目数量
     @Override
     public Integer findUnFinishedProjectCountByYear(Integer year) {
@@ -121,6 +127,12 @@ public class StatisticalServiceImpl implements StatisticalService {
         return statisticalMapper.countDesignFinishedProjectByYear(year);
     }
 
+    // 查完成设计项目哪年创建多少个
+    @Override
+    public String countDesignFinishedProjectByYearGroupCreateTime(Integer year) {
+        return statisticalMapper.countDesignFinishedProjectByYearGroupCreateTime(year);
+    }
+
     // 按年份查询未完成设计项目数量
     @Override
     public Integer findUnFinishedDesignCountByYear(Integer year) {
@@ -133,6 +145,12 @@ public class StatisticalServiceImpl implements StatisticalService {
         return statisticalMapper.countProcessFinishedProjectByYear(year);
     }
 
+    // 查完成工艺项目哪年创建多少个
+    @Override
+    public String countProcessFinishedProjectByYearGroupCreateTime(Integer year) {
+        return statisticalMapper.countProcessFinishedProjectByYearGroupCreateTime(year);
+    }
+
     // 按年份查询未完成工艺项目数量
     @Override
     public Integer findUnFinishedProcessCountByYear(Integer year) {
@@ -143,6 +161,12 @@ public class StatisticalServiceImpl implements StatisticalService {
     @Override
     public Integer findFinishedProduceCountByYear(Integer year) {
         return statisticalMapper.countProduceFinishedProjectByYear(year);
+    }
+
+    // 查完成生产项目哪年创建多少个
+    @Override
+    public String countProduceFinishedProjectByYearGroupCreateTime(Integer year) {
+        return statisticalMapper.countProduceFinishedProjectByYearGroupCreateTime(year);
     }
 
     // 按年份查询未完成生产项目数量

@@ -49,13 +49,17 @@ public class StatisticalController {
 
         Integer projectTotalCountByYear = statisticalService.findProjectCountByYear(year);
         Integer finishedProjectCountByYear = statisticalService.findFinishedProjectCountByYear(year);
+        String finishedProjectGroupByYear = statisticalService.countFinishedProjectByYearGroupCreateTime(year);
         Integer unFinishedProjectCountByYear = statisticalService.findUnFinishedProjectCountByYear(year);
         Integer cancelProjectCountByYear = statisticalService.findCancelProjectCountByYear(year);
         Integer finishedDesignCountByYear = statisticalService.findFinishedDesignCountByYear(year);
+        String finishedDesignProjectGroupByYear = statisticalService.countDesignFinishedProjectByYearGroupCreateTime(year);
         Integer unFinishedDesignCountByYear = statisticalService.findUnFinishedDesignCountByYear(year);
         Integer finishedProcessCountByYear = statisticalService.findFinishedProcessCountByYear(year);
+        String finishedProcessProjectGroupByYear = statisticalService.countProcessFinishedProjectByYearGroupCreateTime(year);
         Integer unFinishedProcessCountByYear = statisticalService.findUnFinishedProcessCountByYear(year);
         Integer finishedProduceCountByYear = statisticalService.findFinishedProduceCountByYear(year);
+        String finishedProduceProjectGroupByYear = statisticalService.countProduceFinishedProjectByYearGroupCreateTime(year);
         Integer unFinishedProduceCountByYear = statisticalService.findUnFinishedProduceCountByYear(year);
 
         Integer projectTotalCountByMonth = statisticalService.findProjectCountByMonth(month);
@@ -82,13 +86,17 @@ public class StatisticalController {
 
         model.addAttribute("projectCountByYear", projectTotalCountByYear);
         model.addAttribute("finishedProjectCountByYear", finishedProjectCountByYear);
+        model.addAttribute("finishedProjectGroupByYear", finishedProjectGroupByYear);
         model.addAttribute("unFinishedProjectCountByYear", unFinishedProjectCountByYear);
         model.addAttribute("cancelProjectCountByYear", cancelProjectCountByYear);
         model.addAttribute("finishedDesignCountByYear", finishedDesignCountByYear);
+        model.addAttribute("finishedDesignProjectGroupByYear", finishedDesignProjectGroupByYear);
         model.addAttribute("unFinishedDesignCountByYear", unFinishedDesignCountByYear);
         model.addAttribute("finishedProcessCountByYear", finishedProcessCountByYear);
+        model.addAttribute("finishedProcessProjectGroupByYear", finishedProcessProjectGroupByYear);
         model.addAttribute("unFinishedProcessCountByYear", unFinishedProcessCountByYear);
         model.addAttribute("finishedProduceCountByYear", finishedProduceCountByYear);
+        model.addAttribute("finishedProduceProjectGroupByYear", finishedProduceProjectGroupByYear);
         model.addAttribute("unFinishedProduceCountByYear", unFinishedProduceCountByYear);
 
         model.addAttribute("projectCountByMonth", projectTotalCountByMonth);
@@ -124,6 +132,7 @@ public class StatisticalController {
         StatisticalModel model = new StatisticalModel();
         model.setTotalCount(statisticalService.findProjectCountByYear(year));
         model.setFinishedCount(statisticalService.findFinishedProjectCountByYear(year));
+        model.setGroupCount(statisticalService.countFinishedProjectByYearGroupCreateTime(year));
         model.setUnFinishedCount(statisticalService.findUnFinishedProjectCountByYear(year));
         model.setCancelCount(statisticalService.findCancelProjectCountByYear(year));
         BaseResponse baseResponse = new BaseResponse();
@@ -138,6 +147,7 @@ public class StatisticalController {
         StatisticalModel model = new StatisticalModel();
         model.setTotalCount(statisticalService.findProjectCountByYear(year));
         model.setFinishedCount(statisticalService.findFinishedDesignCountByYear(year));
+        model.setGroupCount(statisticalService.countDesignFinishedProjectByYearGroupCreateTime(year));
         model.setUnFinishedCount(statisticalService.findUnFinishedDesignCountByYear(year));
         model.setCancelCount(statisticalService.findCancelProjectCountByYear(year));
         BaseResponse baseResponse = new BaseResponse();
@@ -152,6 +162,7 @@ public class StatisticalController {
         StatisticalModel model = new StatisticalModel();
         model.setTotalCount(statisticalService.findProjectCountByYear(year));
         model.setFinishedCount(statisticalService.findFinishedProcessCountByYear(year));
+        model.setGroupCount(statisticalService.countProcessFinishedProjectByYearGroupCreateTime(year));
         model.setUnFinishedCount(statisticalService.findUnFinishedProcessCountByYear(year));
         model.setCancelCount(statisticalService.findCancelProjectCountByYear(year));
         BaseResponse baseResponse = new BaseResponse();
@@ -166,6 +177,7 @@ public class StatisticalController {
         StatisticalModel model = new StatisticalModel();
         model.setTotalCount(statisticalService.findProjectCountByYear(year));
         model.setFinishedCount(statisticalService.findFinishedProduceCountByYear(year));
+        model.setGroupCount(statisticalService.countProduceFinishedProjectByYearGroupCreateTime(year));
         model.setUnFinishedCount(statisticalService.findUnFinishedProduceCountByYear(year));
         model.setCancelCount(statisticalService.findCancelProjectCountByYear(year));
         BaseResponse baseResponse = new BaseResponse();

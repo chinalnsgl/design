@@ -23,6 +23,10 @@
     select count(0) from project where status = 4 and year(complete_time) = #{year}
   </select>
 
+  <select id="countFinishedProjectByYearGroupCreateTime" resultType="java.lang.String">
+    select '   ' + convert(varchar,a.y) + '年' + CONVERT(varchar, a.n) + '个' from (select year(create_time) as y, count(id) as n from project where status != 1 and year(complete_time) = #{year} GROUP BY year(create_time)) as a for xml path('')
+  </select>
+
   <select id="countUnFinishedProjectByYear" resultType="java.lang.Integer">
     select count(0) from project where status = 2 and year(create_time) = #{year}
   </select>
@@ -35,6 +39,10 @@
     select count(0) from project where status != 0 and year(section_complete_time) = #{year} and section_task_status = 2
   </select>
 
+  <select id="countDesignFinishedProjectByYearGroupCreateTime" resultType="java.lang.String">
+    select '   ' + convert(varchar,a.y) + '年' + CONVERT(varchar, a.n) + '个' from (select year(create_time) as y, count(id) as n from project where status != 0 and year(section_complete_time) = #{year} and section_task_status = 2 GROUP BY year(create_time)) as a for xml path('')
+  </select>
+
   <select id="countDesignUnFinishedProjectByYear" resultType="java.lang.Integer">
     select count(0) from project where status != 0 and year(create_time) = #{year} and
     <![CDATA[ section_task_status < 2 ]]>
@@ -44,6 +52,10 @@
     select count(0) from project where status != 0 and year(process_complete_time) = #{year} and process_task_status = 2
   </select>
 
+  <select id="countProcessFinishedProjectByYearGroupCreateTime" resultType="java.lang.String">
+    select '   ' + convert(varchar,a.y) + '年' + CONVERT(varchar, a.n) + '个' from (select year(create_time) as y, count(id) as n from project where status != 0 and year(process_complete_time) = #{year} and process_task_status = 2 GROUP BY year(create_time)) as a for xml path('')
+  </select>
+
   <select id="countProcessUnFinishedProjectByYear" resultType="java.lang.Integer">
     select count(0) from project where status != 0 and year(create_time) = #{year} and
     <![CDATA[ process_task_status < 2 ]]>
@@ -51,6 +63,10 @@
 
   <select id="countProduceFinishedProjectByYear" resultType="java.lang.Integer">
     select count(0) from project where status != 0 and year(produce_complete_time) = #{year} and produce_task_status = 2
+  </select>
+
+  <select id="countProduceFinishedProjectByYearGroupCreateTime" resultType="java.lang.String">
+    select '   ' + convert(varchar,a.y) + '年' + CONVERT(varchar, a.n) + '个' from (select year(create_time) as y, count(id) as n from project where status != 0 and year(produce_complete_time) = #{year} and produce_task_status = 2 GROUP BY year(create_time)) as a for xml path('')
   </select>
 
   <select id="countProduceUnFinishedProjectByYear" resultType="java.lang.Integer">

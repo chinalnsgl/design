@@ -48,6 +48,9 @@ public interface StatisticalService {
     // 按年份查询已完成项目数量
     Integer findFinishedProjectCountByYear(Integer year);
 
+    // 查完成项目哪年创建多少个
+    String countFinishedProjectByYearGroupCreateTime(Integer year);
+
     // 按年份查询未完成项目数量
     Integer findUnFinishedProjectCountByYear(Integer year);
 
@@ -57,17 +60,26 @@ public interface StatisticalService {
     // 按年份查询已完成设计项目数量
     Integer findFinishedDesignCountByYear(Integer year);
 
+    // 查完成设计项目哪年创建多少个
+    String countDesignFinishedProjectByYearGroupCreateTime(Integer year);
+
     // 按年份查询未完成设计项目数量
     Integer findUnFinishedDesignCountByYear(Integer year);
 
     // 按年份查询已完成工艺项目数量
     Integer findFinishedProcessCountByYear(Integer year);
 
+    // 查完成工艺项目哪年创建多少个
+    String countProcessFinishedProjectByYearGroupCreateTime(Integer year);
+
     // 按年份查询未完成工艺项目数量
     Integer findUnFinishedProcessCountByYear(Integer year);
 
     // 按年份查询已完成生产项目数量
     Integer findFinishedProduceCountByYear(Integer year);
+
+    // 查完成生产项目哪年创建多少个
+    String countProduceFinishedProjectByYearGroupCreateTime(Integer year);
 
     // 按年份查询未完成生产项目数量
     Integer findUnFinishedProduceCountByYear(Integer year);
