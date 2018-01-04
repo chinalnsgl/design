@@ -24,7 +24,7 @@
   </select>
 
   <select id="countFinishedProjectByYearGroupCreateTime" resultType="java.lang.String">
-    select '   ' + convert(varchar,a.y) + '年' + CONVERT(varchar, a.n) + '个' from (select year(create_time) as y, count(id) as n from project where status != 1 and year(complete_time) = #{year} GROUP BY year(create_time)) as a for xml path('')
+    select '   ' + convert(varchar,a.y) + '年' + CONVERT(varchar, a.n) + '个' from (select year(create_time) as y, count(id) as n from project where status = 4 and year(complete_time) = #{year} GROUP BY year(create_time)) as a for xml path('')
   </select>
 
   <select id="countUnFinishedProjectByYear" resultType="java.lang.Integer">
