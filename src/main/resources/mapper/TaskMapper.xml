@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.mapper.DeptTaskDao">
+  <select id="findTasks" resultType="com.zw.design.dto.TaskDto" parameterType="com.zw.design.query.ProjectQuery">
+    select * from (
+    select
+    ROW_NUMBER() OVER(Order by t.order_no desc, t.code) as rowId,* from (
+    select
+    b.id,
+    b.projectNo,
+    b.order_no,
+    b.code,
+    b.code_special as codeSpecial,
+    b.name,
+    b.demander,
+    b.address,
+    b.num,
+    b.plan_time as planTime,
+    b.comment,
+    b.status as projectStatus,
+    b.create_time as createTime,
+    b.delivery_date as deliveryDate,
+    a.department_type as deptType,
+    a.department_num as deptNum,
+    a.status as deptStatus,
+    a.annotates as annotates,
+    c.produce_name as sendName,
+    c.status as sendStatus,
+    c.annotate as sendAnnotate,
+    d.produce_name as signName,
+    d.status as signStatus,
+    d.annotate as signAnnotate,
+    e.produce_name as produceName,
+    e.status as produceStatus,
+    e.annotate as produceAnnotate,
+    f.produce_name as installName,
+    f.status as installStatus,
+    f.annotate as installAnnotate,
+    g.produce_name as debugName,
+    g.status as debugStatus,
+    g.annotate as debugAnnotate,
+    h.produce_name as acceptName,
+    h.status as acceptStatus,
+    h.annotate as acceptAnnotate,
+    i.produce_name as saveName,
+    i.status as saveStatus,
+    i.annotate as saveAnnotate
+    from 	(
+    select dept_a.department_type,dept_a.project_id,min(department_num) as department_num,sum ( status ) AS status,
+    stuff((select ',' + dept_c.annotate from dept_task dept_c where dept_c.department_type = dept_a.department_type and dept_c.project_id = dept_a.project_id for xml path('')),1,1,'') as annotates
+    from dept_Task dept_a
+    <![CDATA[ where dept_a.status < 100  ]]>
+    group by dept_a.department_type,dept_a.project_id
+    ) as a
+    inner JOIN (
+
+    select ROW_NUMBER() OVER(Order by order_no desc, code) as projectNo,* from project
+
+    ) b on a.project_id = b.id
+    LEFT JOIN produce_task c on c.project_id = b.id
+    LEFT JOIN produce_task d on d.project_id = b.id
+    LEFT JOIN produce_task e on e.project_id = b.id
+    LEFT JOIN produce_task f on f.project_id = b.id
+    LEFT JOIN produce_task g on g.project_id = b.id
+    LEFT JOIN produce_task h on h.project_id = b.id
+    LEFT JOIN produce_task i on i.project_id = b.id
+    WHERE c.produce_num = 1 and d.produce_num = 2 and e.produce_num = 3 and f.produce_num = 4 and g.produce_num = 5 and
+    h.produce_num = 6 and i.produce_num = 7
+    <if test="code != null and code != ''">
+      AND b.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND b.name like #{name}
+    </if>
+    <if test="type != null">
+      AND a.department_type = #{type}
+    </if>
+    <if test="num != null">
+      AND a.department_num = #{num}
+    </if>
+    <if test="statusQuery == 1">
+      AND b.status != 4
+    </if>
+    <if test="statusQuery == 2">
+      AND b.status = 4
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ AND b.create_time >= #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND b.create_time <= #{endTime} ]]>
+    </if>
+    ) as t ) p
+    where p.rowId BETWEEN #{start} and #{length}
+	</select>
+
+  <select id="findTasksCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.ProjectQuery">
+    select count(b.id) from (
+    select department_type,project_id,min(department_num) as department_num,sum ( status ) AS status
+    from dept_Task
+    <![CDATA[ where status < 100  ]]>
+    group by department_type,project_id
+    ) as a
+    inner JOIN project b on a.project_id = b.id
+    where 1 = 1
+    <if test="code != null and code != ''">
+      AND b.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND b.name like #{name}
+    </if>
+    <if test="type != null">
+      AND a.department_type = #{type}
+    </if>
+    <if test="num != null">
+      AND a.department_num = #{num}
+    </if>
+    <if test="statusQuery == 1">
+      AND b.status != 4
+    </if>
+    <if test="statusQuery == 2">
+      AND b.status = 4
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ AND b.create_time >= #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND b.create_time <= #{endTime} ]]>
+    </if>
+
+  </select>
+
+
+  <select id="findTasksByProjectId" resultType="com.zw.design.entity.dbo.DeptTask" >
+    select * from dept_task where project_id = #{id}
+    order by isnull(start_time,'2300-1-1') , id
+  </select>
+
+  <select id="findMaxStepNumByProjectId" resultType="java.lang.Integer">
+    select max(step_num) from dept_task where project_id = #{id}
+  </select>
+
+  <select id="findIdsByDept" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
+    select DISTINCT project_id from dept_task GROUP BY project_id, department_type, department_num HAVING 1=1
+    <if test="type != null and num != null">
+      and department_type = #{type} and department_num = #{num}
+    </if>
+    <if test="status == 1">
+      <![CDATA[ and sum(status) < 8 ]]>
+    </if>
+    <if test="status == 2">
+      and sum(status) = 8
+    </if>
+    <if test="status == 3">
+      <![CDATA[ and sum(status) > 8 ]]>
+    </if>
+    order by project_id
+
+  </select>
+
+  <select id="findDeptTaskList" resultType="com.zw.design.dto.DeptTaskDto" parameterType="com.zw.design.query.TaskQuery">
+    select * from
+    (
+    select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code, d.type) as rowId, * from
+    (
+    select a.id,a.order_no as orderNo, a.name,a.code,a.num,a.plan_time as planTime, b.type,b.num as deptNum, b.a as firstStep, b.b as secondStep, b.c as thirdStep, b.d as fourthStep ,c.sumStatus as sumStatus
+    from project a
+    left JOIN
+    (	select department_type type,min(department_num) num,project_id,
+      sum(CASE step_no WHEN 1 then status end) as a,
+      sum(CASE step_no WHEN 2 then status end) as b,
+      sum(CASE step_no WHEN 3 then status end) as c,
+      sum(CASE step_no WHEN 4 then status end) as d
+      from dept_task GROUP BY department_type, project_id) b
+    on b.project_id = a.id
+    inner join
+    (select a.project_id , a.department_type as type, a.department_num as deptNum, sum(a.status) as sumStatus from dept_task a
+    group by a.project_id,a.department_type,a.department_num) c
+    on c.project_id = a.id and c.type = b.type and c.deptNum = b.num
+    where 1 = 1
+    <if test="code != null and code != ''">
+      AND a.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND a.name like #{name}
+    </if>
+    <if test="ids != null and ids != '' ">
+      and a.id in (${ids})
+    </if>
+    ) d
+    ) e
+    where e.rowid BETWEEN #{start} and #{length}
+  </select>
+
+  <select id="findDeptTaskCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
+    select count(a.id)
+    from project a
+    left JOIN
+    (	select department_type type,min(department_num) num,project_id,
+    sum(CASE step_no WHEN 1 then status end) as a,
+    sum(CASE step_no WHEN 2 then status end) as b,
+    sum(CASE step_no WHEN 3 then status end) as c,
+    sum(CASE step_no WHEN 4 then status end) as d
+    from dept_task GROUP BY department_type, project_id) b
+    on b.project_id = a.id
+    inner join
+    (select a.project_id , a.department_type as type, a.department_num as deptNum, sum(a.status) as sumStatus from dept_task a
+    group by a.project_id,a.department_type,a.department_num) c
+    on c.project_id = a.id and c.type = b.type and c.deptNum = b.num
+    where 1 = 1
+    <if test="code != null and code != ''">
+      AND a.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND a.name like #{name}
+    </if>
+    <if test="ids != null and ids != '' ">
+      and a.id in (${ids})
+    </if>
+  </select>
+</mapper>

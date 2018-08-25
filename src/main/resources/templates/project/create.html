@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<section class="content-header">
+  <h1>
+    创建项目
+    <small>创建项目</small>
+  </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+
+    <div class="col-xs-6">
+      <div class="box">
+        <div class="box-header">
+          <h3>待下达项目</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            <div class="form-inline">
+              <div class="form-group" style="margin-right: 10px;">
+                <label>项目号</label>
+                <input type="text" id="codeQuery" name="code" class="form-control" placeholder="请输入计划名称">
+              </div>
+              <div class="form-group" style="margin-right: 10px;">
+                <label>项目名称</label>
+                <input type="text" id="nameQuery" name="name" class="form-control" placeholder="请输入计划名称">
+              </div>
+              <button class="btn btn-default" id="btn_search">搜索</button>
+            </div>
+          </div>
+          <table id="projectDataTables" class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>项目号</th>
+              <th>项目名称</th>
+              <th>甲方</th>
+              <th>数量</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+          </table>
+
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <div class="col-xs-6">
+      <div class="box">
+        <div class="box-header">
+          <h3>项目基本信息</h3>
+        </div>
+        <form id="projectForm" class="form-horizontal">
+          <div class="box-body">
+            <div class="form-group">
+              <label for="name" class="col-sm-2 control-label">项目名称</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" name="name" placeholder="项目名称">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="demander" class="col-sm-2 control-label">需方</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="demander" name="demander" placeholder="甲方">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="address" class="col-sm-2 control-label">安装地点</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="address" name="address" placeholder="项目名称">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="code" class="col-sm-2 control-label">项目号</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="code" name="code" placeholder="项目号">
+              </div>
+              <div class="col-sm-2">
+                <label class="checkbox-inline icheck">
+                  <input type="checkbox" name="orderNo" class="minimal-red" value="1" >优先排序
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="codeSpecial" class="col-sm-2 control-label">任务单号号</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="codeSpecial" name="codeSpecial" placeholder="附属项目号">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="num" class="col-sm-2 control-label">数量</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="num" name="num" placeholder="数量">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="planTime" class="col-sm-2 control-label no-padding-right">预计时间</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control datepicker" id="planTime" name="planTime" readonly >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="comment" class="col-sm-2 control-label">备注</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="comment" name="comment" placeholder="备注">
+              </div>
+            </div>
+          </div>
+
+          <div class="box-footer" shiro:hasPermission="project:add">
+            <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
+          </div>
+          <!-- /.box-footer -->
+        </form>
+      </div>
+    </div>
+    <!-- /.col -->
+  </div>
+  <form id="taskForm">
+    <div class="row">
+
+      <div class="col-md-3">
+        <div class="box box-default box-solid">
+          <div class="box-header with-border">
+            <h3 class="box-title">机械设计</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body" style="display: block;">
+
+            <div class="form-group">
+              <select id="machineNo" class="form-control select2" name="machineNo" style="width: 100%;">
+                <option value="" selected="selected">请选择</option>
+                <option value="1">机械设计一科</option>
+                <option value="2">机械设计二科</option>
+                <option value="3">机械设计三科</option>
+                <option value="4">机械设计四科</option>
+                <option value="5">机械设计五科</option>
+                <option value="6">机械设计六科</option>
+                <option value="7">机械设计七科</option>
+              </select>
+            </div>
+            <p class="text-muted">机械设计</p>
+            <p class="text-muted">提动作条件</p>
+            <p class="text-muted">报采购计划</p>
+            <p class="text-muted">下图纸</p>
+
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      </div>
+
+      <div class="col-md-3">
+        <div class="box box-default box-solid">
+          <div class="box-header with-border">
+            <h3 class="box-title">液压设计</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body" style="display: block;">
+            <div class="form-group">
+              <select id="hypreNo" name="hypreNo" class="form-control select2" style="width: 100%;">
+                <option value="" selected="selected">请选择</option>
+                <option value="1">液压设计一科</option>
+                <option value="2">液压设计二科</option>
+              </select>
+            </div>
+            <p class="text-muted">液压设计</p>
+            <p class="text-muted">提委托书</p>
+            <p class="text-muted">报采购计划</p>
+            <p class="text-muted">下图纸</p>
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      </div>
+
+      <div class="col-md-3">
+        <div class="box box-default box-solid">
+          <div class="box-header with-border">
+            <h3 class="box-title">电气设计</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body" style="display: block;">
+            <div class="form-group">
+              <select id="electricNo" class="form-control select2" name="electricNo" style="width: 100%;">
+                <option value="" selected="selected">请选择</option>
+                <option value="1">电气设计一科</option>
+                <option value="2">电气设计二科</option>
+                <option value="3">电气设计三科</option>
+              </select>
+            </div>
+            <p class="text-muted">电气设计</p>
+            <p class="text-muted">确定最终条件</p>
+            <p class="text-muted">报采购计划</p>
+            <p class="text-muted">下图纸</p>
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      </div>
+
+      <div class="col-md-3">
+        <div class="box box-default box-solid">
+          <div class="box-header with-border">
+            <h3 class="box-title">软件设计</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body" style="display: block;">
+            <div class="form-group">
+              <select id="softwareNo" class="form-control select2" name="softwareNo" style="width: 100%;">
+                <option value="" selected="selected">请选择</option>
+                <option value="1">软件设计科</option>
+              </select>
+            </div>
+            <p class="text-muted">软件设计</p>
+            <p class="text-muted">编码及测试</p>
+            <p class="text-muted">报采购计划</p>
+            <p class="text-muted">试运行</p>
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      </div>
+
+    </div>
+    <input id="projectId" type="hidden" name="projectId">
+    <button shiro:hasPermission="project:send" type="button" id="btn_task" class="btn btn-info btn-success pull-right">下达任务单</button>
+  </form>
+  <!-- /.row -->
+</section>
+<!-- /.content -->
+<div th:include="include :: footer"></div>
+<script>
+
+  var projectTable;
+  var projectForm = $("#projectForm");
+  var taskForm = $("#taskForm");
+
+  /** 刷新列表 */
+  function reloadTable() {
+    projectTable.destroy();
+    getProjectList();
+    taskForm.css("pointer-events", 'none');
+    $("#projectId").val('');
+  }
+
+  /** 加载列表 */
+  function getProjectList() {
+
+    projectTable = $('#projectDataTables').DataTable( {
+      "info": true,
+      "ordering": false,
+      "autoWidth": true,
+      "lengthChange": false,  //每页显示的记录数
+      "pageLength": 5,
+      "dom": "Tft<'row DTTTFooter'<'col-sm-6'li><'col-sm-6'p>>",
+      "searching":false,//禁用搜索
+      "processing": true,
+      "serverSide": true,
+      "ajax": {
+        url : "/project/list/notSend",
+        type : "POST",
+        data : {
+          "code": $("#codeQuery").val(),
+          "name": $("#nameQuery").val()
+        },
+        dataSrc : function (json) {
+          if (json.status === 200) {
+            json.draw = json.content.draw;
+            json.recordsTotal = json.content.recordsTotal;
+            json.recordsFiltered = json.content.recordsFiltered;
+            json.data = json.content.data;
+          }
+          return json.data;
+        }
+      },
+      "columns": [
+        /*{ "data": "id",
+          "class" : 'details-control',
+          "width" : "10%"
+        },*/
+        { "data": "code",
+          // "width": "20%"
+        },
+        { "data": "name",
+          // "width": "30%"
+        },
+        { "data": "demander",
+          // "width": "30%"
+        },
+        { "data": "num",
+          // "width": "20%"
+        },
+        { "data": "id",
+          "width" : "20%",
+          render : function(data, type, row, meta) {
+            return '<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="updateStatus(' + data + ', \'' + row.name + '\')">删除</a>';
+          }
+        }
+      ],
+      "language" : { // 国际化配置
+        "sProcessing" : "正在获取数据，请稍后...",
+        "sLengthMenu" : "显示 _MENU_ 条",
+        "sZeroRecords" : "没有找到数据",
+        "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+        "infoEmpty" : "记录数为0",
+        "infoFiltered" : "(全部记录数 _MAX_ 条)",
+        "paginate" : {
+          "first" : "第一页",
+          "previous" : "上一页",
+          "next" : "下一页",
+          "last" : "最后一页"
+        }
+      }
+    });
+    taskForm.css("pointer-events", 'none');
+    $("#projectId").val('');
+  }
+
+  function updateStatus(id, name) {
+    bootbox.setLocale("zh_CN");
+    bootbox.confirm("确定对项目名："+name+"操作吗?", function (result) {
+      if (result) {
+        $.ajax({
+          url: "/project/del",
+          type:"POST",
+          data: {"id": id},
+          success: function(result){
+            if (result.status === 200) {
+              toastr.success("删除成功！");
+              //重新加载数据
+              projectTable.ajax.reload();
+            } else {
+              toastr.error("删除失败！");
+            }
+          },
+          error: function() {
+            toastr.error("删除失败！");
+          }
+        });
+        taskForm.css("pointer-events", 'none');
+        $("#projectId").val('');
+      }
+    });
+    event.stopPropagation();
+  }
+
+  /** 表单验证设置 */
+  function setValid() {
+    projectForm.bootstrapValidator({
+      feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+      },
+      fields: {
+        code: {
+          validators: {
+            notEmpty: {message: '项目号必需填写'},
+            remote: {
+              url:"/project/checkCodeUnique",
+              message: '项目编号已存在，无法使用相同项目编号',
+              delay: 3000,
+              type: 'POST',
+              data: {code: $("#code").val()}
+            }
+          }
+        },
+        name: {validators: {notEmpty: {message: '项目名必需填写'}}},
+        num: {validators: {notEmpty: {message: '数量必须填写'}}},
+        demander: {validators: {notEmpty: {message: '需方必须填写'}}},
+        address: {validators: {notEmpty: {message: '安装地址必须填写'}}}
+      }
+    });
+  }
+
+  /** 搜索按钮事件 */
+  function searchEvent() {
+    $("#btn_search").click(function () {
+      reloadTable();
+    });
+  }
+
+  /** 创建项目事件 */
+  function createEvent() {
+    $("#btn_create").click(function () {
+      projectForm.bootstrapValidator('validate');//提交验证
+      if (projectForm.data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
+        $.ajax({
+          url: "/project/create",
+          type:"POST",
+          data: projectForm.serialize(),
+          success: function(result){
+            if (result.status === 200) {
+              toastr.success("创建成功！");
+              //重新加载数据
+              projectTable.ajax.reload();
+              projectForm[0].reset();
+              projectForm.bootstrapValidator('resetForm');
+            } else {
+              toastr.error("创建失败！");
+            }
+          },
+          error: function() {
+            toastr.error("创建失败！");
+          }
+        });
+
+        taskForm.css("pointer-events", 'none');
+        $("#projectId").val('');
+      }
+    });
+  }
+
+  /** 行点击事件 */
+  function tableSelectEvent() {
+    $('#projectDataTables tbody').on('click', 'tr', function () {
+      if ( $(this).hasClass('active') ) {
+        $(this).removeClass('active');
+        taskForm.css("pointer-events", 'none');
+        $("#projectId").val('');
+      }
+      else {
+        projectTable.$('tr.active').removeClass('active');
+        $(this).addClass('active');
+        taskForm.css("pointer-events", '');
+        $("#projectId").val(projectTable.row(this).data().id);
+      }
+    });
+  }
+
+  /** 任务下发事件 */
+  function taskBtnEvent() {
+    $("#btn_task").click(function () {
+      if (!$("#machineNo").val() && !$("#hypreNo").val() && !$("#electricNo").val() && !$("#softwareNo").val()) {
+        toastr.warning("至少选择一个科室下发任务！");
+        return;
+      }
+      $.ajax({
+        url: "/project/send",
+        type:"POST",
+        data: taskForm.serialize(),
+        success: function(result){
+          if (result.status === 200) {
+            toastr.success("下发成功！");
+            //重新加载数据
+            projectTable.ajax.reload();
+          } else {
+            toastr.error("下发失败！");
+          }
+        },
+        error: function() {
+          toastr.error("创建失败！");
+        }
+      });
+
+      taskForm.css("pointer-events", 'none');
+      $("#projectId").val('');
+      $("#machineNo").val('').trigger("change");
+      $("#hypreNo").val('').trigger("change");
+      $("#electricNo").val('').trigger("change");
+      $("#softwareNo").val('').trigger("change");
+    });
+  }
+
+  function taskSelectEvent() {
+    $(".select2").change(function () {
+      if ($(this).val()) {
+        $(this).parents(".box").removeClass("box-default");
+        $(this).parents(".box").addClass("box-info");
+        $(this).parents(".box").find("p").removeClass("text-muted");
+        $(this).parents(".box").find("p").addClass("text-aqua");
+      } else {
+        $(this).parents(".box").addClass("box-default");
+        $(this).parents(".box").removeClass("box-info");
+        $(this).parents(".box").find("p").removeClass("text-aqua");
+        $(this).parents(".box").find("p").addClass("text-muted");
+      }
+    });
+  }
+
+  $(function () {
+
+    getProjectList();
+
+    setValid();
+
+    searchEvent();
+
+    createEvent();
+
+    tableSelectEvent();
+
+    taskBtnEvent();
+
+    taskSelectEvent();
+
+    /** 日期控件加载， 并触发验证 */
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd',
+      language: 'zh-cn',
+      autoclose: true,
+      clearBtn: true
+    });;
+
+  });
+
+</script>
+</body>
+</html>

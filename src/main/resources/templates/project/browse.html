@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        项目浏览
+        <small>项目浏览</small>
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+
+              <div class="row">
+                <div class="form-inline">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>项目号</label>
+                    <input type="text" id="codeQuery" name="code" class="form-control" placeholder="请输入计划名称">
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>项目名称</label>
+                    <input type="text" id="nameQuery" name="name" class="form-control" placeholder="请输入计划名称">
+                  </div>
+                  <button class="btn btn-default" id="btn_search">搜索</button>
+                </div>
+              </div>
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+
+              <table id="projectDataTables" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>编号</th>
+                  <th>项目号</th>
+                  <th>项目名称</th>
+                  <th>创建日期</th>
+                </tr>
+                </thead>
+              </table>
+
+            </div>
+
+            <div class="box-footer">
+              <table id="taskDataTables" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>设计科室</th>
+                  <th>任务</th>
+                  <th>开始时间</th>
+                  <th>结束时间</th>
+                  <th>备注</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+    <div th:include="include :: footer"></div>
+    <script>
+
+      var projectTable, taskTable, taskJson = [];
+      var deptName = ["","机械设计","液压设计","电气设计","软件设计"];
+      var deptNum = ["","一科","二科","三科","四科","五科","六科","七科"];
+      /** 刷新列表 */
+      function reloadTable() {
+        projectTable.destroy();
+        getProjectList();
+      }
+
+      /** 刷新列表 */
+      function reloadTaskTable() {
+        taskTable.destroy();
+        getTaskList();
+      }
+
+      /** 加载列表 */
+      function getProjectList() {
+
+        projectTable = $('#projectDataTables').DataTable( {
+          "info": true,
+          "ordering": false,
+          "autoWidth": false,
+          "lengthChange": false,  //每页显示的记录数
+          "pageLength": 5,
+          "dom": "Tft<'row DTTTFooter'<'col-sm-6'li><'col-sm-6'p>>",
+          "searching":false,//禁用搜索
+          "processing": true,
+          "serverSide": true,
+          "ajax": {
+            url : "/project/listForSend",
+            type : "POST",
+            data : {
+              "code": $("#codeQuery").val(),
+              "name": $("#nameQuery").val()
+            },
+            dataSrc : function (json) {
+              if (json.status === 200) {
+                json.draw = json.content.draw;
+                json.recordsTotal = json.content.recordsTotal;
+                json.recordsFiltered = json.content.recordsFiltered;
+                json.data = json.content.data;
+              }
+              return json.data;
+            }
+          },
+          "columns": [
+            { "data": "id",
+              "class" : 'details-control',
+              "width" : "10%"
+            },
+            { "data": "code",
+              "width": "30%"
+            },
+            { "data": "name",
+              "width": "30%"
+            },
+            { "data": "createTime",
+              "width": "30%"
+            }
+          ],
+          "language" : { // 国际化配置
+            "sProcessing" : "正在获取数据，请稍后...",
+            "sLengthMenu" : "显示 _MENU_ 条",
+            "sZeroRecords" : "没有找到数据",
+            "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+            "infoEmpty" : "记录数为0",
+            "infoFiltered" : "(全部记录数 _MAX_ 条)",
+            "paginate" : {
+              "first" : "第一页",
+              "previous" : "上一页",
+              "next" : "下一页",
+              "last" : "最后一页"
+            }
+          }
+        });
+      }
+
+      /** 加载列表 */
+      function getTaskList() {
+
+        taskTable = $('#taskDataTables').DataTable( {
+          "info": false,
+          "ordering": false,
+          "autoWidth": false,
+          "lengthChange": false,  //每页显示的记录数
+          "paging" :false,
+          // "pageLength": 5,
+          // "dom": "Tft<'row DTTTFooter'<'col-sm-6'li><'col-sm-6'p>>",
+          "searching":false,//禁用搜索
+          "processing": true,
+          // "serverSide": true,
+          "data" : taskJson,
+          "columns": [
+            { "data": "id",
+              "width" : "5%"
+            },
+            { "data": "departmentType",
+              "width": "10%",
+              render : function(data, type, row, meta) {
+                return deptName[data] + deptNum[row.departmentNum];
+              }
+            },
+            { "data": "stepName",
+              "width": "10%"
+            },
+            { "data": "startTime",
+              "width": "20%"
+            },
+            { "data": "endTime",
+              "width": "20%"
+            },
+            { "data": "comment",
+              "width": "35%"
+            }
+          ],
+          "language" : { // 国际化配置
+            "sProcessing" : "正在获取数据，请稍后...",
+            "sLengthMenu" : "显示 _MENU_ 条",
+            "sZeroRecords" : "没有找到数据",
+            "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+            "infoEmpty" : "记录数为0",
+            "infoFiltered" : "(全部记录数 _MAX_ 条)",
+            "paginate" : {
+              "first" : "第一页",
+              "previous" : "上一页",
+              "next" : "下一页",
+              "last" : "最后一页"
+            }
+          }
+        });
+      }
+
+      /** 搜索按钮事件 */
+      function searchEvent() {
+        $("#btn_search").click(function () {
+          reloadTable();
+        });
+      }
+
+      /** 行点击事件 */
+      function tableSelectEvent() {
+        $('#projectDataTables tbody').on('click', 'tr', function () {
+          if ( $(this).hasClass('active') ) {
+            $(this).removeClass('active');
+            taskJson = [];
+            reloadTaskTable();
+          }
+          else {
+            projectTable.$('tr.active').removeClass('active');
+            $(this).addClass('active');
+            taskJson = projectTable.row(this).data().deptTasks;
+            reloadTaskTable();
+          }
+        });
+      }
+
+      $(function () {
+
+        getProjectList();
+
+        searchEvent();
+
+        tableSelectEvent();
+
+        getTaskList();
+
+      });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://192.168.50.1:1433;DatabaseName=DB_DESIGN
+#    url: jdbc:sqlserver://192.168.72.229:1433;DatabaseName=DB_DESIGN
+    username: sa
+#    password: 123
+    password: zw1234aA#
+  jpa:
+    hibernate:
+      ddl-auto: update
+#    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServer2008Dialect
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+  cache:
+    type: redis
+  redis:
+#    host: 192.168.72.158
+    host: 192.168.50.1
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.zw.design.domain.dbo
+  configuration:
+    map-underscore-to-camel-case: true
+pagehelper:
+  reasonable: true
+logging:
+  level:
+#    root: warn
+    com:
+      zw:
+        design:
+          mapper: error
+  path: e:/DesignProjectLog

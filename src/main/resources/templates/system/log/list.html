@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        日志列表
+        <small>LogList</small>
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+
+          <div class="box">
+            <div class="box-header">
+              <div class="row">
+                <div class="form-inline">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>用户名</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入用户名">
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>时间</label>
+                    <input type="text" class="form-control datepicker" id="startTime" readonly="readonly" />
+                    <span>至</span>
+                    <input type="text" class="form-control datepicker" id="endTime" readonly="readonly" />
+                  </div>
+                  <button class="btn btn-default" id="btn_search">搜索</button>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="logDataTable" class="table table-bordered">
+                <thead>
+                <tr>
+                  <th>帐号</th>
+                  <th>用户名</th>
+                  <th>操作名</th>
+                  <th>时间</th>
+                  <th>IP地址</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+    <div th:include="include :: footer"></div>
+
+    <script th:inline="javascript">
+
+      var logDataTable;
+      /** 刷新列表 */
+      function reloadTable() {
+        logDataTable.destroy();
+        getLogList();
+      }
+
+      /** 加载列表 */
+      function getLogList() {
+
+        logDataTable = $('#logDataTable').DataTable( {
+          buttons: [
+            {
+              extend: 'excel',
+              text: '导出Excel',
+              className: 'btn btn-success pull-right',
+              filename: 'log',
+              exportOptions: {
+                // 将打印 id 和 title 列
+                columns: [ 0,1,2,3,4]
+              }
+            },
+          ],
+          "info": true,
+          "ordering": false,
+          "autoWidth": true,
+          // "scrollX": true,
+          "lengthChange": false,  //每页显示的记录数
+          "pageLength": 100,
+          // "dom": "Tft<'row DTTTFooter'<'col-sm-6'li><'col-sm-6'p>>",
+          "searching":false,//禁用搜索
+          "dom": "t<'row'<'col-sm-6'B><'col-sm-6'p>>",
+          "processing": true,
+          "serverSide": true,
+          "ajax": {
+            url : "/sys/log/list",
+            type : "POST",
+            data : {
+              "name": $("#name").val(),
+              "startTime" :$("#startTime").val(),
+              "endTime" : $("#endTime").val()
+            },
+            dataSrc : function (json) {
+              if (json.status === 200) {
+                json.draw = json.content.draw;
+                json.recordsTotal = json.content.recordsTotal;
+                json.recordsFiltered = json.content.recordsFiltered;
+                json.data = json.content.data;
+              }
+              return json.data;
+            }
+          },
+          "columns": [
+            { "data": "account",
+              // width: '1500px'
+            },
+            { "data": "name",
+              // "width": "10%"
+            },
+            { "data": "operationName",
+              // "width": "10%"
+            },
+            { "data": "operationTime",
+              // "width": "10%"
+            },
+            { "data": "address",
+              // "width": "10%"
+            }
+
+          ],
+          "language" : { // 国际化配置
+            "sProcessing" : "正在获取数据，请稍后...",
+            "sLengthMenu" : "显示 _MENU_ 条",
+            "sZeroRecords" : "没有找到数据",
+            "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+            "infoEmpty" : "记录数为0",
+            "infoFiltered" : "(全部记录数 _MAX_ 条)",
+            "paginate" : {
+              "first" : "第一页",
+              "previous" : "上一页",
+              "next" : "下一页",
+              "last" : "最后一页"
+            }
+          }
+        });
+      }
+
+      /** 搜索按钮事件 */
+      function searchEvent() {
+        $("#btn_search").click(function () {
+          reloadTable();
+        });
+      }
+
+      $(function () {
+        getLogList();
+        searchEvent();
+
+        // 日期控件配置
+        $('.datepicker').datepicker({
+          format: 'yyyy-mm-dd',
+          language: 'zh-cn',
+          autoclose: true,
+          clearBtn: true
+        });
+      });
+
+    </script>
+</body>
+</html>

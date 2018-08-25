@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<div class="modal fade" id="modal-info">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">修改密码</h4>
+      </div>
+      <div class="modal-body">
+
+        <form id="userForm" class="form-horizontal" role="form">
+          <div class="form-group">
+            <label for="password" class="col-sm-2 control-label no-padding-right">新的密码</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="password" name="password" placeholder="请输入新密码" >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="rePassword" class="col-sm-2 control-label no-padding-right">重复密码</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="rePassword" name="rePassword" placeholder="请再输入一次" >
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" id="btn-commit">确定</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- Site wrapper -->
+  <div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+    <a class="logo">
+      <span class="logo-lg"><b>技术研发部看板系统</b></span>
+    </a>
+    <nav class="navbar navbar-static-top">
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <li shiro:authenticated="true">
+            <a id="account" th:text="${session.user.name}" ></a>
+          </li>
+          <li shiro:authenticated="true">
+            <a id="updatePassword" ><i class="fa fa-edit">&nbsp;修改密码</i></a>
+          </li>
+          <li>
+            <a th:href="@{/logout}" ><i class="fa fa-sign-out">&nbsp;退出</i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Left side column. contains the sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">项目菜单</li>
+        <li shiro:hasPermission="project:create" >
+          <a th:href="@{/project/create}" target="content">
+            <i class="fa fa-book text-red"></i>
+            <span>创建项目</span>
+          </a>
+        </li>
+        <li shiro:hasPermission="project:many" class="active">
+          <a th:href="@{/project/many}" target="content">
+            <i class="fa fa-files-o text-green"></i>
+            <span>多项目看板</span>
+          </a>
+        </li>
+        <li shiro:hasPermission="depts">
+          <a th:href="@{/project/depts}" target="content">
+            <i class="fa fa-sticky-note-o text-aqua"></i>
+            <span>科室项目浏览</span>
+          </a>
+        </li>
+        <li shiro:hasPermission="system:menu" class="treeview">
+          <a href="#">
+            <i class="fa fa-folder-open text-orange"></i>
+            <span>系统菜单</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a th:href="@{/sys/users}" shiro:hasPermission="user:list" target="content"><i class="fa fa-circle-o text-red"></i> 用户列表</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="role:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 角色列表</a></li>
+            <li><a th:href="@{/sys/permissions}" shiro:hasPermission="permission:list" target="content"><i class="fa fa-circle-o text-blue"></i> 权限列表</a></li>
+            <li><a th:href="@{/sys/logs}" shiro:hasPermission="log:list" target="content"><i class="fa fa-circle-o text-blue"></i> 操作日志</a></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <iframe id="content" th:src="@{/project/many}" scrolling="auto" frameborder="0" name="content" width="100%" height="100%"></iframe>
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+
+<div th:include="include :: footer"></div>
+<script>
+    function changeFrameHeight() {
+        var ifm = document.getElementById("content");
+        ifm.height = document.documentElement.clientHeight - 56;
+    }
+
+    window.onresize = function () {
+        changeFrameHeight();
+    };
+
+    var userForm = $("#userForm");
+
+    function setValid() {
+      userForm.bootstrapValidator({
+        feedbackIcons: {
+          valid: 'glyphicon glyphicon-ok',
+          invalid: 'glyphicon glyphicon-remove',
+          validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+          password: {validators: {notEmpty: {message: '请输入密码'}}},
+          rePassword: {validators: {notEmpty: {message: '请确认密码'},identical: { field: 'password', message: '两次密码不一致'}}}
+        }
+      });
+    }
+
+    /** 创建项目事件 */
+    function createEvent() {
+      $("#btn-commit").click(function () {
+        userForm.bootstrapValidator('validate');//提交验证
+        if (userForm.data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
+          $.ajax({
+            url: "/update",
+            type:"POST",
+            data : userForm.serialize(),
+            success: function(result){
+              if (result.status === 200) {
+                $("#modal-info").modal('hide');
+                toastr.success("编辑成功！");
+              }
+            },
+            error: function() {
+              toastr.success("编辑失败！");
+            }
+          });
+        }
+      });
+    }
+
+    $(function () {
+
+      setValid();
+
+      createEvent();
+
+      $(".sidebar-menu>li").click(function () {
+        $(".sidebar-menu>li").removeClass("active");
+        $(this).addClass("active");
+      });
+
+      $(".treeview-menu>li").click(function () {
+        $(".treeview-menu>li").removeClass("active");
+        $(this).addClass("active");
+      });
+
+      $("#updatePassword").click(function () {
+        $('#modal-info').modal('show');
+      });
+
+      changeFrameHeight();
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        用户列表
+        <small>UserList</small>
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+
+              <div class="row">
+                <div class="form-inline">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>帐号</label>
+                    <input type="text" id="userName" name="userName" class="form-control" placeholder="请输入用户名">
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>用户名</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入用户名">
+                  </div>
+                  <button class="btn btn-default" id="btn_search">搜索</button>
+                  <a shiro:hasPermission="user:create" th:href="@{/sys/user/create}" class="btn btn-info pull-right" >添加</a>
+                </div>
+              </div>
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+
+              <table id="userDataTables" class="table table-bordered">
+                <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>帐号</th>
+                  <th>名称</th>
+                  <th>角色</th>
+                  <th>操作</th>
+                </tr>
+                </thead>
+              </table>
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+    <div th:include="include :: footer"></div>
+    <!-- page script -->
+    <script th:inline="javascript">
+
+      var userTable;
+      /** 刷新列表 */
+      function reloadTable() {
+        userTable.destroy();
+        getUserList();
+      }
+
+      /** 加载列表 */
+      function getUserList() {
+        userTable = $('#userDataTables').DataTable( {
+          "info": true,
+          "ordering": false,
+          "autoWidth": true,
+          "lengthChange": false,  //每页显示的记录数
+          "pageLength": 10,
+          "dom": "Tft<'row DTTTFooter'<'col-sm-6'li><'col-sm-6'p>>",
+          "searching":false,//禁用搜索
+          "processing": true,
+          "serverSide": true,
+          "ajax": {
+            url : "/sys/user/list",
+            type : "POST",
+            data : {
+              "userName": $("#userName").val(),
+              "name": $("#name").val()
+            },
+            dataSrc : function (json) {
+              if (json.status === 200) {
+                json.draw = json.content.draw;
+                json.recordsTotal = json.content.recordsTotal;
+                json.recordsFiltered = json.content.recordsFiltered;
+                json.data = json.content.data;
+              }
+              return json.data;
+            }
+          },
+          "columns": [
+            { "data": "id",
+              // "width": "8%"
+            },
+            { "data": "userName",
+              // "width": "10%"
+            },
+            { "data": "name",
+              // "width": "10%"
+            },
+            { "data": "roles",
+              // "width": "5%",
+              render : function(data, type, row, meta) {
+                var html = '';
+                $.each(data,function (i, v) {
+                  html += '<span style="margin-left: 5px">' + v.roleName + '</span>'
+                  if (i === 4) {
+                    html += ' 等...';
+                    return false;
+                  }
+                });
+                return html;
+              }
+            },
+            { "data": "id",
+              // "width": "5%",
+              render : function(data, type, row, meta) {
+                if (row.status === 1) {
+                  return '<a style="margin-right: 5px" class="btn btn-warning btn-xs user-edit" href="/sys/user/edit/'+data+'" >编辑</a>' +
+                      '<a class="btn btn-danger btn-xs user-status" href="javascript:void(0);" onclick="updateStatus(' + data + ',0)">锁定</a>';
+                }else if (row.status === 0) {
+                  return '<a class="btn btn-success btn-xs user-status" href="javascript:void(0);" onclick="updateStatus(' + data + ',1)">解锁</a>';
+                }
+              }
+            }
+          ],
+          "language" : { // 国际化配置
+            "sProcessing" : "正在获取数据，请稍后...",
+            "sLengthMenu" : "显示 _MENU_ 条",
+            "sZeroRecords" : "没有找到数据",
+            "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+            "infoEmpty" : "记录数为0",
+            "infoFiltered" : "(全部记录数 _MAX_ 条)",
+            "paginate" : {
+              "first" : "第一页",
+              "previous" : "上一页",
+              "next" : "下一页",
+              "last" : "最后一页"
+            }
+          }
+        });
+      }
+
+      function updateStatus(id,status) {
+        bootbox.setLocale("zh_CN");
+        bootbox.confirm("确定修改这个用户吗?", function (result) {
+          if (result) {
+            $.ajax({
+              url: "/sys//user/status",
+              type:"POST",
+              data: {"id": id, "status": status},
+              success: function(result){
+                if (result.status === 200) {
+                  toastr.success("操作成功！");
+                  //重新加载数据
+                  userTable.ajax.reload();
+                } else {
+                  toastr.error("操作失败！");
+                }
+              },
+              error: function() {
+                toastr.error("系统错误，操作失败！");
+              }
+            });
+          }
+        });
+        event.stopPropagation();
+      }
+
+      /** 搜索按钮事件 */
+      function searchEvent() {
+        $("#btn_search").click(function () {
+          reloadTable();
+        });
+      }
+
+      function setPermission() {
+        userTable.on( 'draw.dt', function () {
+          var roles = [[${session.roles}]];
+          var permissions = [[${session.permissions}]];
+          if ($.inArray('user:edit', permissions) === -1) {
+            $(".user-edit").hide();
+          }
+          if ($.inArray('user:status', permissions) === -1) {
+            $(".user-status").hide();
+          }
+        } );
+      }
+
+      $(function () {
+
+        getUserList();
+
+        searchEvent();
+
+        setPermission();
+
+      });
+
+    </script>
+</body>
+</html>

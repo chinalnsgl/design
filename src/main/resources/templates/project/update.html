@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<section class="content-header">
+  <h1>
+    修改项目
+    <small>修改项目</small>
+  </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <form id="projectForm" class="form-horizontal">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="box">
+        <div class="box-header">
+          <h3>项目基本信息</h3>
+        </div>
+
+          <input type="hidden" th:value="${project.id}" name="id">
+          <div class="box-body">
+            <div class="form-group">
+              <label for="name" class="col-sm-2 control-label">项目名称</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" name="name" th:value="${project.name}" placeholder="项目名称">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="demander" class="col-sm-2 control-label">需方</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="demander" name="demander" th:value="${project.demander}" placeholder="甲方">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="address" class="col-sm-2 control-label">安装地点</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="address" name="address" th:value="${project.address}" placeholder="安装地点">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="code" class="col-sm-2 control-label">项目号</label>
+              <div class="col-sm-5">
+                <input type="text" class="form-control" id="code" name="code" th:value="${project.code}" placeholder="项目号" disabled>
+              </div>
+              <div class="col-sm-5">
+                <label class="checkbox-inline icheck">
+                  <input type="checkbox" name="orderNo" class="minimal-red" value="1" th:checked="${project.orderNo == 1}" >优先排序
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="codeSpecial" class="col-sm-2 control-label">任务单号号</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="codeSpecial" name="codeSpecial" th:value="${project.codeSpecial}" placeholder="附属项目号">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="num" class="col-sm-2 control-label">数量</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="num" name="num" th:value="${project.num}" placeholder="数量">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="planTime" class="col-sm-2 control-label no-padding-right">预计时间</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control datepicker" id="planTime" name="planTime" th:value="${#dates.format(project.planTime,'yyyy-MM-dd')}" readonly >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="comment" class="col-sm-2 control-label">备注</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="comment" name="comment" th:value="${project.comment}" placeholder="备注">
+              </div>
+            </div>
+          </div>
+          <!-- /.box-footer -->
+      </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="row">
+
+          <div class="col-md-6">
+            <div class="box box-default box-solid">
+              <div class="box-header with-border">
+                <h3 class="box-title">机械设计</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body" style="display: block;">
+
+                <div class="form-group">
+                  <select id="machineNo" class="form-control select2" name="machineNo" style="width: 100%;">
+                    <option value="" selected="selected">请选择</option>
+                    <option value="1">机械设计一科</option>
+                    <option value="2">机械设计二科</option>
+                    <option value="3">机械设计三科</option>
+                    <option value="4">机械设计四科</option>
+                    <option value="5">机械设计五科</option>
+                    <option value="6">机械设计六科</option>
+                    <option value="7">机械设计七科</option>
+                  </select>
+                </div>
+                <p class="text-muted">机械设计</p>
+                <p class="text-muted">提动作条件</p>
+                <p class="text-muted">报采购计划</p>
+                <p class="text-muted">下图纸</p>
+
+              </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+          </div>
+
+          <div class="col-md-6">
+            <div class="box box-default box-solid">
+              <div class="box-header with-border">
+                <h3 class="box-title">液压设计</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body" style="display: block;">
+                <div class="form-group">
+                  <select id="hypreNo" name="hypreNo" class="form-control select2" style="width: 100%;">
+                    <option value="" selected="selected">请选择</option>
+                    <option value="1">液压设计一科</option>
+                    <option value="2">液压设计二科</option>
+                  </select>
+                </div>
+                <p class="text-muted">液压设计</p>
+                <p class="text-muted">提委托书</p>
+                <p class="text-muted">报采购计划</p>
+                <p class="text-muted">下图纸</p>
+              </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="col-md-6">
+            <div class="box box-default box-solid">
+              <div class="box-header with-border">
+                <h3 class="box-title">电气设计</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body" style="display: block;">
+                <div class="form-group">
+                  <select id="electricNo" class="form-control select2" name="electricNo" style="width: 100%;">
+                    <option value="" selected="selected">请选择</option>
+                    <option value="1">电气设计一科</option>
+                    <option value="2">电气设计二科</option>
+                    <option value="3">电气设计三科</option>
+                  </select>
+                </div>
+                <p class="text-muted">电气设计</p>
+                <p class="text-muted">确定最终条件</p>
+                <p class="text-muted">报采购计划</p>
+                <p class="text-muted">下图纸</p>
+              </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+          </div>
+
+          <div class="col-md-6">
+            <div class="box box-default box-solid">
+              <div class="box-header with-border">
+                <h3 class="box-title">软件设计</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body" style="display: block;">
+                <div class="form-group">
+                  <select id="softwareNo" class="form-control select2" name="softwareNo" style="width: 100%;">
+                    <option value="" selected="selected">请选择</option>
+                    <option value="1">软件设计科</option>
+                  </select>
+                </div>
+                <p class="text-muted">软件设计</p>
+                <p class="text-muted">编码及测试</p>
+                <p class="text-muted">试运行</p>
+                <p class="text-muted">报采购计划</p>
+              </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+          </div>
+
+        </div>
+
+
+    </div>
+    <!-- /.col -->
+  </div>
+    <div shiro:hasPermission="project:add">
+      <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
+    </div>
+  </form>
+  <!-- /.row -->
+</section>
+<!-- /.content -->
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+
+  var projectForm = $("#projectForm");
+  var deptTask = [[${project.deptTasks}]];
+
+  /** 表单验证设置 */
+  function setValid() {
+    projectForm.bootstrapValidator({
+      feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+      },
+      fields: {
+        code: {
+          validators: {
+            notEmpty: {message: '项目号必需填写'},
+            remote: {
+              url:"/project/checkCodeUnique",
+              message: '项目编号已存在，无法使用相同项目编号',
+              delay: 3000,
+              type: 'POST',
+              data: {code: $("#code").val()}
+            }
+          }
+        },
+        name: {validators: {notEmpty: {message: '项目名必需填写'}}},
+        num: {validators: {notEmpty: {message: '数量必须填写'}}},
+        demander: {validators: {notEmpty: {message: '需方必须填写'}}},
+        address: {validators: {notEmpty: {message: '安装地址必须填写'}}}
+      }
+    });
+  }
+
+  /** 创建项目事件 */
+  function createEvent() {
+    $("#btn_create").click(function () {
+      projectForm.bootstrapValidator('validate');//提交验证
+      if (projectForm.data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
+        $.ajax({
+          url: "/project/update",
+          type:"POST",
+          data: projectForm.serialize(),
+          success: function(result){
+            if (result.status === 200) {
+              toastr.success("创建成功！");
+              //重新加载数据
+              location.href = "/project/many"
+            } else {
+              toastr.error("创建失败！");
+            }
+          },
+          error: function() {
+            toastr.error("创建失败！");
+          }
+        });
+      }
+    });
+  }
+
+  function taskSelectEvent() {
+    $(".select2").change(function () {
+      if ($(this).val()) {
+        $(this).parents(".box").removeClass("box-default");
+        $(this).parents(".box").addClass("box-info");
+        $(this).parents(".box").find("p").removeClass("text-muted");
+        $(this).parents(".box").find("p").addClass("text-aqua");
+      } else {
+        $(this).parents(".box").addClass("box-default");
+        $(this).parents(".box").removeClass("box-info");
+        $(this).parents(".box").find("p").removeClass("text-aqua");
+        $(this).parents(".box").find("p").addClass("text-muted");
+      }
+    });
+  }
+
+  $(function () {
+
+    setValid();
+
+    createEvent();
+
+    taskSelectEvent();
+
+    /** 日期控件加载， 并触发验证 */
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd',
+      language: 'zh-cn',
+      autoclose: true,
+      clearBtn: true
+    });;
+
+    $.each(deptTask,function (i, v) {
+      var tmpType = 0;
+      var tmpNum = 0;
+      if (v.departmentType === tmpType) {
+        return true;
+      } else {
+        tmpType = v.departmentType;
+        tmpNum = v.departmentNum;
+        switch (tmpType) {
+          case 1:
+            if(v.status < 100)
+            $("#machineNo").val(tmpNum).trigger("change");
+            break;
+          case 2:
+            if(v.status < 100)
+            $("#hypreNo").val(tmpNum).trigger("change");
+            break;
+          case 3:
+            if(v.status < 100)
+            $("#electricNo").val(tmpNum).trigger("change");
+            break;
+          case 4:
+            if(v.status < 100)
+            $("#softwareNo").val(tmpNum).trigger("change");
+            break;
+        }
+      }
+    })
+
+  });
+
+</script>
+</body>
+</html>
