@@ -163,7 +163,7 @@
     (
     select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code, d.type) as rowId, * from
     (
-    select a.id,a.order_no as orderNo, a.name,a.code,a.num,a.plan_time as planTime, b.type,b.num as deptNum, b.a as firstStep, b.b as secondStep, b.c as thirdStep, b.d as fourthStep ,c.sumStatus as sumStatus
+    select a.id,a.order_no as orderNo, a.name,a.code,a.num,a.plan_time as planTime, a.comment,a.status as projectStatus, b.type,b.num as deptNum, b.a as firstStep, b.b as secondStep, b.c as thirdStep, b.d as fourthStep ,c.sumStatus as sumStatus
     from project a
     left JOIN
     (	select department_type type,min(department_num) num,project_id,

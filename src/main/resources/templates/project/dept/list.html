@@ -47,7 +47,7 @@
                   </div>
                   <div class="form-group" style="margin-right: 10px;">
                     <label>
-                      执行状态
+                      设计状态
                     </label>
                     <select id="status" name="status" class="form-control select2" >
                       <option value="1" selected="selected">未完成</option>
@@ -72,6 +72,7 @@
                   <th>项目名称</th>
                   <th>数量</th>
                   <th>项目计划时间</th>
+                  <th>备注</th>
                   <th>科室</th>
                   <th>设计</th>
                   <th>条件相关</th>
@@ -117,7 +118,7 @@
               filename: 'projects',
               exportOptions: {
                 // 将打印 id 和 title 列
-                columns: [ 0,1,2,3,4,5,6,7,8,9]
+                columns: [ 0,1,2,3,4,5,6,7,8,9,10]
               }
             },
           ],
@@ -167,6 +168,9 @@
             { "data": "planTime",
               // "width": "5%",
             },
+            { "data": "comment",
+              "width": "200px",
+            },
             { "data": "type",
               // "width": "10%"
               render : function(data, type, row, meta) {
@@ -214,39 +218,47 @@
           ],
           "createdRow": function ( row, data, index ) {
             if($("#departmentQuery").find("option:selected").text() == (deptName[data.type] + deptNum[data.deptNum])){
-              $('td', row).eq(5).css("background", '#e0e0e0');
               $('td', row).eq(6).css("background", '#e0e0e0');
               $('td', row).eq(7).css("background", '#e0e0e0');
               $('td', row).eq(8).css("background", '#e0e0e0');
               $('td', row).eq(9).css("background", '#e0e0e0');
+              $('td', row).eq(10).css("background", '#e0e0e0');
             }
-            if(data.firstStep === 1)
-              $('td', row).eq(6).css("background", '#f39c12');
-            if(data.firstStep === 2)
-              $('td', row).eq(6).css("background", '#00a65a');
-            if(data.firstStep >= 100)
-              $('td', row).eq(6).css("background", 'red');
 
-            if(data.secondStep === 1)
+            if(data.firstStep === 1)
               $('td', row).eq(7).css("background", '#f39c12');
-            if(data.secondStep === 2)
+            if(data.firstStep === 2)
               $('td', row).eq(7).css("background", '#00a65a');
-            if(data.secondStep >= 100)
+            if(data.firstStep >= 100)
               $('td', row).eq(7).css("background", 'red');
 
-            if(data.thirdStep === 1)
+            if(data.secondStep === 1)
               $('td', row).eq(8).css("background", '#f39c12');
-            if(data.thirdStep === 2)
+            if(data.secondStep === 2)
               $('td', row).eq(8).css("background", '#00a65a');
-            if(data.thirdStep >= 100)
+            if(data.secondStep >= 100)
               $('td', row).eq(8).css("background", 'red');
 
-            if(data.fourthStep === 1)
+            if(data.thirdStep === 1)
               $('td', row).eq(9).css("background", '#f39c12');
-            if(data.fourthStep === 2)
+            if(data.thirdStep === 2)
               $('td', row).eq(9).css("background", '#00a65a');
-            if(data.fourthStep >= 100)
+            if(data.thirdStep >= 100)
               $('td', row).eq(9).css("background", 'red');
+
+            if(data.fourthStep === 1)
+              $('td', row).eq(10).css("background", '#f39c12');
+            if(data.fourthStep === 2)
+              $('td', row).eq(10).css("background", '#00a65a');
+            if(data.fourthStep >= 100)
+              $('td', row).eq(10).css("background", 'red');
+
+            if (data.projectStatus === 0) {
+              $(row).css('background', '#FF0000');
+            }
+            if (data.projectStatus === 3) {
+              $(row).css('background', '#f39c12');
+            }
 
             if (temp!=null && data.code === $('td', temp).eq(1).html()) {
               rowspan = $('td', temp).eq(1).attr("rowSpan");
@@ -255,7 +267,7 @@
                 rowspan = $('td', temp).eq(1).attr("rowSpan");
               }
               rowspan = Number(rowspan)+1;
-              merge(temp, row, rowspan, [1, 2, 3, 4, 10]);
+              merge(temp, row, rowspan, [1, 2, 3, 4, 5, 11]);
             } else {
               temp = row;
             }

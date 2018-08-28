@@ -84,7 +84,6 @@ public class PermissionController {
      * 子权限添加页面
      */
     @GetMapping("/permission/create/{id}")
-    @LogAnnotation(action = "添加子权限")
     public String permissionCreate(@PathVariable Integer id, Model model) {
         model.addAttribute("id", id);
         return prefix + "/permission/create";

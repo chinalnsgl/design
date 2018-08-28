@@ -5,3 +5,5 @@ $.ajaxSetup({
     }
   }
 });
+
+$.fn.dataTable.ext.errMode = 'none';
