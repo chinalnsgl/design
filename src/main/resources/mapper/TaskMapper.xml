@@ -55,7 +55,25 @@
     inner JOIN (
 
     select ROW_NUMBER() OVER(Order by order_no desc, code) as projectNo,* from project
-
+    where 1 = 1
+    <if test="code != null and code != ''">
+      AND code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND name like #{name}
+    </if>
+    <if test="statusQuery == 1">
+      AND status != 4
+    </if>
+    <if test="statusQuery == 2">
+      AND status = 4
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ AND create_time >= #{startTime} ]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND create_time <= #{endTime} ]]>
+    </if>
     ) b on a.project_id = b.id
     LEFT JOIN produce_task c on c.project_id = b.id
     LEFT JOIN produce_task d on d.project_id = b.id
