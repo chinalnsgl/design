@@ -18,5 +18,7 @@ public class ProjectQuery implements Serializable {
     private Date startTime;
     private Date endTime;
     private String departmentQuery;
+    private String demander;
     private Integer statusQuery;
+    private Integer year;
 }

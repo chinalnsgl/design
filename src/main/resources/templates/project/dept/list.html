@@ -50,9 +50,9 @@
                       设计状态
                     </label>
                     <select id="status" name="status" class="form-control select2" >
-                      <option value="1" selected="selected">未完成</option>
+                      <option value="" selected="selected">全部</option>
+                      <option value="1" >未完成</option>
                       <option value="2">已完成</option>
-                      <option value="">全部</option>
                       <!--<option value="3">已取消</option>-->
                     </select>
                   </div>
@@ -151,7 +151,7 @@
             }
           },
           "columns": [
-            { "data": "rowId",
+            { "data": "projectNo",
               // "width": "8%",
 
             },
@@ -267,9 +267,10 @@
                 rowspan = $('td', temp).eq(1).attr("rowSpan");
               }
               rowspan = Number(rowspan)+1;
-              merge(temp, row, rowspan, [1, 2, 3, 4, 5, 11]);
+              merge(temp, row, rowspan, [0,1, 2, 3, 4, 5, 11]);
             } else {
               temp = row;
+              $('td', row).css("border-top", '1px solid black');
             }
           },
           "language" : { // 国际化配置

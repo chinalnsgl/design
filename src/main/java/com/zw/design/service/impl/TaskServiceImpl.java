@@ -137,6 +137,9 @@ public class TaskServiceImpl implements TaskService {
         if (query.getName() != null && !"".equals(query.getName().trim())) {
             query.setName("%" + query.getName() + "%");
         }
+        if (query.getDemander() != null && !"".equals(query.getDemander().trim())) {
+            query.setDemander("%" + query.getDemander() + "%");
+        }
         query.setLength(query.getStart() + query.getLength());
         query.setStart(query.getStart() + 1);
         List<TaskDto> dtos = taskDao.findTasks(query);

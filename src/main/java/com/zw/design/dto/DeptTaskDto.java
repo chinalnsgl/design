@@ -12,6 +12,7 @@ public class DeptTaskDto implements Serializable {
     private Integer rowId;
     private Integer id;
     private Integer orderNo;
+    private Integer projectNo;
     private String name;
     private String code;
     private Integer num;

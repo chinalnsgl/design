@@ -26,3 +26,18 @@ tr.shown td.details-control {
   color: red;
 }
 
+.delete-status {
+  background: red;
+  color: white;
+}
+
+.execute-status {
+  background: #f39c12;
+  color: white;
+}
+
+.success-status {
+  background: #00a65a;
+  color: white;
+}
+

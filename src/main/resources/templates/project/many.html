@@ -28,11 +28,16 @@
                     <input type="text" id="nameQuery" name="name" class="form-control" placeholder="请输入项目名称">
                   </div>
                   <div class="form-group" style="margin-right: 10px;">
-                    <label>时间</label>
-                    <input type="text" class="form-control datepicker" id="startTime" readonly="readonly" />
-                    <span>至</span>
-                    <input type="text" class="form-control datepicker" id="endTime" readonly="readonly" />
+                    <label>需方</label>
+                    <input type="text" id="demander" name="demander" class="form-control" placeholder="请输入需方">
                   </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>年度</label>
+                    <select id="year" name="year" class="form-control select2" >
+                      <option value="" selected="selected">请选择</option>
+                    </select>
+                  </div>
+
                   <div class="form-group" style="margin-right: 10px;">
                     <label>设计科室</label>
                     <select id="departmentQuery" name="departmentQuery" class="form-control select2" >
@@ -60,16 +65,29 @@
                       <option value="">全部</option>
                     </select>
                   </div>
-
                   <button class="btn btn-default" id="btn_search">搜索</button>
+
+
                 </div>
               </div>
+
+              <div class="row" style="margin-top: 10px">
+                <div class="form-inline">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>时间</label>
+                    <input type="text" class="form-control datepicker" id="startTime" readonly="readonly" />
+                    <span>至</span>
+                    <input type="text" class="form-control datepicker" id="endTime" readonly="readonly" />
+                  </div>
+                </div>
+              </div>
+
 
             </div>
             <!-- /.box-header -->
             <div class="box-body">
 
-              <table id="projectDataTables" class="table table-bordered table-hover">
+              <table id="projectDataTables" class="table table-bordered">
                 <thead>
                 <tr>
                   <th>序号</th>
@@ -156,7 +174,9 @@
           departmentQuery : $("#departmentQuery").val(),
           "startTime": $("#startTime").val(),
           "endTime": $("#endTime").val(),
-          "statusQuery" : $("#statusQuery").val()
+          "statusQuery" : $("#statusQuery").val(),
+          "demander": $("#demander").val(),
+          "year" : $("#year").val()
         },
         dataSrc : function (json) {
           if (json.status === 200) {
@@ -276,6 +296,7 @@
         if(data.signStatus === 1)
           $('td', row).eq(8).css("background", '#f39c12');
         if(data.signStatus === 2)
+          // $('td', row).eq(8).addClass("success-status");
           $('td', row).eq(8).css("background", '#00a65a');
 
         if(data.deptStatus > 0 && data.deptStatus < 8)
@@ -311,6 +332,7 @@
 
 
         if (data.projectStatus === 0) {
+          // $(row).addClass("delete-status")
           $(row).css('background', '#FF0000');
         }
         if (data.projectStatus === 3) {
@@ -326,6 +348,7 @@
           merge(temp, row, rowspan, [0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17]);
         } else {
           temp = row;
+          $('td', row).css("border-top", '1px solid black');
         }
       },
       "language" : { // 国际化配置
@@ -366,7 +389,18 @@
     });
   }
 
+  function yearSelectCreate() {
+    var myDate= new Date();
+    var endYear=myDate.getFullYear();//结束年份
+    for (var i=2016;i<=endYear;i++)
+    {
+      $("#year").append("<option value='"+ i +"'>"+ i + "年" +"</option>");
+    }
+  }
+
   $(function () {
+
+    yearSelectCreate();
 
     // 加载列表
     getProjectList();
