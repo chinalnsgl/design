@@ -157,7 +157,7 @@
       ],
       "info": false,
       "ordering": false,
-      // "autoWidth": true,
+      "autoWidth": false,
       "scrollX": false,
       "lengthChange": false,  //每页显示的记录数
       "pageLength": 300,
@@ -394,7 +394,10 @@
     var endYear=myDate.getFullYear();//结束年份
     for (var i=2016;i<=endYear;i++)
     {
-      $("#year").append("<option value='"+ i +"'>"+ i + "年" +"</option>");
+      if(i === 2016)
+        $("#year").append("<option value='"+ i +"'>"+ i + "年及以前" +"</option>");
+      else
+        $("#year").append("<option value='"+ i +"'>"+ i + "年" +"</option>");
     }
   }
 
