@@ -181,13 +181,13 @@ public class ProjectServiceImpl implements ProjectService {
         p.setAddress(project.getAddress());
         p.setCodeSpecial(project.getCodeSpecial());
         p.setComment(project.getComment());
-        if (p.getOrderNo() != 2) {
+        /*if (p.getOrderNo() != 2) {
             if (project.getOrderNo() == null) {
                 p.setOrderNo(0);
             } else {
                 p.setOrderNo(1);
             }
-        }
+        }*/
         p.setNum(project.getNum());
         p.setPlanTime(project.getPlanTime());
         List<DeptTask> mechineList = new ArrayList<>();

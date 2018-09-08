@@ -19,6 +19,9 @@ public class DeptTaskDto implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date planTime;
     private String comment;
+    private String demander;
+    private String address;
+    private String codeSpecial;
     private Integer projectStatus;
     private Integer type;
     private Integer deptNum;
@@ -27,5 +30,6 @@ public class DeptTaskDto implements Serializable {
     private Integer thirdStep;
     private Integer fourthStep;
     private Integer sumStatus;
+    private Integer signStatus;
 
 }

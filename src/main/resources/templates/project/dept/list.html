@@ -67,7 +67,7 @@
               <table id="projectDataTables" class="table table-bordered">
                 <thead>
                 <tr>
-                  <th>序号</th>
+                  <!--<th>序号</th>
                   <th>项目号</th>
                   <th>项目名称</th>
                   <th>数量</th>
@@ -78,6 +78,22 @@
                   <th>条件相关</th>
                   <th>采购计划</th>
                   <th>下图纸</th>
+                  <th>操作</th>-->
+                  <th>序号</th>
+                  <th>项目名称</th>
+                  <th>需方</th>
+                  <th>安装地点</th>
+                  <th>项目号</th>
+                  <th>任务单号</th>
+                  <th>数量</th>
+                  <th>计划完成时间</th>
+                  <th>签技术协议</th>
+                  <th>科室</th>
+                  <th>设计</th>
+                  <th>条件相关</th>
+                  <th>采购计划</th>
+                  <th>下图纸</th>
+                  <th>备注</th>
                   <th>操作</th>
                 </tr>
                 </thead>
@@ -118,13 +134,13 @@
               filename: 'projects',
               exportOptions: {
                 // 将打印 id 和 title 列
-                columns: [ 0,1,2,3,4,5,6,7,8,9,10]
+                columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
               }
             },
           ],
           "info": true,
           "ordering": false,
-          "autoWidth": true,
+          "autoWidth": false,
           "lengthChange": false,  //每页显示的记录数
           "pageLength": 300,
           "dom": "t<'row'<'col-sm-6'B><'col-sm-6'p>>",
@@ -152,62 +168,75 @@
           },
           "columns": [
             { "data": "projectNo",
-              // "width": "8%",
-
+              "width": "8px"
+            },
+            { "data": "name",
+              "width": "180px"
+            },
+            { "data": "demander",
+              "width": "170px"
+            },
+            { "data": "address",
+              "width": "100px"
             },
             { "data": "code",
               // "width": "5%",
             },
-            { "data": "name",
+            { "data": "codeSpecial",
               // "width": "5%",
-
             },
             { "data": "num",
               // "width": "20%",
             },
             { "data": "planTime",
-              // "width": "5%",
+              "width": "100px"
             },
-            { "data": "comment",
-              "width": "200px",
+            { "data": "signStatus",
+              "width": "70px",
+              render : function(data, type, row, meta) {
+                return '<span>' + statusName[data] + '</span>';
+              }
             },
             { "data": "type",
-              // "width": "10%"
+              "width": "140px",
               render : function(data, type, row, meta) {
                 return deptName[data] + deptNum[row.deptNum];
               }
             },
             { "data": "firstStep",
+              "width": "70px",
               render : function(data, type, row, meta) {
                 if(data > 2)
                   data = 3
                 return statusName[data];
               }
-              // "width": "5%",
             },
             { "data": "secondStep",
+              "width": "70px",
               render : function(data, type, row, meta) {
                 if(data > 2)
                   data = 3
                 return statusName[data];
               }
-              // "width": "5%",
             },
             { "data": "thirdStep",
+              "width": "70px",
               render : function(data, type, row, meta) {
                 if(data > 2)
                   data = 3
                 return statusName[data];
               }
-              // "width": "5%",
             },
             { "data": "fourthStep",
+              "width": "70px",
               render : function(data, type, row, meta) {
                 if(data > 2)
                   data = 3
                 return statusName[data];
               }
-              // "width": "5%",
+            },
+            { "data": "comment",
+              "width": "100px"
             },
             { "data": "id",
               // "width": "5%",
@@ -218,40 +247,46 @@
           ],
           "createdRow": function ( row, data, index ) {
             if($("#departmentQuery").find("option:selected").text() == (deptName[data.type] + deptNum[data.deptNum])){
-              $('td', row).eq(6).css("background", '#e0e0e0');
-              $('td', row).eq(7).css("background", '#e0e0e0');
-              $('td', row).eq(8).css("background", '#e0e0e0');
               $('td', row).eq(9).css("background", '#e0e0e0');
               $('td', row).eq(10).css("background", '#e0e0e0');
+              $('td', row).eq(11).css("background", '#e0e0e0');
+              $('td', row).eq(12).css("background", '#e0e0e0');
+              $('td', row).eq(13).css("background", '#e0e0e0');
             }
 
+            if(data.signStatus === 1)
+              $('td', row).eq(8).css("background", '#f39c12');
+            if(data.signStatus === 2)
+            // $('td', row).eq(8).addClass("success-status");
+              $('td', row).eq(8).css("background", '#00a65a');
+
             if(data.firstStep === 1)
-              $('td', row).eq(7).css("background", '#f39c12');
+              $('td', row).eq(10).css("background", '#f39c12');
             if(data.firstStep === 2)
-              $('td', row).eq(7).css("background", '#00a65a');
+              $('td', row).eq(10).css("background", '#00a65a');
             if(data.firstStep >= 100)
-              $('td', row).eq(7).css("background", 'red');
+              $('td', row).eq(10).css("background", 'red');
 
             if(data.secondStep === 1)
-              $('td', row).eq(8).css("background", '#f39c12');
+              $('td', row).eq(11).css("background", '#f39c12');
             if(data.secondStep === 2)
-              $('td', row).eq(8).css("background", '#00a65a');
+              $('td', row).eq(11).css("background", '#00a65a');
             if(data.secondStep >= 100)
-              $('td', row).eq(8).css("background", 'red');
+              $('td', row).eq(11).css("background", 'red');
 
             if(data.thirdStep === 1)
-              $('td', row).eq(9).css("background", '#f39c12');
+              $('td', row).eq(12).css("background", '#f39c12');
             if(data.thirdStep === 2)
-              $('td', row).eq(9).css("background", '#00a65a');
+              $('td', row).eq(12).css("background", '#00a65a');
             if(data.thirdStep >= 100)
-              $('td', row).eq(9).css("background", 'red');
+              $('td', row).eq(12).css("background", 'red');
 
             if(data.fourthStep === 1)
-              $('td', row).eq(10).css("background", '#f39c12');
+              $('td', row).eq(13).css("background", '#f39c12');
             if(data.fourthStep === 2)
-              $('td', row).eq(10).css("background", '#00a65a');
+              $('td', row).eq(13).css("background", '#00a65a');
             if(data.fourthStep >= 100)
-              $('td', row).eq(10).css("background", 'red');
+              $('td', row).eq(13).css("background", 'red');
 
             if (data.projectStatus === 0) {
               $(row).css('background', '#FF0000');
@@ -260,14 +295,14 @@
               $(row).css('background', '#f39c12');
             }
 
-            if (temp!=null && data.code === $('td', temp).eq(1).html()) {
-              rowspan = $('td', temp).eq(1).attr("rowSpan");
+            if (temp!=null && data.code === $('td', temp).eq(4).html()) {
+              rowspan = $('td', temp).eq(4).attr("rowSpan");
               if (rowspan === undefined) {
-                $('td', temp).eq(1).attr("rowSpan",1);
-                rowspan = $('td', temp).eq(1).attr("rowSpan");
+                $('td', temp).eq(4).attr("rowSpan",1);
+                rowspan = $('td', temp).eq(4).attr("rowSpan");
               }
               rowspan = Number(rowspan)+1;
-              merge(temp, row, rowspan, [0,1, 2, 3, 4, 5, 11]);
+              merge(temp, row, rowspan, [0,1, 2, 3, 4, 5, 6, 7, 8, 14, 15]);
             } else {
               temp = row;
               $('td', row).css("border-top", '1px solid black');
