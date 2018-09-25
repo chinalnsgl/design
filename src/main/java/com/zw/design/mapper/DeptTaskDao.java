@@ -1,5 +1,6 @@
 package com.zw.design.mapper;
 
+import com.zw.design.dto.CollectDto;
 import com.zw.design.dto.DeptTaskDto;
 import com.zw.design.dto.TaskDto;
 import com.zw.design.query.ProjectQuery;
@@ -24,4 +25,14 @@ public interface DeptTaskDao {
     List<DeptTaskDto> findDeptTaskList(TaskQuery query);
 
     Integer findDeptTaskCount(TaskQuery query);
+
+    CollectDto findProjectCount(TaskQuery query);
+
+    CollectDto findProjectDelCompCount(TaskQuery query);
+
+    CollectDto findProjectDelUnCompCount(TaskQuery query);
+
+    CollectDto findDeptUndoneCount(TaskQuery query);
+
+    CollectDto findDeptdoneCount(TaskQuery query);
 }

@@ -1,5 +1,6 @@
 package com.zw.design.service.impl;
 
+import com.zw.design.dto.CollectDto;
 import com.zw.design.dto.DataTablesCommonDto;
 import com.zw.design.dto.DeptTaskDto;
 import com.zw.design.dto.TaskDto;
@@ -19,6 +20,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -182,5 +184,27 @@ public class TaskServiceImpl implements TaskService {
         dataTablesCommonDto.setRecordsTotal(count);
         dataTablesCommonDto.setRecordsFiltered(count);
         return dataTablesCommonDto;
+    }
+
+    @Override
+    public List<CollectDto> findDeptTaskCollect(TaskQuery query) {
+        if (query.getDepartmentQuery() != null && !"".equals(query.getDepartmentQuery())) {
+            String[] strings = query.getDepartmentQuery().split(",");
+            query.setType(Integer.parseInt(strings[0]));
+            query.setNum(Integer.parseInt(strings[1]));
+        }
+        if (query.getCode() != null && !"".equals(query.getCode().trim())) {
+            query.setCode("%" + query.getCode() + "%");
+        }
+        if (query.getName() != null && !"".equals(query.getName().trim())) {
+            query.setName("%" + query.getName() + "%");
+        }
+        List<CollectDto> dtos = new ArrayList<>();
+        dtos.add(taskDao.findProjectCount(query));
+        dtos.add(taskDao.findProjectDelUnCompCount(query));
+        dtos.add(taskDao.findProjectDelCompCount(query));
+        dtos.add(taskDao.findDeptUndoneCount(query));
+        dtos.add(taskDao.findDeptdoneCount(query));
+        return dtos;
     }
 }

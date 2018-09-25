@@ -18,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 @Slf4j
 @RequestMapping("/project")
@@ -241,6 +243,18 @@ public class ProjectController {
     @PostMapping("/dept/list")
     public BaseResponse deptTaskList(TaskQuery query) {
         DataTablesCommonDto<DeptTaskDto> dto = taskService.findTasksByCriteria(query);
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setContent(dto);
+        return baseResponse;
+    }
+
+    /**
+     * 科室看板统计信息
+     */
+    @ResponseBody
+    @PostMapping("/dept/collect")
+    public BaseResponse deptTaskCollect(TaskQuery query) {
+        List<CollectDto> dto = taskService.findDeptTaskCollect(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;

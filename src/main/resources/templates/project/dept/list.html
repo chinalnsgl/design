@@ -2,6 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
+
+<div class="modal fade" id="modal-info">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">统计信息</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <label class="col-sm-4 no-padding-right">项目数量</label>
+          <div class="col-sm-2 center-info" id="project_num"></div>
+          <label  class="col-sm-4 no-padding-right">产品数量</label>
+          <div class="col-sm-2 center-info" id="product_num"></div>
+        </div>
+        <div class="row">
+          <label  class="col-sm-4 no-padding-right">已删除项目数量（未完成）</label>
+          <div class="col-sm-2 center-info" id="project_del_uncomp_num"></div>
+          <label  class="col-sm-4 no-padding-right">已删除项目产品数量</label>
+          <div class="col-sm-2 center-info" id="product_del_uncomp_num"></div>
+        </div>
+        <div class="row">
+          <label  class="col-sm-4 no-padding-right">已删除项目数量（完成）</label>
+          <div class="col-sm-2 center-info" id="project_del_comp_num"></div>
+          <label  class="col-sm-4 no-padding-right">已删除项目产品数量</label>
+          <div class="col-sm-2 center-info" id="product_del_comp_num"></div>
+        </div>
+        <div class="row">
+          <label  class="col-sm-4 no-padding-right">未完成数量</label>
+          <div class="col-sm-2 center-info" id="project_dept_undone_num"></div>
+          <label  class="col-sm-4 no-padding-right">未完成产品数量</label>
+          <div class="col-sm-2 center-info" id="product_dept_undone_num"></div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 no-padding-right">已完成数量</label>
+          <div class="col-sm-2 center-info" id="project_dept_done_num"></div>
+          <label  class="col-sm-4 no-padding-right">已完成产品数量</label>
+          <div class="col-sm-2 center-info" id="product_dept_done_num"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-close" data-dismiss="modal">确定</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
@@ -57,6 +104,7 @@
                     </select>
                   </div>
                   <button class="btn btn-default" id="btn_search">搜索</button>
+                  <button class="btn btn-default" id="btn_collect" disabled>统计</button>
                 </div>
               </div>
 
@@ -143,7 +191,7 @@
           "autoWidth": false,
           "lengthChange": false,  //每页显示的记录数
           "pageLength": 300,
-          "dom": "t<'row'<'col-sm-6'B><'col-sm-6'p>>",
+          "dom": "<'row'<'col-sm-6'><'col-sm-6'p>>t<'row'<'col-sm-6'B><'col-sm-6'p>>",
           "searching":false,//禁用搜索
           "processing": true,
           "serverSide": true,
@@ -246,7 +294,7 @@
             }
           ],
           "createdRow": function ( row, data, index ) {
-            if($("#departmentQuery").find("option:selected").text() == (deptName[data.type] + deptNum[data.deptNum])){
+            if($("#departmentQuery").find("option:selected").text() == (deptName[data.type] + deptNum[data.deptNum]) && data.projectStatus !== 0 && data.projectStatus !== 3){
               $('td', row).eq(9).css("background", '#e0e0e0');
               $('td', row).eq(10).css("background", '#e0e0e0');
               $('td', row).eq(11).css("background", '#e0e0e0');
@@ -254,38 +302,38 @@
               $('td', row).eq(13).css("background", '#e0e0e0');
             }
 
-            if(data.signStatus === 1)
+            if(data.signStatus === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(8).css("background", '#f39c12');
-            if(data.signStatus === 2)
+            if(data.signStatus === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
             // $('td', row).eq(8).addClass("success-status");
               $('td', row).eq(8).css("background", '#00a65a');
 
-            if(data.firstStep === 1)
+            if(data.firstStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(10).css("background", '#f39c12');
-            if(data.firstStep === 2)
+            if(data.firstStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(10).css("background", '#00a65a');
-            if(data.firstStep >= 100)
+            if(data.firstStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(10).css("background", 'red');
 
-            if(data.secondStep === 1)
+            if(data.secondStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(11).css("background", '#f39c12');
-            if(data.secondStep === 2)
+            if(data.secondStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(11).css("background", '#00a65a');
-            if(data.secondStep >= 100)
+            if(data.secondStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(11).css("background", 'red');
 
-            if(data.thirdStep === 1)
+            if(data.thirdStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(12).css("background", '#f39c12');
-            if(data.thirdStep === 2)
+            if(data.thirdStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(12).css("background", '#00a65a');
-            if(data.thirdStep >= 100)
+            if(data.thirdStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(12).css("background", 'red');
 
-            if(data.fourthStep === 1)
+            if(data.fourthStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(13).css("background", '#f39c12');
-            if(data.fourthStep === 2)
+            if(data.fourthStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(13).css("background", '#00a65a');
-            if(data.fourthStep >= 100)
+            if(data.fourthStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(13).css("background", 'red');
 
             if (data.projectStatus === 0) {
@@ -345,6 +393,43 @@
         });
       }
 
+      /** 统计按钮事件 */
+      function collectEvent() {
+        $("#btn_collect").click(function () {
+          $("#btn_search").trigger('click');
+          $.ajax({
+            url: "/project/dept/collect",
+            type: "POST",
+            data: {
+              "code": $("#codeQuery").val(),
+              "name": $("#nameQuery").val(),
+              departmentQuery : $("#departmentQuery").val(),
+              "status" : $("#status").val()
+            },
+            success: function (result) {
+              if (result.status === 200) {
+                var list = result.content;
+                $("#project_num").text(list[0].projectNum);
+                $("#product_num").text(list[0].productNum);
+                $("#project_del_uncomp_num").text(list[1].projectNum);
+                $("#product_del_uncomp_num").text(list[1].productNum);
+                $("#project_del_comp_num").text(list[2].projectNum);
+                $("#product_del_comp_num").text(list[2].productNum);
+                $("#project_dept_undone_num").text(list[3].projectNum);
+                $("#product_dept_undone_num").text(list[3].productNum);
+                $("#project_dept_done_num").text(list[4].projectNum);
+                $("#product_dept_done_num").text(list[4].productNum);
+
+                $("#modal-info").modal('show');
+              }
+            },
+            error: function () {
+              toastr.success("服务器失败！");
+            }
+          });
+        });
+      }
+
       $(function () {
 
         // getProjectList();
@@ -362,6 +447,16 @@
           autoclose: true,
           clearBtn: true
         });
+
+        $("#departmentQuery").change(function () {
+          if ($(this).val() != null && $(this).val() != "") {
+            $("#btn_collect").attr("disabled", false);
+          } else {
+            $("#btn_collect").attr("disabled", true);
+          }
+        });
+
+        collectEvent();
 
       });
 

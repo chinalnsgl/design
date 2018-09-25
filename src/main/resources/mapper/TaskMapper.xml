@@ -268,4 +268,120 @@
       and a.id in (${ids})
     </if>
   </select>
+
+  <select id="findProjectCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+    select count(c.id) as projectNum, sum(c.num) as productNum from
+    (
+    select a.id, a.num from project as a
+    INNER JOIN ( select project_id from dept_task GROUP BY project_id, department_type, department_num
+    HAVING 1 = 1
+    <if test="type != null and num != null">
+      and department_type = #{type} and department_num = #{num}
+    </if>
+    ) as b
+    on a.id = b.project_id
+    where 1 = 1
+    <if test="code != null and code != ''">
+      AND a.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND a.name like #{name}
+    </if>
+    ) c
+  </select>
+
+  <select id="findProjectDelCompCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+    select count(c.id) as projectNum, sum(c.num) as productNum from
+    (
+    select a.id, a.num from project as a
+    INNER JOIN ( select project_id from dept_task GROUP BY project_id, department_type, department_num
+    HAVING 1 = 1
+    and sum(status) = 8
+    <if test="type != null and num != null">
+      and department_type = #{type} and department_num = #{num}
+    </if>
+    ) as b
+    on a.id = b.project_id
+    where 1 = 1
+    <![CDATA[ and a.status = 0  ]]>
+    <if test="code != null and code != ''">
+      AND a.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND a.name like #{name}
+    </if>
+    ) c
+  </select>
+
+
+  <select id="findProjectDelUnCompCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+    select count(c.id) as projectNum, sum(c.num) as productNum from
+    (
+    select a.id, a.num from project as a
+    INNER JOIN ( select project_id from dept_task GROUP BY project_id, department_type, department_num
+    HAVING 1 = 1
+    <![CDATA[ and sum(status) < 8  ]]>
+    <if test="type != null and num != null">
+      and department_type = #{type} and department_num = #{num}
+    </if>
+    ) as b
+    on a.id = b.project_id
+    where 1 = 1
+    <![CDATA[ and a.status = 0  ]]>
+    <if test="code != null and code != ''">
+      AND a.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND a.name like #{name}
+    </if>
+    ) c
+  </select>
+
+  <select id="findDeptUndoneCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+    select count(c.id) as projectNum, sum(c.num) as productNum from
+    (
+    select a.id, a.num from project as a
+    INNER JOIN ( select project_id from dept_task GROUP BY project_id, department_type, department_num
+    HAVING 1 = 1
+    <![CDATA[ and sum(status) < 8  ]]>
+    <if test="type != null and num != null">
+      and department_type = #{type} and department_num = #{num}
+    </if>
+     ) as b
+    on a.id = b.project_id
+    where 1 = 1
+    <![CDATA[ and a.status > 0  ]]>
+    <if test="code != null and code != ''">
+      AND a.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND a.name like #{name}
+    </if>
+    ) c
+  </select>
+
+  <select id="findDeptdoneCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+    select count(c.id) as projectNum, sum(c.num) as productNum from
+    (
+    select a.id, a.num from project as a
+    INNER JOIN ( select project_id from dept_task GROUP BY project_id, department_type, department_num
+    HAVING 1 = 1
+    and sum(status) = 8
+    <if test="type != null and num != null">
+      and department_type = #{type} and department_num = #{num}
+    </if>
+    ) as b
+    on a.id = b.project_id
+    where 1 = 1
+    <![CDATA[ and a.status > 0  ]]>
+    <if test="code != null and code != ''">
+      AND a.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND a.name like #{name}
+    </if>
+    ) c
+  </select>
+
+
 </mapper>

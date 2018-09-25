@@ -29,7 +29,7 @@ public class DeptTask implements Serializable {
     private Date startTime; // 开始时间
     @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date endTime; // 结束时间
-    private Integer status = 0; // 状态 0：未开始  1：执行中  2：已完成
+    private Integer status = 0; // 状态 0：未开始  1：执行中  2：已完成 100+：删除
     private String comment; // 备注
     private String principal;// 负责人
     @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")

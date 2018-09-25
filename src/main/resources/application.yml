@@ -33,5 +33,5 @@ logging:
     com:
       zw:
         design:
-          mapper: info
+          mapper: debug
   path: e:/DesignProjectLog
