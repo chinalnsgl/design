@@ -13,10 +13,13 @@ import com.zw.design.service.ProjectService;
 import com.zw.design.service.TaskService;
 import com.zw.design.service.impl.ProcessService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -33,6 +36,8 @@ public class ProjectController {
     private TaskService taskService;
     @Autowired
     private ProcessService processService;
+    @Value("${upload.path}")
+    private String uploadPath;
 
     /**
      * 创建项目页面
@@ -302,6 +307,10 @@ public class ProjectController {
         baseResponse.setContent(dto);
         return baseResponse;
     }
+
+    /*public BaseResponse upload(@RequestParam("file") MultipartFile[] file) {
+
+    }*/
 
     /**
      * 处理数据

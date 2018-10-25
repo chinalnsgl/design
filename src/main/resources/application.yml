@@ -38,3 +38,5 @@ logging:
         design:
           mapper: debug
   path: e:/DesignProjectLog
+upload:
+  path: e:/upload/

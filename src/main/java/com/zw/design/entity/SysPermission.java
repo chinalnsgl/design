@@ -32,6 +32,8 @@ public class SysPermission implements Serializable {
     @Transient
     private boolean checkFlag = false;
 
+    private Integer orderNo;
+
     @ManyToOne
     @JoinColumn(name = "pid")
     @JsonIgnoreProperties("children")

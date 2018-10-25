@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -108,7 +109,7 @@ public class PermissionServiceImpl implements PermissionService {
             list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 19));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
-        });
+        }, Sort.by("orderNo"));
 //        List<SysPermission> permissionList = findPermissionAll();
         SysRole role = sysRoleRepository.findById(id).get();
         for (SysPermission permission : permissionList) {
