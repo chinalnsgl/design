@@ -40,7 +40,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public DataTablesCommonDto<SysPermission> findPermissionByCriteria(PermissionQuery query) {
-        Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength());
+        Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(),Sort.by("orderNo"));
         Page<SysPermission> permissionPage = permissionRepository.findAll((Specification<SysPermission>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<Predicate>();
             if (null != query.getPermissionName() && !"".equals(query.getPermissionName())) {
@@ -79,7 +79,7 @@ public class PermissionServiceImpl implements PermissionService {
 //            list.add(criteriaBuilder.isNull(root.get("parent")));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
-        });
+        },Sort.by("orderNo"));
         return permissionList;
     }
 
