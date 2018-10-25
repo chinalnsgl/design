@@ -127,9 +127,9 @@
               render : function(data, type, row, meta) {
                 if (row.status === 1) {
                   return '<a style="margin-right: 5px" class="btn btn-warning btn-xs user-edit" href="/sys/user/edit/'+data+'" >编辑</a>' +
-                      '<a class="btn btn-danger btn-xs user-status" href="javascript:void(0);" onclick="updateStatus(' + data + ',0)">锁定</a>';
+                      '<a class="btn btn-danger btn-xs user-lock" href="javascript:void(0);" onclick="updateStatus(' + data + ',0)">锁定</a>';
                 }else if (row.status === 0) {
-                  return '<a class="btn btn-success btn-xs user-status" href="javascript:void(0);" onclick="updateStatus(' + data + ',1)">解锁</a>';
+                  return '<a class="btn btn-success btn-xs user-unlock" href="javascript:void(0);" onclick="updateStatus(' + data + ',1)">解锁</a>';
                 }
               }
             }
@@ -191,7 +191,10 @@
           if ($.inArray('user:edit', permissions) === -1) {
             $(".user-edit").hide();
           }
-          if ($.inArray('user:status', permissions) === -1) {
+          if ($.inArray('user:lock', permissions) === -1) {
+            $(".user-status").hide();
+          }
+          if ($.inArray('user:unlock', permissions) === -1) {
             $(".user-status").hide();
           }
         } );

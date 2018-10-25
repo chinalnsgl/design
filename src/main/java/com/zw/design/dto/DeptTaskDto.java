@@ -31,5 +31,10 @@ public class DeptTaskDto implements Serializable {
     private Integer fourthStep;
     private Integer sumStatus;
     private Integer signStatus;
+    private Integer debugStatus;
+
+    private Float produceStatus;
+    private Float processStatus;
+    private Float deptStatus;
 
 }

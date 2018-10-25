@@ -48,4 +48,7 @@ public class TaskDto implements Serializable {
     private String saveName;
     private Integer saveStatus;
     private String saveAnnotate;
+    private String contractName;
+    private Integer contractStatus;
+    private String contractAnnotate;
 }

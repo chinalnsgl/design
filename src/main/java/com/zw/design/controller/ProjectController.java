@@ -11,6 +11,7 @@ import com.zw.design.query.ProjectQuery;
 import com.zw.design.query.TaskQuery;
 import com.zw.design.service.ProjectService;
 import com.zw.design.service.TaskService;
+import com.zw.design.service.impl.ProcessService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,8 @@ public class ProjectController {
     private ProjectService projectService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private ProcessService processService;
 
     /**
      * 创建项目页面
@@ -237,7 +240,7 @@ public class ProjectController {
     }
 
     /**
-     * 科室看板
+     * 科室看板数据
      */
     @ResponseBody
     @PostMapping("/dept/list")
@@ -258,6 +261,56 @@ public class ProjectController {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;
+    }
+
+    /**
+     * 工艺进度页面
+     */
+    @GetMapping("/process")
+    public String process() {
+        return prefix + "/produce/process";
+    }
+
+    /**
+     * 工艺进度数据
+     */
+    @ResponseBody
+    @PostMapping("/process/list")
+    public BaseResponse processList(TaskQuery query) {
+        DataTablesCommonDto<DeptTaskDto> dto = taskService.findProcessList(query);
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setContent(dto);
+        return baseResponse;
+    }
+
+    /**
+     * 生产进度页面
+     */
+    @GetMapping("/produce")
+    public String produce() {
+        return prefix + "/produce/produce";
+    }
+
+    /**
+     * 生产进度数据
+     */
+    @ResponseBody
+    @PostMapping("/produce/list")
+    public BaseResponse produceList(TaskQuery query) {
+        DataTablesCommonDto<DeptTaskDto> dto = taskService.findProduceList(query);
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setContent(dto);
+        return baseResponse;
+    }
+
+    /**
+     * 处理数据
+     */
+    @ResponseBody
+    @GetMapping("/processDate")
+    public String processDate() {
+        processService.process();
+        return "ok";
     }
 
 }

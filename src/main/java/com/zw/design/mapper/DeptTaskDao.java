@@ -15,7 +15,6 @@ import java.util.List;
 public interface DeptTaskDao {
 
     List<TaskDto> findTasks(ProjectQuery query);
-
     Integer findTasksCount(ProjectQuery query);
 
     Integer findMaxStepNumByProjectId(@Param("id") Integer id);
@@ -23,7 +22,6 @@ public interface DeptTaskDao {
     List<Integer> findIdsByDept(TaskQuery query);
 
     List<DeptTaskDto> findDeptTaskList(TaskQuery query);
-
     Integer findDeptTaskCount(TaskQuery query);
 
     CollectDto findProjectCount(TaskQuery query);
@@ -35,4 +33,20 @@ public interface DeptTaskDao {
     CollectDto findDeptUndoneCount(TaskQuery query);
 
     CollectDto findDeptdoneCount(TaskQuery query);
+
+    List<DeptTaskDto> findProcessList(TaskQuery query);
+    Integer findProcessCount(TaskQuery query);
+    List<DeptTaskDto> findProduceList(TaskQuery query);
+    Integer findProduceCount(TaskQuery query);
+
+    Float findProduceCompleteStatus(@Param("id") Integer id);
+    Float findDeptCompleteStatus(@Param("id") Integer id);
+
+    int updateProcess1();
+    int updateProcess2();
+    int updateProcess3();
+    int updateProcess4();
+    int updateProcess5();
+
+
 }

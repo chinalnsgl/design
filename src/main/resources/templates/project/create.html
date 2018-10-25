@@ -143,6 +143,7 @@
                 <option value="5">机械设计五科</option>
                 <option value="6">机械设计六科</option>
                 <option value="7">机械设计七科</option>
+                <!--<option value="8">机械设计八科</option>-->
               </select>
             </div>
             <p class="text-muted">机械设计</p>
@@ -236,7 +237,7 @@
 </section>
 <!-- /.content -->
 <div th:include="include :: footer"></div>
-<script>
+<script th:inline="javascript">
 
   var projectTable;
   var projectForm = $("#projectForm");
@@ -300,7 +301,7 @@
         { "data": "id",
           "width" : "20%",
           render : function(data, type, row, meta) {
-            return '<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="updateStatus(' + data + ', \'' + row.name + '\')">删除</a>';
+            return '<a class="btn btn-danger btn-xs project-del" href="javascript:void(0);" onclick="updateStatus(' + data + ', \'' + row.name + '\')">删除</a>';
           }
         }
       ],
@@ -485,6 +486,16 @@
     });
   }
 
+  function setPermission() {
+    projectTable.on( 'draw.dt', function () {
+      var roles = [[${session.roles}]];
+      var permissions = [[${session.permissions}]];
+      if ($.inArray('project:del', permissions) === -1) {
+        $(".project-del").hide();
+      }
+    } );
+  }
+
   $(function () {
 
     getProjectList();
@@ -500,6 +511,8 @@
     taskBtnEvent();
 
     taskSelectEvent();
+
+    setPermission();
 
     /** 日期控件加载， 并触发验证 */
     $('.datepicker').datepicker({

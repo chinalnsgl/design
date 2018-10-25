@@ -29,6 +29,7 @@ public class ProduceTask implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date planStartTime; // 预计完成时间
     private String annotate; // 领导批注
+    private String contractNo; // 合同号
     @ManyToOne
     @JsonIgnoreProperties("produceTasks")
     Project project;

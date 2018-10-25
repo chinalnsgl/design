@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
-<body class="hold-transition login-page"  th:style="|background-image: url(@{/img/bglogin.jpg}); background-repeat: no-repeat;background-size: cover;background-attachment: fixed;|">
-<div class="login-box">
+<body class="hold-transition login-page" style="background: white" th:style="|background-image: url(@{/img/bglogin.jpg}); background-repeat: no-repeat;background-size: cover;background-attachment: fixed;|">
+<div class="row text-center" style="margin-top: 64px" >
+  <img th:src="@{/img/logo3.jpg}" width="112px" height="136px"  style="vertical-align: middle">
+  <h1 style="font-size: 56px;vertical-align: middle"><b style="color: white;">辽宁忠旺机械设备制造有限公司</b></h1>
+</div>
+<div class="login-box" style="margin-top: 32px">
+
   <div class="login-logo">
-    <b style="color: white;">技术研发部看板系统</b>
+    <b style="color: white;">项目看板系统</b>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
@@ -30,6 +35,10 @@
   </div>
   <!-- /.login-box-body -->
 </div>
+
+
+
+
 <!-- /.login-box -->
 <div th:include="include :: footer"></div>
 

@@ -20,4 +20,9 @@ public class TaskQuery implements Serializable {
     private Date startTime;
     private Date endTime;
     private String ids;
+    private Integer firstStatus;
+    private Integer secondStatus;
+    private Integer thirdStatus;
+    private Integer year;
+
 }

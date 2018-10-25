@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,17 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<SysPermission> findPermissionByRoleId(Integer id) {
-        List<SysPermission> permissionList = findPermissionAll();
+        List<SysPermission> permissionList = permissionRepository.findAll((Specification<SysPermission>) (root, query, criteriaBuilder) -> {
+            List<Predicate> list = new ArrayList<Predicate>();
+            list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), 1));
+            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 3));
+            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 6));
+            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 7));
+            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 19));
+            Predicate[] p = new Predicate[list.size()];
+            return criteriaBuilder.and(list.toArray(p));
+        });
+//        List<SysPermission> permissionList = findPermissionAll();
         SysRole role = sysRoleRepository.findById(id).get();
         for (SysPermission permission : permissionList) {
             for (SysPermission p : role.getPermissions()) {

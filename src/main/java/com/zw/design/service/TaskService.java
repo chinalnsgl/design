@@ -26,4 +26,8 @@ public interface TaskService {
     DeptTask saveDeptComment(DeptTask deptTask);
 
     List<CollectDto> findDeptTaskCollect(TaskQuery query);
+
+    DataTablesCommonDto<DeptTaskDto> findProcessList(TaskQuery query);
+
+    DataTablesCommonDto<DeptTaskDto> findProduceList(TaskQuery query);
 }

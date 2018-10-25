@@ -43,9 +43,12 @@
   <header class="main-header">
     <!-- Logo -->
     <a class="logo">
-      <span class="logo-lg"><b>技术研发部看板系统</b></span>
+      <span class="logo-lg"><b style="float:left">项目看板系统</b></span>
     </a>
     <nav class="navbar navbar-static-top">
+
+      <!--<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">-->
+
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <li shiro:authenticated="true">
@@ -83,8 +86,20 @@
         </li>
         <li shiro:hasPermission="depts">
           <a th:href="@{/project/depts}" target="content">
-            <i class="fa fa-sticky-note-o text-aqua"></i>
-            <span>科室项目浏览</span>
+            <i class="fa fa-pencil text-red"></i>
+            <span>设计进度看板</span>
+          </a>
+        </li>
+        <li shiro:hasPermission="process">
+          <a th:href="@{/project/process}" target="content">
+            <i class="fa fa-table text-yellow"></i>
+            <span>工艺进度看板</span>
+          </a>
+        </li>
+        <li shiro:hasPermission="produce">
+          <a th:href="@{/project/produce}" target="content">
+            <i class="fa fa-ambulance text-aqua"></i>
+            <span>生产进度看板</span>
           </a>
         </li>
         <li shiro:hasPermission="system:menu" class="treeview">
@@ -96,7 +111,7 @@
             <li><a th:href="@{/sys/users}" shiro:hasPermission="user:list" target="content"><i class="fa fa-circle-o text-red"></i> 用户列表</a></li>
             <li><a th:href="@{/sys/roles}" shiro:hasPermission="role:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 角色列表</a></li>
             <li><a th:href="@{/sys/permissions}" shiro:hasPermission="permission:list" target="content"><i class="fa fa-circle-o text-blue"></i> 权限列表</a></li>
-            <li><a th:href="@{/sys/logs}" shiro:hasPermission="log:list" target="content"><i class="fa fa-circle-o text-blue"></i> 操作日志</a></li>
+            <li><a th:href="@{/sys/logs}" shiro:hasPermission="log:list" target="content"><i class="fa fa-circle-o text-green"></i> 操作日志</a></li>
           </ul>
         </li>
       </ul>
@@ -169,6 +184,7 @@
 
       $(".sidebar-menu>li").click(function () {
         $(".sidebar-menu>li").removeClass("active");
+        // $(".treeview").removeClass("menu-open");
         $(this).addClass("active");
       });
 

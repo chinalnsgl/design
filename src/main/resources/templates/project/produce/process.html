@@ -52,8 +52,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        设计进度看板
-        <small>设计进度看板</small>
+        工艺进度看板
+        <small>工艺进度看板</small>
       </h1>
     </section>
     <!-- Main content -->
@@ -74,34 +74,42 @@
                     <input type="text" id="nameQuery" name="name" class="form-control" placeholder="请输入项目名称">
                   </div>
                   <div class="form-group" style="margin-right: 10px;">
-                    <label>设计科室</label>
-                    <select id="departmentQuery" name="departmentQuery" class="form-control select2" >
+                    <label>年度</label>
+                    <select id="year" name="year" class="form-control select2" >
                       <option value="" selected="selected">请选择</option>
-                      <option value="1,1">机械设计一科</option>
-                      <option value="1,2">机械设计二科</option>
-                      <option value="1,3">机械设计三科</option>
-                      <option value="1,4">机械设计四科</option>
-                      <option value="1,5">机械设计五科</option>
-                      <option value="1,6">机械设计六科</option>
-                      <option value="1,7">机械设计七科</option>
-                      <!--<option value="1,8">机械设计八科</option>-->
-                      <option value="2,1">液压设计一科</option>
-                      <option value="2,2">液压设计二科</option>
-                      <option value="3,1">电气设计一科</option>
-                      <option value="3,2">电气设计二科</option>
-                      <option value="3,3">电气设计三科</option>
-                      <option value="4,1">软件设计一科</option>
                     </select>
                   </div>
                   <div class="form-group" style="margin-right: 10px;">
                     <label>
-                      设计状态
+                      原材料外协计划状态
                     </label>
-                    <select id="status" name="status" class="form-control select2" >
+                    <select id="firstStatus" name="firstStatus" class="form-control select2" >
                       <option value="" selected="selected">全部</option>
-                      <option value="1" >未完成</option>
+                      <option value="0" >未完成</option>
+                      <option value="1" >执行中</option>
                       <option value="2">已完成</option>
-                      <!--<option value="3">已取消</option>-->
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>
+                      工艺编制状态
+                    </label>
+                    <select id="secondStatus" name="secondStatus" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="0" >未完成</option>
+                      <option value="1" >执行中</option>
+                      <option value="2">已完成</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>
+                      外购计划状态
+                    </label>
+                    <select id="thirdStatus" name="thirdStatus" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="0" >未完成</option>
+                      <option value="1" >执行中</option>
+                      <option value="2">已完成</option>
                     </select>
                   </div>
                   <button class="btn btn-default" id="btn_search">搜索</button>
@@ -116,18 +124,6 @@
               <table id="projectDataTables" class="table table-bordered">
                 <thead>
                 <tr>
-                  <!--<th>序号</th>
-                  <th>项目号</th>
-                  <th>项目名称</th>
-                  <th>数量</th>
-                  <th>项目计划时间</th>
-                  <th>备注</th>
-                  <th>科室</th>
-                  <th>设计</th>
-                  <th>条件相关</th>
-                  <th>采购计划</th>
-                  <th>下图纸</th>
-                  <th>操作</th>-->
                   <th>序号</th>
                   <th>项目名称</th>
                   <th>需方</th>
@@ -135,14 +131,11 @@
                   <th>项目号</th>
                   <th>任务单号</th>
                   <th>数量</th>
-                  <th>计划完成时间</th>
-                  <th>签技术协议</th>
-                  <th>科室</th>
-                  <th>设计</th>
-                  <th>条件相关</th>
-                  <th>采购计划</th>
-                  <th>下图纸</th>
-                  <th>调试运行</th>
+                  <!--<th>设计</th>-->
+                  <th>原材料<br>外协计划</th>
+                  <th>工艺编制</th>
+                  <th>外购计划</th>
+                  <!--<th>生产</th>-->
                   <th>备注</th>
                   <th>操作</th>
                 </tr>
@@ -164,8 +157,6 @@
     <script th:inline="javascript">
 
       var projectTable, temp;
-      var deptName = ["","机械设计","液压设计","电气设计","软件设计"];
-      var deptNum = ["","一科","二科","三科","四科","五科","六科","七科","八科"];
       var statusName = ["未开始","执行中","已完成","已取消"];
       /** 刷新列表 */
       function reloadTable() {
@@ -202,13 +193,15 @@
           "processing": true,
           "serverSide": true,
           "ajax": {
-            url : "/project/dept/list",
+            url : "/project/process/list",
             type : "POST",
             data : {
               "code": $("#codeQuery").val(),
               "name": $("#nameQuery").val(),
-              departmentQuery : $("#departmentQuery").val(),
-              "status" : $("#status").val()
+              "year" : $("#year").val(),
+              "firstStatus": $("#firstStatus").val(),
+              "secondStatus": $("#secondStatus").val(),
+              "thirdStatus": $("#thirdStatus").val()
             },
             dataSrc : function (json) {
               if (json.status === 200) {
@@ -225,134 +218,121 @@
               "width": "8px"
             },
             { "data": "name",
-              "width": "180px"
+              "width": "200px"
             },
             { "data": "demander",
-              "width": "170px"
+              "width": "200px"
             },
             { "data": "address",
-              "width": "100px"
+              "width": "120px"
             },
             { "data": "code",
-              // "width": "5%",
-            },
-            { "data": "codeSpecial",
-              // "width": "5%",
-            },
-            { "data": "num",
-              // "width": "20%",
-            },
-            { "data": "planTime",
               "width": "100px"
             },
-            { "data": "signStatus",
+            { "data": "codeSpecial",
+              "width": "100px"
+            },
+            { "data": "num",
+              "width": "30px"
+            },
+            /*{ "data": "deptStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
+                if(data > 0 && data < 2)
+                  data = 1;
                 return '<span>' + statusName[data] + '</span>';
               }
-            },
-            { "data": "type",
-              "width": "140px",
-              render : function(data, type, row, meta) {
-                return deptName[data] + deptNum[row.deptNum];
-              }
-            },
+            },*/
             { "data": "firstStep",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if(data > 2)
-                  data = 3
                 return statusName[data];
               }
             },
             { "data": "secondStep",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if(data > 2)
-                  data = 3
                 return statusName[data];
               }
             },
             { "data": "thirdStep",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if(data > 2)
-                  data = 3
                 return statusName[data];
               }
             },
-            { "data": "fourthStep",
+            /*{ "data": "produceStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if(data > 2)
-                  data = 3
-                return statusName[data];
-              }
-            },
-            { "data": "debugStatus",
-              "width": "70px",
-              render : function(data, type, row, meta) {
+                if(data > 0 && data < 2)
+                  data = 1;
                 return '<span>' + statusName[data] + '</span>';
               }
-            },
+            },*/
             { "data": "comment",
-              "width": "100px"
+              "width": "100px",
+              render : function(data, type, row, meta) {
+                if (data.length > 10) {
+                  return '<span title="' + data + '">' + data.substr(0, 10) + '...</span>';
+                }
+                return data;
+              }
             },
             { "data": "id",
               // "width": "5%",
               render : function(data, type, row, meta) {
-                return '<a style="margin-right: 5px" class="btn btn-info btn-xs dept-view" href="/project/single/' + data + '">查看</a>';
+                return '<a style="margin-right: 5px" class="btn btn-info btn-xs process-view" href="/project/single/' + data + '">查看</a>';
               }
             }
           ],
           "createdRow": function ( row, data, index ) {
-            if($("#departmentQuery").find("option:selected").text() == (deptName[data.type] + deptNum[data.deptNum]) && data.projectStatus !== 0 && data.projectStatus !== 3){
+            /*if($("#departmentQuery").find("option:selected").text() == (deptName[data.type] + deptNum[data.deptNum]) && data.projectStatus !== 0 && data.projectStatus !== 3){
               $('td', row).eq(9).css("background", '#e0e0e0');
               $('td', row).eq(10).css("background", '#e0e0e0');
               $('td', row).eq(11).css("background", '#e0e0e0');
               $('td', row).eq(12).css("background", '#e0e0e0');
               $('td', row).eq(13).css("background", '#e0e0e0');
-            }
+            }*/
 
-            if(data.signStatus === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(8).css("background", '#f39c12');
-            if(data.signStatus === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
+            /*if(data.deptStatus > 0 && data.deptStatus < 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
+              $('td', row).eq(7).css("background", '#f39c12');
+            if(data.deptStatus === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
             // $('td', row).eq(8).addClass("success-status");
-              $('td', row).eq(8).css("background", '#00a65a');
+              $('td', row).eq(7).css("background", '#00a65a');*/
 
             if(data.firstStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(10).css("background", '#f39c12');
+              $('td', row).eq(7).css("background", '#f39c12');
             if(data.firstStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(10).css("background", '#00a65a');
+              $('td', row).eq(7).css("background", '#00a65a');
             if(data.firstStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(10).css("background", 'red');
+              $('td', row).eq(7).css("background", 'red');
 
             if(data.secondStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(11).css("background", '#f39c12');
+              $('td', row).eq(8).css("background", '#f39c12');
             if(data.secondStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(11).css("background", '#00a65a');
+              $('td', row).eq(8).css("background", '#00a65a');
             if(data.secondStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(11).css("background", 'red');
+              $('td', row).eq(8).css("background", 'red');
 
             if(data.thirdStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(12).css("background", '#f39c12');
+              $('td', row).eq(9).css("background", '#f39c12');
             if(data.thirdStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(12).css("background", '#00a65a');
+              $('td', row).eq(9).css("background", '#00a65a');
             if(data.thirdStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(12).css("background", 'red');
+              $('td', row).eq(9).css("background", 'red');
 
-            if(data.fourthStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
+            /*if(data.fourthStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(13).css("background", '#f39c12');
             if(data.fourthStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(13).css("background", '#00a65a');
             if(data.fourthStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(13).css("background", 'red');
+              $('td', row).eq(13).css("background", 'red');*/
 
-            if(data.debugStatus === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(14).css("background", '#f39c12');
-            if(data.debugStatus === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
+            /*if(data.produceStatus > 0 && data.produceStatus < 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
+              $('td', row).eq(11).css("background", '#f39c12');
+            if(data.produceStatus === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
             // $('td', row).eq(8).addClass("success-status");
-              $('td', row).eq(14).css("background", '#00a65a');
+              $('td', row).eq(11).css("background", '#00a65a');*/
 
             if (data.projectStatus === 0) {
               $(row).css('background', '#FF0000');
@@ -360,8 +340,8 @@
             if (data.projectStatus === 3) {
               $(row).css('background', '#f39c12');
             }
-
-            if (temp!=null && data.code === $('td', temp).eq(4).html()) {
+            $('td', row).css("border-top", '1px solid black');
+            /*if (temp!=null && data.code === $('td', temp).eq(4).html()) {
               rowspan = $('td', temp).eq(4).attr("rowSpan");
               if (rowspan === undefined) {
                 $('td', temp).eq(4).attr("rowSpan",1);
@@ -372,7 +352,7 @@
             } else {
               temp = row;
               $('td', row).css("border-top", '1px solid black');
-            }
+            }*/
           },
           "language" : { // 国际化配置
             "sProcessing" : "正在获取数据，请稍后...",
@@ -453,19 +433,31 @@
         projectTable.on( 'draw.dt', function () {
           var roles = [[${session.roles}]];
           var permissions = [[${session.permissions}]];
-          if ($.inArray('dept:view', permissions) === -1) {
-            $(".dept-view").hide();
+          if ($.inArray('process:view', permissions) === -1) {
+            $(".process-view").hide();
           }
         } );
       }
 
+      function yearSelectCreate() {
+        var myDate= new Date();
+        var endYear=myDate.getFullYear();//结束年份
+        for (var i=2016;i<=endYear;i++)
+        {
+          if(i === 2016)
+            $("#year").append("<option value='"+ i +"'>"+ i + "年及以前" +"</option>");
+          else
+            $("#year").append("<option value='"+ i +"'>"+ i + "年" +"</option>");
+        }
+      }
+
       $(function () {
+
+        yearSelectCreate();
 
         getProjectList();
 
         searchEvent();
-
-
 
         $('#projectDataTables').on( 'page.dt', function () {
           temp = null;
@@ -478,15 +470,15 @@
           clearBtn: true
         });
 
-        $("#departmentQuery").change(function () {
+        /*$("#departmentQuery").change(function () {
           if ($(this).val() != null && $(this).val() != "") {
             $("#btn_collect").attr("disabled", false);
           } else {
             $("#btn_collect").attr("disabled", true);
           }
-        });
+        });*/
 
-        collectEvent();
+        // collectEvent();
 
         var topDistance = 500;
         var showDistance = 1;
@@ -510,7 +502,6 @@
           return false;
         });
 
-        // setPermission();
 
       });
 

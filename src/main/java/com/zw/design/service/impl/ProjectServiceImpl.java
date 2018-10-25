@@ -72,6 +72,11 @@ public class ProjectServiceImpl implements ProjectService {
         if (produceTask.getStatus() == 2) {
             produceTask.setEndTime(null);
             produceTask.setStatus(1);
+            if (produceTask.getProduceNum() == 7) {
+                Project project = produceTask.getProject();
+                project.setStatus(2);
+                projectRepository.saveAndFlush(project);
+            }
         }
         return produceTaskRepository.saveAndFlush(produceTask);
     }
@@ -421,6 +426,7 @@ public class ProjectServiceImpl implements ProjectService {
                 task.setStatus(2);
             }
             task.setProduceName(Const.PRODUCE_TASK_STEP_NAME[i]);
+
             task.setProduceNum(i + 1);
             task.setProject(p);
             produceTasks.add(task);

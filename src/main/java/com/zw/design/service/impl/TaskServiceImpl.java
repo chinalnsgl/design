@@ -45,6 +45,7 @@ public class TaskServiceImpl implements TaskService {
         DeptTask t = deptTaskRepository.findById(deptTask.getId()).get();
         if (deptTask.getAnnotate() != null) {
             t.setAnnotate(deptTask.getAnnotate());
+            t = deptTaskRepository.saveAndFlush(t);
         } else {
             t.setComment(deptTask.getComment());
             t.setPrincipal(deptTask.getPrincipal());
@@ -54,17 +55,27 @@ public class TaskServiceImpl implements TaskService {
             }
             if (deptTask.getStatus() != null && deptTask.getStatus() == 1) {
                 t.setStartTime(new Date());
-                Integer num = taskDao.findMaxStepNumByProjectId(t.getProject().getId());
+                // 设置部门执行顺序
+                /*Integer num = taskDao.findMaxStepNumByProjectId(t.getProject().getId());
                 if (num == null) {
                     t.setStepNum(1);
                 } else {
                     t.setStepNum(num + 1);
-                }
+                }*/
             } else if (deptTask.getStatus() != null && deptTask.getStatus() == 2) {
                 t.setEndTime(new Date());
             }
+            // 判断并设置项目完成状态
+            t = deptTaskRepository.saveAndFlush(t);
+            Project p = projectRepository.findById(t.getProject().getId()).get();
+            float produceStatus = taskDao.findProduceCompleteStatus(p.getId());
+            float deptStatus = taskDao.findDeptCompleteStatus(p.getId());
+            if (produceStatus == 2 && deptStatus == 2) {
+                p.setStatus(4);
+                p.setCompleteTime(new Date());
+                projectRepository.saveAndFlush(p);
+            }
         }
-        t = deptTaskRepository.saveAndFlush(t);
         return t;
     }
 
@@ -78,17 +89,29 @@ public class TaskServiceImpl implements TaskService {
         // 处理批注
         if (produceTask.getAnnotate() != null) {
             t.setAnnotate(produceTask.getAnnotate());
+            t = produceTaskRepository.saveAndFlush(t);
         } else {
             // 单独处理签协议任务
-            if (t.getProduceNum() == 2) {
+            if (t.getProduceNum() == 2 || t.getProduceNum() == 3) {
                 t.setComment(produceTask.getComment());
                 if (t.getStatus() != null && t.getStatus() != 2) {
                     t.setStatus(2);
                     t.setStartTime(new Date());
                     t.setEndTime(new Date());
                 }
-                return produceTaskRepository.saveAndFlush(t);
+                t.setContractNo(produceTask.getContractNo());
+                t = produceTaskRepository.saveAndFlush(t);
+                Project p = projectRepository.findById(t.getProject().getId()).get();
+                float produceStatus = taskDao.findProduceCompleteStatus(p.getId());
+                float deptStatus = taskDao.findDeptCompleteStatus(p.getId());
+                if (produceStatus == 2 && deptStatus == 2) {
+                    p.setStatus(4);
+                    p.setCompleteTime(new Date());
+                    projectRepository.saveAndFlush(p);
+                }
+                return t;
             }
+
             t.setComment(produceTask.getComment());
             t.setPrincipal(produceTask.getPrincipal());
             t.setPlanStartTime(produceTask.getPlanStartTime());
@@ -99,16 +122,18 @@ public class TaskServiceImpl implements TaskService {
                 t.setStartTime(new Date());
             } else if (produceTask.getStatus() != null && produceTask.getStatus() == 2) {
                 t.setEndTime(new Date());
-                if (t.getProduceNum() == 7) {
-                    Project p = projectRepository.findById(t.getProject().getId()).get();
-                    p.setStatus(4);
-                    p.setCompleteTime(new Date());
-                    projectRepository.saveAndFlush(p);
-                }
             }
-
+            // 判断并设置项目完成状态
+            t = produceTaskRepository.saveAndFlush(t);
+            Project p = projectRepository.findById(t.getProject().getId()).get();
+            float produceStatus = taskDao.findProduceCompleteStatus(p.getId());
+            float deptStatus = taskDao.findDeptCompleteStatus(p.getId());
+            if (produceStatus == 2 && deptStatus == 2) {
+                p.setStatus(4);
+                p.setCompleteTime(new Date());
+                projectRepository.saveAndFlush(p);
+            }
         }
-        t = produceTaskRepository.saveAndFlush(t);
         return t;
     }
 
@@ -206,5 +231,53 @@ public class TaskServiceImpl implements TaskService {
         dtos.add(taskDao.findDeptUndoneCount(query));
         dtos.add(taskDao.findDeptdoneCount(query));
         return dtos;
+    }
+
+    /**
+     * 工艺看板
+     */
+    @Override
+    public DataTablesCommonDto<DeptTaskDto> findProcessList(TaskQuery query) {
+        if (query.getCode() != null && !"".equals(query.getCode().trim())) {
+            query.setCode("%" + query.getCode() + "%");
+        }
+        if (query.getName() != null && !"".equals(query.getName().trim())) {
+            query.setName("%" + query.getName() + "%");
+        }
+        query.setLength(query.getStart() + query.getLength());
+        query.setStart(query.getStart() + 1);
+
+        List<DeptTaskDto> dtos = taskDao.findProcessList(query);
+        Integer count = taskDao.findProcessCount(query);
+        DataTablesCommonDto<DeptTaskDto> dataTablesCommonDto = new DataTablesCommonDto<>();
+        dataTablesCommonDto.setDraw(query.getDraw());
+        dataTablesCommonDto.setData(dtos);
+        dataTablesCommonDto.setRecordsTotal(count);
+        dataTablesCommonDto.setRecordsFiltered(count);
+        return dataTablesCommonDto;
+    }
+
+    /**
+     * 生产看板
+     */
+    @Override
+    public DataTablesCommonDto<DeptTaskDto> findProduceList(TaskQuery query) {
+        if (query.getCode() != null && !"".equals(query.getCode().trim())) {
+            query.setCode("%" + query.getCode() + "%");
+        }
+        if (query.getName() != null && !"".equals(query.getName().trim())) {
+            query.setName("%" + query.getName() + "%");
+        }
+        query.setLength(query.getStart() + query.getLength());
+        query.setStart(query.getStart() + 1);
+
+        List<DeptTaskDto> dtos = taskDao.findProduceList(query);
+        Integer count = taskDao.findProduceCount(query);
+        DataTablesCommonDto<DeptTaskDto> dataTablesCommonDto = new DataTablesCommonDto<>();
+        dataTablesCommonDto.setDraw(query.getDraw());
+        dataTablesCommonDto.setData(dtos);
+        dataTablesCommonDto.setRecordsTotal(count);
+        dataTablesCommonDto.setRecordsFiltered(count);
+        return dataTablesCommonDto;
     }
 }

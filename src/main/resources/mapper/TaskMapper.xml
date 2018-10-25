@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zw.design.mapper.DeptTaskDao">
+
   <select id="findTasks" resultType="com.zw.design.dto.TaskDto" parameterType="com.zw.design.query.ProjectQuery">
     select * from (
     select
@@ -30,12 +31,10 @@
     d.produce_name as signName,
     d.status as signStatus,
     d.annotate as signAnnotate,
-    e.produce_name as produceName,
-    e.status as produceStatus,
-    e.annotate as produceAnnotate,
-    f.produce_name as installName,
-    f.status as installStatus,
-    f.annotate as installAnnotate,
+    j.status as produceStatus,
+    j.annotates as produceAnnotate,
+    k.status as installStatus,
+    k.annotates as installAnnotate,
     g.produce_name as debugName,
     g.status as debugStatus,
     g.annotate as debugAnnotate,
@@ -44,7 +43,10 @@
     h.annotate as acceptAnnotate,
     i.produce_name as saveName,
     i.status as saveStatus,
-    i.annotate as saveAnnotate
+    i.annotate as saveAnnotate,
+    l.produce_name as contractName,
+    l.status as contractStatus,
+    l.annotate as contractAnnotate
     from 	(
     select dept_a.department_type,dept_a.project_id,min(department_num) as department_num,sum ( status ) AS status,
     stuff((select ',' + dept_c.annotate from dept_task dept_c where dept_c.department_type = dept_a.department_type and dept_c.project_id = dept_a.project_id for xml path('')),1,1,'') as annotates
@@ -52,8 +54,19 @@
     <![CDATA[ where dept_a.status < 100  ]]>
     group by dept_a.department_type,dept_a.project_id
     ) as a
+    left join (
+    select pro_a.project_id, sum(pro_a.status) as status,
+    stuff((select ',' + pro_c.annotate from produce_task pro_c where pro_c.produce_num in (4,5,6) and pro_c.project_id = pro_a.project_id for xml path('')),1,1,'') as annotates
+    from produce_task pro_a where pro_a.produce_num in(4,5,6)
+    group by pro_a.project_id
+    ) as j on j.project_id = a.project_id
+    left join (
+    select pro_b.project_id, sum(pro_b.status) as status,
+    stuff((select ',' + pro_d.annotate from produce_task pro_d where pro_d.produce_num in(7,8,9) and pro_d.project_id = pro_b.project_id for xml path('')),1,1,'') as annotates
+    from produce_task pro_b where pro_b.produce_num in(7,8,9)
+    group by pro_b.project_id
+    ) as k on k.project_id = a.project_id
     inner JOIN (
-
     select ROW_NUMBER() OVER(Order by order_no desc, code) as projectNo,* from project
     where 1 = 1
     <if test="code != null and code != ''">
@@ -83,13 +96,12 @@
     ) b on a.project_id = b.id
     LEFT JOIN produce_task c on c.project_id = b.id
     LEFT JOIN produce_task d on d.project_id = b.id
-    LEFT JOIN produce_task e on e.project_id = b.id
-    LEFT JOIN produce_task f on f.project_id = b.id
     LEFT JOIN produce_task g on g.project_id = b.id
     LEFT JOIN produce_task h on h.project_id = b.id
     LEFT JOIN produce_task i on i.project_id = b.id
-    WHERE c.produce_num = 1 and d.produce_num = 2 and e.produce_num = 3 and f.produce_num = 4 and g.produce_num = 5 and
-    h.produce_num = 6 and i.produce_num = 7
+    LEFT JOIN produce_task l on l.project_id = b.id
+    WHERE c.produce_num = 1 and d.produce_num = 2 and g.produce_num = 10 and
+    h.produce_num = 11 and i.produce_num = 12 and l.produce_num = 3
     <if test="code != null and code != ''">
       AND b.code like #{code}
     </if>
@@ -123,7 +135,6 @@
     ) as t ) p
     where p.rowId BETWEEN #{start} and #{length}
 	</select>
-
   <select id="findTasksCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.ProjectQuery">
     select count(b.id) from (
     select department_type,project_id,min(department_num) as department_num,sum ( status ) AS status
@@ -166,7 +177,6 @@
 
   </select>
 
-
   <select id="findTasksByProjectId" resultType="com.zw.design.entity.dbo.DeptTask" >
     select * from dept_task where project_id = #{id}
     order by isnull(start_time,'2300-1-1') , id
@@ -199,7 +209,7 @@
     (
     select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code, d.type) as rowId, * from
     (
-    select t.projectNo,a.id,a.order_no as orderNo,a.demander,a.address,a.code_special as codeSpecial,e.status as signStatus, a.name,a.code,a.num,a.plan_time as planTime, a.comment,a.status as projectStatus, b.type,b.num as deptNum, b.a as firstStep, b.b as secondStep, b.c as thirdStep, b.d as fourthStep ,c.sumStatus as sumStatus
+    select t.projectNo,a.id,a.order_no as orderNo,a.demander,a.address,a.code_special as codeSpecial,e.status as signStatus,f.status as debugStatus, a.name,a.code,a.num,a.plan_time as planTime, a.comment,a.status as projectStatus, b.type,b.num as deptNum, b.a as firstStep, b.b as secondStep, b.c as thirdStep, b.d as fourthStep ,c.sumStatus as sumStatus
     from project a
     left JOIN
     (	select department_type type,min(department_num) num,project_id,
@@ -227,7 +237,8 @@
     ) t
     on a.id = t.id
     LEFT JOIN produce_task e on e.project_id = a.id
-    where e.produce_num = 2
+    LEFT JOIN produce_task f on f.project_id = a.id
+    where e.produce_num = 2 and f.produce_num = 10
     <if test="code != null and code != ''">
       AND a.code like #{code}
     </if>
@@ -238,10 +249,9 @@
       and a.id in (${ids})
     </if>
     ) d
-    ) e
-    where e.rowid BETWEEN #{start} and #{length}
+    ) x
+    where x.rowid BETWEEN #{start} and #{length}
   </select>
-
   <select id="findDeptTaskCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
     select count(a.id)
     from project a
@@ -289,7 +299,6 @@
     </if>
     ) c
   </select>
-
   <select id="findProjectDelCompCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
     select count(c.id) as projectNum, sum(c.num) as productNum from
     (
@@ -312,8 +321,6 @@
     </if>
     ) c
   </select>
-
-
   <select id="findProjectDelUnCompCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
     select count(c.id) as projectNum, sum(c.num) as productNum from
     (
@@ -336,7 +343,6 @@
     </if>
     ) c
   </select>
-
   <select id="findDeptUndoneCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
     select count(c.id) as projectNum, sum(c.num) as productNum from
     (
@@ -359,7 +365,6 @@
     </if>
     ) c
   </select>
-
   <select id="findDeptdoneCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
     select count(c.id) as projectNum, sum(c.num) as productNum from
     (
@@ -383,5 +388,225 @@
     ) c
   </select>
 
+  <select id="findProcessList" resultType="com.zw.design.dto.DeptTaskDto" parameterType="com.zw.design.query.TaskQuery">
+    select * from
+    (
+      select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code) as rowId, * from
+      (
+        select
+        t.projectNo,
+        a.id,
+        a.name,
+        a.code,
+        a.num,
+        a.plan_time as planTime,
+        a.comment,
+        a.status as projectStatus,
+        a.demander,
+        a.address,
+        a.code_special as codeSpecial,
+        a.order_no as orderNo,
+        b.status as firstStep,
+        c.status as secondStep,
+        d.status as thirdStep/*,
+        e.status as deptStatus,
+        f.status as produceStatus*/
+        from project a
+        left JOIN produce_task b on b.project_id = a.id
+        left join produce_task c on c.project_id = a.id
+        left join produce_task d on d.project_id = a.id
+        /*LEFT JOIN (
+          select round(avg(CONVERT(float,status)),2) as status , project_id from dept_task
+          <![CDATA[ where status <=2   ]]>
+          group by project_id
+        ) e on e.project_id = a.id
+        LEFT JOIN (
+          select round(avg(CONVERT(float,status)),2) as status , project_id from produce_task where produce_num in (7,8,9) group by project_id
+        ) f on f.project_id = a.id*/
+        left join
+          (select ROW_NUMBER() OVER(Order by order_no desc, code) as projectNo, id from project where 1 = 1
+          <if test="code != null and code != ''">
+            AND code like #{code}
+          </if>
+          <if test="name != null and name != ''">
+            AND name like #{name}
+          </if>
+          <if test="year != null">
+            AND year (create_time) = #{year}
+          </if>
+          ) t
+        on a.id = t.id
+        where b.produce_num = 4 and c.produce_num = 5 and d.produce_num = 6
+        <if test="code != null and code != ''">
+          AND a.code like #{code}
+        </if>
+        <if test="name != null and name != ''">
+          AND a.name like #{name}
+        </if>
+        <if test="year != null">
+          AND year (a.create_time) = #{year}
+        </if>
+        <if test="firstStatus != null">
+          AND b.status = #{firstStatus}
+        </if>
+        <if test="secondStatus != null">
+          AND c.status = #{secondStatus}
+        </if>
+        <if test="thirdStatus != null">
+          AND d.status = #{thirdStatus}
+        </if>
+      ) d
+    ) x where x.rowid BETWEEN #{start} and #{length}
+  </select>
+  <select id="findProcessCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
+    select count(a.id)
+    from project a
+    left JOIN produce_task b on b.project_id = a.id
+    left join produce_task c on c.project_id = a.id
+    left join produce_task d on d.project_id = a.id
+    where 1 = 1 and b.produce_num = 4 and c.produce_num = 5 and d.produce_num = 6
+    <if test="code != null and code != ''">
+      AND a.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND a.name like #{name}
+    </if>
+    <if test="year != null">
+      AND year (a.create_time) = #{year}
+    </if>
+    <if test="firstStatus != null">
+      AND b.status = #{firstStatus}
+    </if>
+    <if test="secondStatus != null">
+      AND c.status = #{secondStatus}
+    </if>
+    <if test="thirdStatus != null">
+      AND d.status = #{thirdStatus}
+    </if>
+  </select>
+
+  <select id="findProduceList" resultType="com.zw.design.dto.DeptTaskDto" parameterType="com.zw.design.query.TaskQuery">
+    select * from
+    (
+      select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code) as rowId, * from
+      (
+        select
+        t.projectNo,
+        a.id,
+        a.name,
+        a.code,
+        a.num,
+        a.plan_time as planTime,
+        a.comment,
+        a.status as projectStatus,
+        a.demander,
+        a.address,
+        a.code_special as codeSpecial,
+        a.order_no as orderNo,
+        b.status as firstStep,
+        c.status as secondStep,
+        d.status as thirdStep
+        /*e.status as deptStatus,
+        f.status as processStatus*/
+        from project a
+        left JOIN produce_task b on b.project_id = a.id
+        left join produce_task c on c.project_id = a.id
+        left join produce_task d on d.project_id = a.id
+        /*LEFT JOIN (
+          select round(avg(CONVERT(float,status)),2) as status , project_id from dept_task
+          <![CDATA[ where status <=2   ]]>
+          group by project_id
+        ) e on e.project_id = a.id
+        LEFT JOIN (
+          select round(avg(CONVERT(float,status)),2) as status , project_id from produce_task where produce_num in (4,5,6) group by project_id
+        ) f on f.project_id = a.id*/
+        left join
+          (select ROW_NUMBER() OVER(Order by order_no desc, code) as projectNo, id from project where 1 = 1
+          <if test="code != null and code != ''">
+            AND code like #{code}
+          </if>
+          <if test="name != null and name != ''">
+            AND name like #{name}
+          </if>
+    <if test="year != null">
+      AND year (create_time) = #{year}
+    </if>
+          ) t
+        on a.id = t.id
+        where b.produce_num = 7 and c.produce_num = 8 and d.produce_num = 9
+        <if test="code != null and code != ''">
+          AND a.code like #{code}
+        </if>
+        <if test="name != null and name != ''">
+          AND a.name like #{name}
+        </if>
+    <if test="year != null">
+      AND year (a.create_time) = #{year}
+    </if>
+        <if test="firstStatus != null">
+          AND b.status = #{firstStatus}
+        </if>
+        <if test="secondStatus != null">
+          AND c.status = #{secondStatus}
+        </if>
+        <if test="thirdStatus != null">
+          AND d.status = #{thirdStatus}
+        </if>
+      ) d
+    ) x where x.rowid BETWEEN #{start} and #{length}
+  </select>
+  <select id="findProduceCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
+    select count(a.id)
+    from project a
+    left JOIN produce_task b on b.project_id = a.id
+    left join produce_task c on c.project_id = a.id
+    left join produce_task d on d.project_id = a.id
+    where 1 = 1 and b.produce_num = 4 and c.produce_num = 5 and d.produce_num = 6
+    <if test="code != null and code != ''">
+      AND a.code like #{code}
+    </if>
+    <if test="name != null and name != ''">
+      AND a.name like #{name}
+    </if>
+    <if test="year != null">
+      AND year (a.create_time) = #{year}
+    </if>
+    <if test="firstStatus != null">
+      AND b.status = #{firstStatus}
+    </if>
+    <if test="secondStatus != null">
+      AND c.status = #{secondStatus}
+    </if>
+    <if test="thirdStatus != null">
+      AND d.status = #{thirdStatus}
+    </if>
+  </select>
+
+  <select id="findProduceCompleteStatus" resultType="java.lang.Float">
+    select round(avg(CONVERT(float,status)),2) as produceStatus from produce_task where project_id = #{id} group by project_id
+  </select>
+
+  <select id="findDeptCompleteStatus" resultType="java.lang.Float">
+    select round(avg(CONVERT(float,status)),2) as status from dept_task
+          <![CDATA[ where status <=2   ]]>
+          and project_id = #{id}
+          group by project_id
+  </select>
+
+  <update id="updateProcess1">
+    update produce_task set produce_num = 12 where produce_num = 7
+  </update>
+  <update id="updateProcess2">
+    update produce_task set produce_num = 11 where produce_num = 6
+  </update>
+  <update id="updateProcess3">
+    update produce_task set produce_num = 10 where produce_num = 5
+  </update>
+  <update id="updateProcess4">
+    update produce_task set produce_num = 7, produce_name = '铆焊制作' where produce_num = 4
+  </update>
+  <update id="updateProcess5">
+    update produce_task set produce_num = 4, produce_name = '原材料外协计划' where produce_num = 3
+  </update>
 
 </mapper>

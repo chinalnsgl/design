@@ -47,7 +47,13 @@ public class Project implements Serializable {
     List<DeptTask> deptTasks;
 
     @OneToMany(mappedBy = "project")
-    @OrderBy("id")
+    @OrderBy("produceNum,id")
     @JsonIgnoreProperties("project")
     List<ProduceTask> produceTasks;
+
+    @OneToMany
+    @JoinColumn(name = "projectId")
+    List<Image> images;
+
+
 }
