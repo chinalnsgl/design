@@ -72,7 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
         if (produceTask.getStatus() == 2) {
             produceTask.setEndTime(null);
             produceTask.setStatus(1);
-            if (produceTask.getProduceNum() == 2 || produceTask.getProduceNum() == 3) {
+            if (produceTask.getProduceNum() == 2) {
                 produceTask.setStatus(0);
                 produceTask.setStartTime(null);
             }

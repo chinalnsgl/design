@@ -37,6 +37,8 @@
               <button type="button" class="btn btn-info" id="btn-commit">开始</button>
               <button type="button" class="btn btn-info" id="btn-commit-produce">开始</button>
               <button shiro:hasPermission="dept:cancel" type="button" class="btn btn-info" id="btn-cancel">撤消</button>
+              <button shiro:hasPermission="sign:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-cancel-sign">撤消</button>
+              <button shiro:hasPermission="contract:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-cancel-contract">撤消</button>
               <button shiro:hasPermission="process1:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-cancel-process1">撤消</button>
               <button shiro:hasPermission="process2:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-cancel-process2">撤消</button>
               <button shiro:hasPermission="process3:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-cancel-process3">撤消</button>
@@ -54,7 +56,13 @@
               <input type="text" class="form-control" id="principal" name="principal" placeholder="请输入负责人" >
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="contractDiv">
+            <label for="contractNo" class="col-sm-2 control-label no-padding-right">合同号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="contractNo" name="contractNo" placeholder="请输入合同号" >
+            </div>
+          </div>
+          <div class="form-group" id="planStartTimeDiv">
             <label for="planStartTime" class="col-sm-2 control-label no-padding-right">预计时间</label>
             <div class="col-sm-10">
               <input type="text" class="form-control datepicker" id="planStartTime" name="planStartTime" readonly >
@@ -78,7 +86,7 @@
   <!-- /.modal-dialog -->
 </div>
 <!--签协议模态框-->
-<div class="modal fade" id="modal-sign">
+<!--<div class="modal fade" id="modal-sign">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -121,10 +129,10 @@
         <button type="button" class="btn btn-info" id="btn-sign">确定</button>
       </div>
     </div>
-    <!-- /.modal-content -->
+    &lt;!&ndash; /.modal-content &ndash;&gt;
   </div>
-  <!-- /.modal-dialog -->
-</div>
+  &lt;!&ndash; /.modal-dialog &ndash;&gt;
+</div>-->
 <!--注解模态框-->
 <div class="modal fade" id="modal-annotate">
   <div class="modal-dialog">
@@ -275,7 +283,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[1].startTime}">从<span th:text="${#dates.format(project.produceTasks[1].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[1].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[1].startTime}">时间</div>
           <div th:if="${project.produceTasks[1].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[1].principal,6)}">某某人</span></div>
+          <div th:unless="${project.produceTasks[1].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[1].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[1].annotate != null && project.produceTasks[1].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[1].status}">
               <span th:case="0">未开始</span>
@@ -283,10 +294,11 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[1].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
-          <button th:if="${project.status == 2 and project.produceTasks[1].status == 2}" shiro:hasPermission="sign:cancel" type="button" class="btn btn-danger btn-xs pull-right" th:onclick="|cancelSignContractTaskSchedule(${project.produceTasks[1].id})|" id="btn-cancel-sign">撤消</button>
-          <button th:if="${project.status == 2}" shiro:hasPermission="sign:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editSignTask(${project.produceTasks[1].id},'${project.name}','${project.produceTasks[1].produceName}',${project.produceTasks[1].status},'${project.produceTasks[1].principal}','${#dates.format(project.produceTasks[1].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[1].comment}')|">编辑任务</button>
+          <!--<button th:if="${project.status == 2 and project.produceTasks[1].status == 2}" shiro:hasPermission="sign:cancel" type="button" class="btn btn-danger btn-xs pull-right" th:onclick="|cancelSignContractTaskSchedule(${project.produceTasks[1].id})|" id="btn-cancel-sign">撤消</button>-->
+          <button th:if="${project.status == 2}" shiro:hasPermission="sign:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[1].id},'${project.name}','${project.produceTasks[1].produceName}',${project.produceTasks[1].status},'${project.produceTasks[1].principal}','${#dates.format(project.produceTasks[1].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[1].comment}')|">编辑任务</button>
           <button th:if="${project.status == 2}" shiro:hasPermission="sign:anno" style="margin-right: 5px" class="btn btn-success btn-xs pull-right" th:onclick="|editProduceAnno(${project.produceTasks[1].id},'${project.produceTasks[1].annotate}')|">批注</button>
           <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.produceTasks[1].produceName}',${project.produceTasks[1].status},'${project.produceTasks[1].principal}','${#dates.format(project.produceTasks[1].planStartTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[1].startTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[1].endTime,'yyyy-MM-dd')}','${project.produceTasks[1].comment}','${project.produceTasks[1].annotate}')|">查看</button>
         </div>
@@ -300,8 +312,11 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[2].startTime}">从<span th:text="${#dates.format(project.produceTasks[2].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[2].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[2].startTime}">时间</div>
           <div th:if="${project.produceTasks[2].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[2].principal,6)}">某某人</span></div>
+          <div th:unless="${project.produceTasks[2].principal}">负责人：</div>
           <div th:if="${project.produceTasks[2].contractNo}">合同号：<span th:text="${#strings.abbreviate(project.produceTasks[2].contractNo,10)}">合同号</span></div>
+          <div th:unless="${project.produceTasks[2].contractNo}">合同号：</div>
           <div th:classappend="${project.produceTasks[2].annotate != null && project.produceTasks[2].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[2].status}">
               <span th:case="0">未开始</span>
@@ -309,10 +324,11 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[2].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
-          <button th:if="${project.status == 2 and project.produceTasks[2].status == 2}" shiro:hasPermission="contract:cancel" type="button" class="btn btn-danger btn-xs pull-right" th:onclick="|cancelSignContractTaskSchedule(${project.produceTasks[2].id})|" id="btn-cancel-contract">撤消</button>
-          <button th:if="${project.status == 2}" shiro:hasPermission="contract:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editSignTask(${project.produceTasks[2].id},'${project.name}','${project.produceTasks[2].produceName}',${project.produceTasks[2].status},'${project.produceTasks[2].principal}','${#dates.format(project.produceTasks[2].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[2].comment}','${project.produceTasks[2].contractNo}')|">编辑任务</button>
+          <!--<button th:if="${project.status == 2 and project.produceTasks[2].status == 2}" shiro:hasPermission="contract:cancel" type="button" class="btn btn-danger btn-xs pull-right" th:onclick="|cancelSignContractTaskSchedule(${project.produceTasks[2].id})|" id="btn-cancel-contract">撤消</button>-->
+          <button th:if="${project.status == 2}" shiro:hasPermission="contract:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[2].id},'${project.name}','${project.produceTasks[2].produceName}',${project.produceTasks[2].status},'${project.produceTasks[2].principal}','${#dates.format(project.produceTasks[2].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[2].comment}','${project.produceTasks[2].contractNo}')|">编辑任务</button>
           <button th:if="${project.status == 2}" shiro:hasPermission="contract:anno" style="margin-right: 5px" class="btn btn-success btn-xs pull-right" th:onclick="|editProduceAnno(${project.produceTasks[2].id},'${project.produceTasks[2].annotate}')|">批注</button>
           <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.produceTasks[1].produceName}',${project.produceTasks[2].status},'${project.produceTasks[2].principal}','${#dates.format(project.produceTasks[2].planStartTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[2].startTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[2].endTime,'yyyy-MM-dd')}','${project.produceTasks[2].comment}','${project.produceTasks[2].annotate}','${project.produceTasks[2].contractNo}')|">查看</button>
         </div>
@@ -361,8 +377,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[3].startTime}">从<span th:text="${#dates.format(project.produceTasks[3].startTime,'yyyy-MM-dd')}">3018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[3].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[3].startTime}">时间</div>
           <div th:if="${project.produceTasks[3].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[3].principal,10)}">某某人</span></div>
-          <div th:if="${project.produceTasks[3].planStartTime}">预计时间：<span th:text="${#dates.format(project.produceTasks[3].planStartTime,'yyyy-MM-dd')}">2018</span></div>
+          <div th:unless="${project.produceTasks[3].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[3].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[3].annotate != null && project.produceTasks[3].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[3].status}">
               <span th:case="0">未开始</span>
@@ -370,6 +388,7 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[3].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2}" shiro:hasPermission="process1:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[3].id},'${project.name}','${project.produceTasks[3].produceName}',${project.produceTasks[3].status},'${project.produceTasks[3].principal}','${#dates.format(project.produceTasks[3].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[3].comment}')|">编辑任务</button>
@@ -385,8 +404,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[6].startTime}">从<span th:text="${#dates.format(project.produceTasks[6].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[6].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[6].startTime}">时间</div>
           <div th:if="${project.produceTasks[6].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[6].principal,10)}">某某人</span></div>
-          <div th:if="${project.produceTasks[6].planStartTime}">预计时间：<span th:text="${#dates.format(project.produceTasks[6].planStartTime,'yyyy-MM-dd')}">2018</span></div>
+          <div th:unless="${project.produceTasks[6].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[6].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[6].annotate != null && project.produceTasks[6].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[6].status}">
               <span th:case="0">未开始</span>
@@ -394,6 +415,7 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[6].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2}" shiro:hasPermission="produce1:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[6].id},'${project.name}','${project.produceTasks[6].produceName}',${project.produceTasks[6].status},'${project.produceTasks[6].principal}','${#dates.format(project.produceTasks[6].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[6].comment}')|">编辑任务</button>
@@ -409,8 +431,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[9].startTime}">从<span th:text="${#dates.format(project.produceTasks[9].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[9].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[9].startTime}">时间</div>
           <div th:if="${project.produceTasks[9].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[9].principal,10)}">某某人</span></div>
-          <div th:if="${project.produceTasks[9].planStartTime}">预计时间：<span th:text="${#dates.format(project.produceTasks[9].planStartTime,'yyyy-MM-dd')}">2018</span></div>
+          <div th:unless="${project.produceTasks[9].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[9].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[9].annotate != null && project.produceTasks[9].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[9].status}">
               <span th:case="0">未开始</span>
@@ -418,6 +442,7 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[9].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2}" shiro:hasPermission="debug:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[9].id},'${project.name}','${project.produceTasks[9].produceName}',${project.produceTasks[9].status},'${project.produceTasks[9].principal}','${#dates.format(project.produceTasks[9].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[9].comment}')|">编辑任务</button>
@@ -433,8 +458,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[10].startTime}">从<span th:text="${#dates.format(project.produceTasks[10].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[10].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[10].startTime}">时间</div>
           <div th:if="${project.produceTasks[10].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[10].principal,10)}">某某人</span></div>
-          <div th:if="${project.produceTasks[10].planStartTime}">预计时间：<span th:text="${#dates.format(project.produceTasks[10].planStartTime,'yyyy-MM-dd')}">2018</span></div>
+          <div th:unless="${project.produceTasks[10].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[10].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[10].annotate != null && project.produceTasks[10].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[10].status}">
               <span th:case="0">未开始</span>
@@ -442,6 +469,7 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[10].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2}" shiro:hasPermission="accept:edit" style="margin-right: 10px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[10].id},'${project.name}','${project.produceTasks[10].produceName}',${project.produceTasks[10].status},'${project.produceTasks[10].principal}','${#dates.format(project.produceTasks[10].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[10].comment}')|">编辑任务</button>
@@ -457,8 +485,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[11].startTime}">从<span th:text="${#dates.format(project.produceTasks[11].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[11].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[11].startTime}">时间</div>
           <div th:if="${project.produceTasks[11].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[11].principal,10)}">某某人</span></div>
-          <div th:if="${project.produceTasks[11].planStartTime}">预计时间：<span th:text="${#dates.format(project.produceTasks[11].planStartTime,'yyyy-MM-dd')}">2018</span></div>
+          <div th:unless="${project.produceTasks[11].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[11].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[11].annotate != null && project.produceTasks[11].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[11].status}">
               <span th:case="0">未开始</span>
@@ -466,6 +496,7 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[11].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2 or project.status == 4}" shiro:hasPermission="save:edit" style="margin-right: 6px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[11].id},'${project.name}','${project.produceTasks[11].produceName}',${project.produceTasks[11].status},'${project.produceTasks[11].principal}','${#dates.format(project.produceTasks[11].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[11].comment}')|">编辑任务</button>
@@ -483,8 +514,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[4].startTime}">从<span th:text="${#dates.format(project.produceTasks[4].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[4].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[4].startTime}">时间</div>
           <div th:if="${project.produceTasks[4].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[4].principal,10)}">某某人</span></div>
-          <div th:if="${project.produceTasks[4].planStartTime}">预计时间：<span th:text="${#dates.format(project.produceTasks[4].planStartTime,'yyyy-MM-dd')}">2018</span></div>
+          <div th:unless="${project.produceTasks[4].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[4].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[4].annotate != null && project.produceTasks[4].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[4].status}">
               <span th:case="0">未开始</span>
@@ -492,6 +525,7 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[4].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2}" shiro:hasPermission="process2:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[4].id},'${project.name}','${project.produceTasks[4].produceName}',${project.produceTasks[4].status},'${project.produceTasks[4].principal}','${#dates.format(project.produceTasks[4].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[4].comment}')|">编辑任务</button>
@@ -507,8 +541,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[7].startTime}">从<span th:text="${#dates.format(project.produceTasks[7].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[7].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[7].startTime}">时间</div>
           <div th:if="${project.produceTasks[7].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[7].principal,10)}">某某人</span></div>
-          <div th:if="${project.produceTasks[7].planStartTime}">预计时间：<span th:text="${#dates.format(project.produceTasks[7].planStartTime,'yyyy-MM-dd')}">2018</span></div>
+          <div th:unless="${project.produceTasks[7].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[7].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[7].annotate != null && project.produceTasks[7].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[7].status}">
               <span th:case="0">未开始</span>
@@ -516,6 +552,7 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[7].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2}" shiro:hasPermission="produce2:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[7].id},'${project.name}','${project.produceTasks[7].produceName}',${project.produceTasks[7].status},'${project.produceTasks[7].principal}','${#dates.format(project.produceTasks[7].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[7].comment}')|">编辑任务</button>
@@ -533,8 +570,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[5].startTime}">从<span th:text="${#dates.format(project.produceTasks[5].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[5].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[5].startTime}">时间</div>
           <div th:if="${project.produceTasks[5].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[5].principal,10)}">某某人</span></div>
-          <div th:if="${project.produceTasks[5].planStartTime}">预计时间：<span th:text="${#dates.format(project.produceTasks[5].planStartTime,'yyyy-MM-dd')}">2018</span></div>
+          <div th:unless="${project.produceTasks[5].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[5].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[5].annotate != null && project.produceTasks[5].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[5].status}">
               <span th:case="0">未开始</span>
@@ -542,6 +581,7 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[5].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2}" shiro:hasPermission="process3:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[5].id},'${project.name}','${project.produceTasks[5].produceName}',${project.produceTasks[5].status},'${project.produceTasks[5].principal}','${#dates.format(project.produceTasks[5].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[5].comment}')|">编辑任务</button>
@@ -557,8 +597,10 @@
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[8].startTime}">从<span th:text="${#dates.format(project.produceTasks[8].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[8].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.produceTasks[8].startTime}">时间</div>
           <div th:if="${project.produceTasks[8].principal}">负责人：<span th:text="${#strings.abbreviate(project.produceTasks[8].principal,10)}">某某人</span></div>
-          <div th:if="${project.produceTasks[8].planStartTime}">预计时间：<span th:text="${#dates.format(project.produceTasks[8].planStartTime,'yyyy-MM-dd')}">2018</span></div>
+          <div th:unless="${project.produceTasks[8].principal}">负责人：</div>
+          <div>预计时间：<span th:text="${#dates.format(project.produceTasks[8].planStartTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:classappend="${project.produceTasks[8].annotate != null && project.produceTasks[8].annotate != ''}?'title-alert':''">状态：
             <span th:switch="${project.produceTasks[8].status}">
               <span th:case="0">未开始</span>
@@ -566,6 +608,7 @@
               <span th:case="2">已完成</span>
             </span>
           </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.produceTasks[8].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2}" shiro:hasPermission="produce3:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[8].id},'${project.name}','${project.produceTasks[8].produceName}',${project.produceTasks[8].status},'${project.produceTasks[8].principal}','${#dates.format(project.produceTasks[8].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[8].comment}')|">编辑任务</button>
@@ -692,7 +735,7 @@
     $('#modal-task').modal('show');
   }
   /** 显示生产部任务模态框 */
-  function editProduceTask(id,projectName,stepName,status,principal,planTime,comment) {
+  function editProduceTask(id, projectName, stepName, status, principal, planTime, comment, contractNo) {
     $(".btn-cancel-task").hide();
     $("#btn-commit").hide();
     $("#btn-comment").hide();
@@ -708,12 +751,29 @@
     $("#principal").val(principal != 'null' ? principal : '');
     $("#planStartTime").val(planTime != 'null' ? planTime : '');
     $("#comment").val(comment != 'null' ? comment : '');
-
+    if (contractNo != undefined) {
+      $("#contractNo").val(contractNo != 'null' ? contractNo : '');
+      $("#contractDiv").show();
+      $("#planStartTimeDiv").hide();
+    } else {
+      $("#contractDiv").hide();
+      $("#planStartTimeDiv").show();
+    }
     if (status == 0) {
       $("#status").val(1);
       $("#btn-commit-produce").text("开始");
+      if (stepName == '签订协议') {
+        $("#status").val(2);
+        $("#btn-commit-produce").text("完成");
+      }
     } else {
       switch (stepName) {
+        case '签订协议':
+          $("#btn-cancel-sign").show();
+          break;
+        case '签合同':
+          $("#btn-cancel-contract").show();
+          break;
         case '原材料外协计划':
           $("#btn-cancel-process1").show();
           break;
@@ -745,7 +805,6 @@
       if (status == 1) {
         $("#status").val(2);
         $("#btn-commit-produce").text("完成");
-
       } else {
         $("#btn-commit-produce").hide();
         $("#successStatus").show();
@@ -865,7 +924,7 @@
     });
   }
 
-  function cancelSignContractTaskSchedule(id) {
+  /*function cancelSignContractTaskSchedule(id) {
     $.ajax({
       url: "/project/produce/cancel",
       type: "POST",
@@ -881,7 +940,7 @@
         toastr.success("编辑失败！");
       }
     });
-  }
+  }*/
 
   /** 显示设计部批注模态框 */
   function editAnno(id,annotate) {
@@ -1056,7 +1115,7 @@
     });
 
     // setValid();
-    setcontractValid();
+    // setcontractValid();
   });
 </script>
 </body>

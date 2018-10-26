@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
 import java.util.List;
 
 @Controller
@@ -308,9 +309,34 @@ public class ProjectController {
         return baseResponse;
     }
 
-    /*public BaseResponse upload(@RequestParam("file") MultipartFile[] file) {
+    @ResponseBody
+    @PostMapping("/upload")
+    public BaseResponse upload(@RequestParam("file") MultipartFile[] file, @RequestParam("id") Integer id, @RequestParam("code") String code) {
 
-    }*/
+        if (null != file && file.length > 0) {
+            //遍历并保存文件
+            for (MultipartFile f : file) {
+                if (file != null) {
+                    //取得当前上传文件的文件名称
+                    String fileName = f.getOriginalFilename();
+                    String path = uploadPath + code + "/";
+                    File dir = new File(path);
+                    if (!dir.exists()) {
+                        dir.mkdir();
+                    }
+                    File saveFile = new File(path + fileName);
+                    try {
+                        f.transferTo(saveFile);
+                    } catch (Exception e) {
+                        return BaseResponse.STATUS_400;
+                    }
+                }
+            }
+        } else {
+            return BaseResponse.STATUS_400;
+        }
+        return BaseResponse.STATUS_200;
+    }
 
     /**
      * 处理数据
