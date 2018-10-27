@@ -331,10 +331,10 @@
               $('td', row).eq(9).css("background", '#f39c12');
             if(data.contractStatus === 2)
               $('td', row).eq(9).css("background", '#00a65a');
-            if (data.contractStatus === 2 && (data.contractNo == null || data.contractNo == '')) {
+            /*if (data.contractStatus === 2 && (data.contractNo == null || data.contractNo == '')) {
               $('td', row).eq(9).css("background", '#3c8dbc');
               $('td', row).eq(9).text("不签");
-            }
+            }*/
 
             if(data.deptStatus > 0 && data.deptStatus < 8){}
               $('td', row).eq(11).css("background", '#f39c12');

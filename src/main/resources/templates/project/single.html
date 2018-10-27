@@ -351,7 +351,7 @@
 
 
 
-      <div class="box box-solid" th:classappend="${project.produceTasks[2].status == 0 ? 'box-default' : (project.produceTasks[2].status == 1 ? 'box-warning' : (project.produceTasks[2].contractNo != null and project.produceTasks[2].contractNo != '' ? 'box-success':'box-primary'))}">
+      <div class="box box-solid" th:classappend="${project.produceTasks[2].status == 0 ? 'box-default' : (project.produceTasks[2].status == 1 ? 'box-warning' :'box-success')}">
         <div class="box-header with-border">
           <h3 class="box-title" th:text="${project.produceTasks[2].produceName}" >签合同</h3>
         </div>
