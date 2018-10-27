@@ -371,9 +371,11 @@
             if (data.projectStatus === 0) {
               // $(row).addClass("delete-status")
               $(row).css('background', '#FF0000');
+              $('td', row).css("background", '#FF0000');
             }
             if (data.projectStatus === 3) {
               $(row).css('background', '#f39c12');
+              $('td', row).css("background", '#f39c12');
             }
             if (temp!=null && data.code === $('td', temp).eq(4).html()) {
               rowspan = $('td', temp).eq(4).attr("rowSpan");
