@@ -51,4 +51,5 @@ public class TaskDto implements Serializable {
     private String contractName;
     private Integer contractStatus;
     private String contractAnnotate;
+    private String contractNo;
 }

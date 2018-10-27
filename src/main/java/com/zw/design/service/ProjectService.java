@@ -8,6 +8,8 @@ import com.zw.design.form.ProjectForm;
 import com.zw.design.form.ProjectSendForm;
 import com.zw.design.query.ProjectQuery;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface ProjectService {
 
     DataTablesCommonDto<Project> findProjectsForNotSendByCriteria(ProjectQuery query);
@@ -33,4 +35,10 @@ public interface ProjectService {
     ProduceTask cancelProduce(Integer id);
 
     Project updateProject(ProjectForm project);
+
+    void saveImage(Integer id, String fileName, String path);
+
+    void download(HttpServletResponse response, Integer[] id, String code);
+
+    void delFile(Integer[] ids);
 }

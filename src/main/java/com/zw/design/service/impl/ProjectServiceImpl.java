@@ -2,19 +2,22 @@ package com.zw.design.service.impl;
 
 import com.zw.design.dto.DataTablesCommonDto;
 import com.zw.design.entity.DeptTask;
+import com.zw.design.entity.Image;
 import com.zw.design.entity.ProduceTask;
 import com.zw.design.entity.Project;
 import com.zw.design.form.ProjectForm;
 import com.zw.design.form.ProjectSendForm;
 import com.zw.design.query.ProjectQuery;
 import com.zw.design.repository.DeptTaskRepository;
+import com.zw.design.repository.ImageRepository;
 import com.zw.design.repository.ProduceTaskRepository;
 import com.zw.design.repository.ProjectRepository;
 import com.zw.design.service.ProjectService;
 import com.zw.design.utils.Const;
+import com.zw.design.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +26,21 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -39,6 +49,8 @@ public class ProjectServiceImpl implements ProjectService {
     private DeptTaskRepository deptTaskRepository;
     @Autowired
     private ProduceTaskRepository produceTaskRepository;
+    @Autowired
+    private ImageRepository imageRepository;
 
     @Override
     @CacheEvict(value = "projects",allEntries = true)
@@ -437,5 +449,67 @@ public class ProjectServiceImpl implements ProjectService {
         }
         produceTaskRepository.saveAll(produceTasks);
         return true;
+    }
+
+    @Override
+    public void saveImage(Integer id, String fileName, String path) {
+        if (imageRepository.countByUrl(path) > 0) {
+            return;
+        }
+        Image image = new Image();
+        image.setName(fileName);
+        image.setUrl(path);
+        image.setUploadTime(new Date());
+        imageRepository.save(image);
+        Project project = projectRepository.findById(id).get();
+        project.getImages().add(image);
+        projectRepository.save(project);
+    }
+
+    @Override
+    public void download(HttpServletResponse response, Integer[] id, String code) {
+        if (id.length == 1) {
+            Image image = imageRepository.findById(id[0]).get();
+            File file = new File(image.getUrl());
+            FileUtils.downloadFile(file, response);
+        } else {
+            List<File> list = new ArrayList<>();
+            Image image;
+            for (Integer integer : id) {
+                image = imageRepository.findById(integer).get();
+                list.add(new File(image.getUrl()));
+            }
+            try {
+                // 要压缩的文件路径
+                File file = new File(uploadPath + code + ".zip");
+                if (file.exists()) {
+                    file.delete();
+                }
+                file.createNewFile();
+                //创建文件输出流
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                // ZipOutputStream输出流转换
+                ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+                // 接收文件集合、压缩流
+                FileUtils.zipFileAll(list, zipOutputStream);
+                zipOutputStream.close();
+                fileOutputStream.close();
+                FileUtils.downloadZip(file, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void delFile(Integer[] ids) {
+        for (Integer id : ids) {
+            Image image = imageRepository.findById(id).get();
+            File file = new File(image.getUrl());
+            if (file.exists()) {
+                file.delete();
+            }
+            imageRepository.deleteById(id);
+        }
     }
 }

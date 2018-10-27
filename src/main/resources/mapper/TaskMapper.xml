@@ -46,7 +46,8 @@
     i.annotate as saveAnnotate,
     l.produce_name as contractName,
     l.status as contractStatus,
-    l.annotate as contractAnnotate
+    l.annotate as contractAnnotate,
+    l.contract_no as contractNo
     from 	(
     select dept_a.department_type,dept_a.project_id,min(department_num) as department_num,sum ( status ) AS status,
     stuff((select ',' + dept_c.annotate from dept_task dept_c where dept_c.department_type = dept_a.department_type and dept_c.project_id = dept_a.project_id for xml path('')),1,1,'') as annotates

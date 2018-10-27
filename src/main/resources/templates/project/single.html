@@ -163,6 +163,47 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
+
+<div class="modal fade" id="modal-upload">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">上传文件</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-offset-1">
+            <form id="uploadForm" th:action="@{/project/upload}" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
+              <input type="hidden" name="id" id="upload_id">
+              <input type="hidden" name="code" id="upload_code">
+              <div class="form-group">
+                <div class="row" th:each="image: ${project.images}">
+                    <input style="margin-left: 20px" type="checkbox" name="ids" th:value="${image.id}" >
+                    <label style="margin-left: 10px" th:text="${image.name}">项目</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputFile">上传文件</label>
+                <input type="file" multiple="multiple" id="exampleInputFile" name="file">
+                <p class="help-block">请选择所需要上传的文件</p>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button shiro:hasPermission="upload" type="button" class="btn btn-info" id="btn-upload">上传</button>
+        <a href="" shiro:hasPermission="download" class="btn btn-success" id="btn-download">下载</a>
+        <button shiro:hasPermission="file:del" type="button" class="btn btn-danger" id="btn-upload-del">删除</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 <!--信息模态框-->
 <div class="modal fade" id="modal-info">
   <div class="modal-dialog">
@@ -273,12 +314,16 @@
         </div>
         <div class="box-body" style="display: block;">
           <div>时间：<span th:text="${#dates.format(project.produceTasks[0].startTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:classappend="${project.images.size() > 0 ? 'text-yellow':''}" >上传文件数量：<span th:text="${project.images.size()}">2018-08-01</span></div>
+        </div>
+        <div class="box-footer">
+          <button style="margin-right: 5px" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}')|">文件</button>
         </div>
       </div>
     </div>
     <div id="div2" class="col-md-2">
       <div class="box box-solid" th:classappend="${project.produceTasks[1].status == 0 ? 'box-default' : (project.produceTasks[1].status == 1 ? 'box-warning' : 'box-success')}">
-        <div class="box-header with-border">
+        <div class="box-header box- with-border">
           <h3 class="box-title" th:text="${project.produceTasks[1].produceName}" >签订协议</h3>
         </div>
         <div class="box-body" style="display: block;">
@@ -306,7 +351,7 @@
 
 
 
-      <div class="box box-solid" th:classappend="${project.produceTasks[2].status == 0 ? 'box-default' : (project.produceTasks[2].status == 1 ? 'box-warning' : 'box-success')}">
+      <div class="box box-solid" th:classappend="${project.produceTasks[2].status == 0 ? 'box-default' : (project.produceTasks[2].status == 1 ? 'box-warning' : (project.produceTasks[2].contractNo != null and project.produceTasks[2].contractNo != '' ? 'box-success':'box-primary'))}">
         <div class="box-header with-border">
           <h3 class="box-title" th:text="${project.produceTasks[2].produceName}" >签合同</h3>
         </div>
@@ -629,6 +674,7 @@
   var taskForm = $("#taskForm");
   var annoForm = $("#annoForm");
   var signForm = $("#signForm");
+  var downhref = "/project/download?code=" + [[${project.code}]];
 
   /** 表单验证设置 */
   function setValid() {
@@ -1047,6 +1093,48 @@
     });
   }
 
+  /** 上传模态框 */
+  function uploadModel(id, code) {
+    $("#upload_id").val(id);
+    $("#upload_code").val(code);
+    $('#modal-upload').modal('show');
+  }
+
+  /** 上传文件 */
+  function uploadFile() {
+    $("#uploadForm").ajaxSubmit({
+      success: function (result) {
+        if (result.status === 200) {
+          location.reload();
+        }
+        else {
+          toastr.success("上传失败！");
+        }
+      },
+      error: function () {
+        toastr.success("上传失败！");
+      }
+    })
+  }
+
+  /** 下载 */
+  function delFile() {
+    $("#uploadForm").ajaxSubmit({
+      url: "/project/delFile",
+      success: function (result) {
+        if (result.status === 200) {
+          location.reload();
+        }
+        else {
+          toastr.success("删除失败！");
+        }
+      },
+      error: function () {
+        toastr.success("删除失败！");
+      }
+    })
+  }
+
   $(window).resize(function(){
     var hi = ($("#rowDiv").outerHeight() - $("#div1").outerHeight())/2;
     var hi2 = ($("#rowDiv").outerHeight() - $("#div2").outerHeight())/2;
@@ -1058,6 +1146,31 @@
 
   $(function () {
     $(window).resize();
+
+    $("#btn-upload").click(function(){
+      uploadFile();
+    });
+
+    $("#btn-download").click(function () {
+      if ($("input:checkbox:checked").length == 0) {
+        toastr.success("请至少选择一个文件");
+        return false;
+      } else {
+        var temp_href = downhref;
+        $("input:checkbox:checked").each(function () {
+          temp_href += "&ids=" + $(this).val();
+        });
+        $("#btn-download").attr("href",temp_href);
+      }
+    });
+
+    $("#btn-upload-del").click(function () {
+      if ($("input:checkbox:checked").length == 0) {
+        toastr.success("请至少选择一个文件");
+      } else {
+        delFile();
+      }
+    });
 
     // 提交签协议任务
     $("#btn-sign").click(function () {

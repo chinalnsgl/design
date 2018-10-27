@@ -12,6 +12,7 @@ import com.zw.design.query.TaskQuery;
 import com.zw.design.service.ProjectService;
 import com.zw.design.service.TaskService;
 import com.zw.design.service.impl.ProcessService;
+import com.zw.design.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 @Controller
 @Slf4j
@@ -309,24 +314,34 @@ public class ProjectController {
         return baseResponse;
     }
 
+    @GetMapping("/upload")
+    public String upload() {
+        return "upload";
+    }
+
     @ResponseBody
     @PostMapping("/upload")
+    @LogAnnotation(action = "上传")
     public BaseResponse upload(@RequestParam("file") MultipartFile[] file, @RequestParam("id") Integer id, @RequestParam("code") String code) {
 
         if (null != file && file.length > 0) {
             //遍历并保存文件
             for (MultipartFile f : file) {
-                if (file != null) {
+                if (!f.isEmpty()) {
                     //取得当前上传文件的文件名称
                     String fileName = f.getOriginalFilename();
                     String path = uploadPath + code + "/";
                     File dir = new File(path);
                     if (!dir.exists()) {
-                        dir.mkdir();
+                        boolean mkdir = dir.mkdirs();
+                        if (!mkdir) {
+                             return BaseResponse.STATUS_400;
+                        }
                     }
                     File saveFile = new File(path + fileName);
                     try {
                         f.transferTo(saveFile);
+                        projectService.saveImage(id, fileName, path + fileName);
                     } catch (Exception e) {
                         return BaseResponse.STATUS_400;
                     }
@@ -335,6 +350,20 @@ public class ProjectController {
         } else {
             return BaseResponse.STATUS_400;
         }
+        return BaseResponse.STATUS_200;
+    }
+
+    @GetMapping("/download")
+    @LogAnnotation(action = "下载")
+    public void download(HttpServletResponse response, @RequestParam("ids") Integer[] ids, @RequestParam("code")String code) {
+        projectService.download(response, ids, code);
+    }
+
+    @ResponseBody
+    @PostMapping("/delFile")
+    @LogAnnotation(action = "删除文件")
+    public BaseResponse delFile(@RequestParam("ids") Integer[] ids) {
+        projectService.delFile(ids);
         return BaseResponse.STATUS_200;
     }
 

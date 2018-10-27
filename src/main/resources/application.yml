@@ -23,6 +23,10 @@ spring:
   mvc:
     favicon:
       enabled: false
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.zw.design.domain.dbo
@@ -39,4 +43,4 @@ logging:
           mapper: debug
   path: e:/DesignProjectLog
 upload:
-  path: e:/upload/
+  path: e://upload/
