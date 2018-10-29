@@ -9,6 +9,7 @@ import com.zw.design.form.ProjectForm;
 import com.zw.design.form.ProjectSendForm;
 import com.zw.design.query.ProjectQuery;
 import com.zw.design.query.TaskQuery;
+import com.zw.design.service.LogService;
 import com.zw.design.service.ProjectService;
 import com.zw.design.service.TaskService;
 import com.zw.design.service.impl.ProcessService;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,6 +44,8 @@ public class ProjectController {
     private TaskService taskService;
     @Autowired
     private ProcessService processService;
+    @Autowired
+    private LogService logService;
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -78,9 +82,11 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/del")
-    @LogAnnotation(action = "删除项目")
-    public BaseResponse create(@RequestParam("id")Integer id) {
+//    @LogAnnotation(action = "删除项目")
+    public BaseResponse create(@RequestParam("id")Integer id, HttpServletRequest request) {
+        Project project = projectService.findProjectById(id);
         projectService.delProject(id);
+        logService.saveLog("删除项目：" + project.getName() + " 项目号：" + project.getCode(), request);
         return BaseResponse.STATUS_200;
     }
 
@@ -89,9 +95,10 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/create")
-    @LogAnnotation(action = "创建项目")
-    public BaseResponse create(Project project) {
+//    @LogAnnotation(action = "创建项目")
+    public BaseResponse create(Project project, HttpServletRequest request) {
         Project p = projectService.saveProject(project);
+        logService.saveLog("创建项目：" + p.getName() + " 项目号：" + p.getCode(), request);
         return BaseResponse.toResponse(p.getId());
     }
 
@@ -100,9 +107,10 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/update")
-    @LogAnnotation(action = "修改项目")
-    public BaseResponse update(ProjectForm project) {
+//    @LogAnnotation(action = "修改项目")
+    public BaseResponse update(ProjectForm project, HttpServletRequest request) {
         Project p = projectService.updateProject(project);
+        logService.saveLog("删除项目：" + p.getName() + " 项目号：" + p.getCode(), request);
         return BaseResponse.toResponse(p.getId());
     }
 
@@ -111,8 +119,10 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/send")
-    @LogAnnotation(action = "下达任务单")
-    public BaseResponse send(ProjectSendForm form) {
+//    @LogAnnotation(action = "下达任务单")
+    public BaseResponse send(ProjectSendForm form, HttpServletRequest request) {
+        Project p = projectService.findProjectById(form.getProjectId());
+        logService.saveLog("下达任务单：" + p.getName() + " 项目号：" + p.getCode(), request);
         if (projectService.sendTask(form)) {
             return new BaseResponse();
         } else {
@@ -174,9 +184,11 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/dept/cancel")
-    @LogAnnotation(action = "取消科室完成进度")
-    public BaseResponse cancelDept(@RequestParam("id")Integer id) {
+//    @LogAnnotation(action = "取消科室完成进度")
+    public BaseResponse cancelDept(@RequestParam("id")Integer id, HttpServletRequest request) {
         DeptTask deptTask = projectService.cancelDept(id);
+        logService.saveLog("撤消设计任务进度：【项目名：" + deptTask.getProject().getName() + " 项目号：" + deptTask.getProject().getCode() +
+                " "+ deptTask.getName() + "  任务名：" + deptTask.getStepName() + " 】", request);
         return BaseResponse.toResponse(deptTask.getId());
     }
 
@@ -185,9 +197,11 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/produce/cancel")
-    @LogAnnotation(action = "取消生产部完成进度")
-    public BaseResponse cancelProduce(@RequestParam("id")Integer id) {
+//    @LogAnnotation(action = "取消生产部完成进度")
+    public BaseResponse cancelProduce(@RequestParam("id")Integer id, HttpServletRequest request) {
         ProduceTask produceTask = projectService.cancelProduce(id);
+        logService.saveLog("撤消生产任务进度：【项目名：" + produceTask.getProject().getName() + " 项目号：" + produceTask.getProject().getCode() +
+                 "  任务名：" + produceTask.getProduceName() + " 】", request);
         return BaseResponse.toResponse(produceTask.getId());
     }
 
@@ -196,9 +210,10 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/status")
-    @LogAnnotation(action = "暂停/启动/取消/恢复项目")
-    public BaseResponse status(@RequestParam("id")Integer id, @RequestParam("status") Integer status, @RequestParam("comment") String comment) {
+//    @LogAnnotation(action = "暂停/启动/取消/恢复项目")
+    public BaseResponse status(@RequestParam("id")Integer id, @RequestParam("status") Integer status, @RequestParam("comment") String comment, HttpServletRequest request) {
         Project p = projectService.updateStatus(id,status, comment);
+        logService.saveLog((status == 3 ? "暂停项目：" : ( status == 0 ? "取消项目" : "恢复启动项目：")) + p.getName() + p.getCode(), request);
         return BaseResponse.toResponse(p.getId());
     }
 
@@ -219,12 +234,14 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/task/produce/edit")
-    @LogAnnotation(action = "编辑生产任务进度")
-    public BaseResponse editProduceTask(ProduceTask produceTask) {
+//    @LogAnnotation(action = "编辑生产任务进度")
+    public BaseResponse editProduceTask(ProduceTask produceTask, HttpServletRequest request) {
         if (produceTask.getComment() != null) {
             produceTask.setComment(produceTask.getComment().replaceAll("\r\n|\r|\n|\n\r",""));
         }
         ProduceTask t = taskService.saveProduceTask(produceTask);
+        logService.saveLog("编辑生产任务进度：【项目名：" + t.getProject().getName() + " 项目号：" + t.getProject().getCode() +
+                "   任务名：" + t.getProduceName() + " 】", request);
         return BaseResponse.toResponse(t.getId());
     }
 
@@ -233,12 +250,14 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/task/dept/edit")
-    @LogAnnotation(action = "编辑设计科室任务进度")
-    public BaseResponse editDeptTask(DeptTask deptTask) {
+//    @LogAnnotation(action = "编辑设计任务进度")
+    public BaseResponse editDeptTask(DeptTask deptTask, HttpServletRequest request) {
         if (deptTask.getComment() != null) {
             deptTask.setComment(deptTask.getComment().replaceAll("\r\n|\r|\n|\n\r",""));
         }
         DeptTask t = taskService.saveDeptTask(deptTask);
+        logService.saveLog("编辑设计任务进度：【项目名：" + t.getProject().getName() + "   项目号：" + t.getProject().getCode() +
+                 " "+ t.getName() + "   任务名：" + t.getStepName() + " 】", request);
         return BaseResponse.toResponse(t.getId());
     }
 
@@ -321,8 +340,8 @@ public class ProjectController {
 
     @ResponseBody
     @PostMapping("/upload")
-    @LogAnnotation(action = "上传")
-    public BaseResponse upload(@RequestParam("file") MultipartFile[] file, @RequestParam("id") Integer id, @RequestParam("code") String code) {
+//    @LogAnnotation(action = "上传")
+    public BaseResponse upload(@RequestParam("file") MultipartFile[] file, @RequestParam("id") Integer id, @RequestParam("code") String code, HttpServletRequest request) {
 
         if (null != file && file.length > 0) {
             //遍历并保存文件
@@ -350,20 +369,24 @@ public class ProjectController {
         } else {
             return BaseResponse.STATUS_400;
         }
+        Project project = projectService.findProjectById(id);
+        logService.saveLog("上传文件：数量" + file.length + " 【项目名：" + project.getName() + "  项目号：" + project.getCode() + "】", request);
         return BaseResponse.STATUS_200;
     }
 
     @GetMapping("/download")
-    @LogAnnotation(action = "下载")
-    public void download(HttpServletResponse response, @RequestParam("ids") Integer[] ids, @RequestParam("code")String code) {
+//    @LogAnnotation(action = "下载")
+    public void download(HttpServletResponse response, @RequestParam("ids") Integer[] ids, @RequestParam("code")String code, HttpServletRequest request) {
         projectService.download(response, ids, code);
+        logService.saveLog("下载文件：数量" + ids.length + "  【项目号：" + code + "】", request);
     }
 
     @ResponseBody
     @PostMapping("/delFile")
-    @LogAnnotation(action = "删除文件")
-    public BaseResponse delFile(@RequestParam("ids") Integer[] ids) {
+//    @LogAnnotation(action = "删除文件")
+    public BaseResponse delFile(@RequestParam("ids") Integer[] ids, HttpServletRequest request) {
         projectService.delFile(ids);
+        logService.saveLog("删除文件", request);
         return BaseResponse.STATUS_200;
     }
 

@@ -26,7 +26,7 @@ public class SysUser implements Serializable /*implements UserDetails */{
 
     @NotNull
     private String password;
-    private Integer status = 1;
+    private Integer status = 1; // 0: 锁定  1: 正常
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Where(clause = "status > 0")

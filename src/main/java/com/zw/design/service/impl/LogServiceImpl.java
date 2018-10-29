@@ -2,9 +2,11 @@ package com.zw.design.service.impl;
 
 import com.zw.design.dto.DataTablesCommonDto;
 import com.zw.design.entity.LogInfo;
+import com.zw.design.entity.SysUser;
 import com.zw.design.query.LogQuery;
 import com.zw.design.repository.LogInfoRepository;
 import com.zw.design.service.LogService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +30,23 @@ public class LogServiceImpl implements LogService {
     @Override
     public LogInfo saveLog(LogInfo logInfo) {
         return logInfoRepository.save(logInfo);
+    }
+
+    @Override
+    public LogInfo saveLog(String content, HttpServletRequest request) {
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        if (user == null) {
+            return null;
+        }
+
+        LogInfo logInfo = new LogInfo();
+        logInfo.setAccount(user.getUserName());
+        logInfo.setName(user.getName());
+        logInfo.setOperationName(content);
+        logInfo.setOperationTime(new Date());
+        logInfo.setAddress(request.getRemoteAddr());
+        logInfoRepository.save(logInfo);
+        return logInfo;
     }
 
     @Override

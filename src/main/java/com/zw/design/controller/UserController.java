@@ -6,13 +6,17 @@ import com.zw.design.dto.DataTablesCommonDto;
 import com.zw.design.dto.ValidResponse;
 import com.zw.design.entity.SysUser;
 import com.zw.design.query.UserQuery;
+import com.zw.design.service.LogService;
 import com.zw.design.service.RoleService;
 import com.zw.design.service.UserService;
+import org.apache.catalina.connector.Request;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/sys")
@@ -25,6 +29,9 @@ public class UserController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private LogService logService;
 
     /**
      * 用户列表页面
@@ -51,9 +58,10 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/user/status")
-    @LogAnnotation(action = "锁定/解锁用户")
-    public BaseResponse updateUserStatus(@RequestParam("id")Integer id, @RequestParam("status") Integer status) {
+//    @LogAnnotation(action = "锁定/解锁用户")
+    public BaseResponse updateUserStatus(@RequestParam("id")Integer id, @RequestParam("status") Integer status, HttpServletRequest request) {
         SysUser user = userService.updateUserStatus(id,status);
+        logService.saveLog((status == 1 ? "解锁用户：" : "锁定用户：") + user.getName(), request);
         return BaseResponse.toResponse(user);
     }
 
@@ -81,9 +89,10 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/user/save")
-    @LogAnnotation(action = "创建用户")
-    public BaseResponse userCreate(SysUser user, Integer[] role) {
+//    @LogAnnotation(action = "创建用户")
+    public BaseResponse userCreate(SysUser user, Integer[] role, HttpServletRequest request) {
         SysUser sysUser = userService.saveUser(user,role);
+        logService.saveLog("创建用户：" + sysUser.getName(), request);
         return BaseResponse.toResponse(sysUser);
     }
 
@@ -103,9 +112,10 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/user/update")
-    @LogAnnotation(action = "修改用户")
-    public BaseResponse userUpdate(SysUser user, Integer[] role) {
+//    @LogAnnotation(action = "修改用户")
+    public BaseResponse userUpdate(SysUser user, Integer[] role, HttpServletRequest request) {
         SysUser sysUser = userService.updateUser(user,role);
+        logService.saveLog("修改用户：" + sysUser.getName(), request);
         return BaseResponse.toResponse(sysUser);
     }
 }

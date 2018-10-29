@@ -1,6 +1,5 @@
 package com.zw.design.controller;
 
-import com.zw.design.aspect.LogAnnotation;
 import com.zw.design.dto.BaseResponse;
 import com.zw.design.dto.DataTablesCommonDto;
 import com.zw.design.dto.ValidResponse;
@@ -66,7 +65,7 @@ public class PermissionController {
      */
     @ResponseBody
     @PostMapping("/permission/status")
-    @LogAnnotation(action = "删除权限")
+//    @LogAnnotation(action = "删除权限")
     public BaseResponse permissionDel(@RequestParam("id")Integer id, @RequestParam("status") Integer status) {
         SysPermission permission = permissionService.updatePermissionStatus(id,status);
         return BaseResponse.toResponse(permission);
@@ -104,7 +103,7 @@ public class PermissionController {
      */
     @ResponseBody
     @PostMapping("/permission/save")
-    @LogAnnotation(action = "添加权限")
+//    @LogAnnotation(action = "添加权限")
     public BaseResponse permissionCreate(SysPermission permission) {
         SysPermission sysPermission = permissionService.savePermission(permission);
         return BaseResponse.toResponse(sysPermission);
@@ -125,7 +124,7 @@ public class PermissionController {
      */
     @ResponseBody
     @PostMapping("/permission/update")
-    @LogAnnotation(action = "修改权限")
+//    @LogAnnotation(action = "修改权限")
     public BaseResponse permissionEdit(SysPermission permission) {
         SysPermission sysPermission = permissionService.updatePermission(permission);
         return BaseResponse.toResponse(sysPermission);

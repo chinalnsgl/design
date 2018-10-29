@@ -6,11 +6,14 @@ import com.zw.design.dto.DataTablesCommonDto;
 import com.zw.design.dto.ValidResponse;
 import com.zw.design.entity.SysRole;
 import com.zw.design.query.RoleQuery;
+import com.zw.design.service.LogService;
 import com.zw.design.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/sys")
@@ -20,6 +23,8 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private LogService logService;
 
     /**
      * 角色列表页面
@@ -46,9 +51,10 @@ public class RoleController {
      */
     @ResponseBody
     @PostMapping("/role/status")
-    @LogAnnotation(action = "删除角色")
-    public BaseResponse updateRoleStatus(@RequestParam("id")Integer id, @RequestParam("status") Integer status) {
+//    @LogAnnotation(action = "删除角色")
+    public BaseResponse updateRoleStatus(@RequestParam("id")Integer id, @RequestParam("status") Integer status, HttpServletRequest request) {
         SysRole role = roleService.updateRoleStatus(id, status);
+        logService.saveLog("删除角色：" + role.getRoleName(), request);
         return BaseResponse.toResponse(role);
     }
 
@@ -75,9 +81,10 @@ public class RoleController {
      */
     @ResponseBody
     @PostMapping("/role/save")
-    @LogAnnotation(action = "新建角色")
-    public BaseResponse roleCreate(SysRole role, Integer [] permissions) {
+//    @LogAnnotation(action = "新建角色")
+    public BaseResponse roleCreate(SysRole role, Integer [] permissions, HttpServletRequest request) {
         SysRole sysRole = roleService.saveRole(role,permissions);
+        logService.saveLog("新建角色：" + role.getRoleName(), request);
         return BaseResponse.toResponse(sysRole);
     }
 
@@ -96,9 +103,10 @@ public class RoleController {
      */
     @ResponseBody
     @PostMapping("/role/update")
-    @LogAnnotation(action = "修改角色")
-    public BaseResponse roleUpdate(SysRole role, Integer [] permissions) {
+//    @LogAnnotation(action = "修改角色")
+    public BaseResponse roleUpdate(SysRole role, Integer [] permissions, HttpServletRequest request) {
         SysRole sysRole = roleService.updateRole(role,permissions);
+        logService.saveLog("修改角色：" + role.getRoleName(), request);
         return BaseResponse.toResponse(sysRole);
     }
 
