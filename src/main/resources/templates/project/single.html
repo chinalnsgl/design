@@ -310,7 +310,7 @@
     <div id="div1" class="col-md-2">
       <div class="box box-success box-solid box-warning">
         <div class="box-header with-border">
-          <h3 class="box-title" th:text="${project.produceTasks[0].produceName}">下任务单</h3>
+          <h3 class="box-title" th:text="${project.produceTasks[0].produceName}">任务单</h3>
         </div>
         <div class="box-body" style="display: block;">
           <div>时间：<span th:text="${#dates.format(project.produceTasks[0].startTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -324,7 +324,7 @@
     <div id="div2" class="col-md-2">
       <div class="box box-solid" th:classappend="${project.produceTasks[1].status == 0 ? 'box-default' : (project.produceTasks[1].status == 1 ? 'box-warning' : 'box-success')}">
         <div class="box-header box- with-border">
-          <h3 class="box-title" th:text="${project.produceTasks[1].produceName}" >签订协议</h3>
+          <h3 class="box-title" th:text="${project.produceTasks[1].produceName}" >技术协议</h3>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[1].startTime}">从<span th:text="${#dates.format(project.produceTasks[1].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[1].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -353,7 +353,7 @@
 
       <div class="box box-solid" th:classappend="${project.produceTasks[2].status == 0 ? 'box-default' : (project.produceTasks[2].status == 1 ? 'box-warning' :'box-success')}">
         <div class="box-header with-border">
-          <h3 class="box-title" th:text="${project.produceTasks[2].produceName}" >签合同</h3>
+          <h3 class="box-title" th:text="${project.produceTasks[2].produceName}" >合同</h3>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[2].startTime}">从<span th:text="${#dates.format(project.produceTasks[2].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[2].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -445,7 +445,7 @@
     <div class="col-md-2">
       <div class="box box-solid" th:classappend="${project.produceTasks[6].status == 0 ? 'box-default' : (project.produceTasks[6].status == 1 ? 'box-warning' : 'box-success')}">
         <div class="box-header with-border">
-          <h3 class="box-title" th:text="${project.produceTasks[6].produceName}" >签订协议</h3>
+          <h3 class="box-title" th:text="${project.produceTasks[6].produceName}" >技术协议</h3>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[6].startTime}">从<span th:text="${#dates.format(project.produceTasks[6].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[6].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -472,7 +472,7 @@
     <div class="col-md-2">
       <div class="box box-solid" th:classappend="${project.produceTasks[9].status == 0 ? 'box-default' : (project.produceTasks[9].status == 1 ? 'box-warning' : 'box-success')}">
         <div class="box-header with-border">
-          <h3 class="box-title" th:text="${project.produceTasks[9].produceName}" >签订协议</h3>
+          <h3 class="box-title" th:text="${project.produceTasks[9].produceName}" >技术协议</h3>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[9].startTime}">从<span th:text="${#dates.format(project.produceTasks[9].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[9].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -499,7 +499,7 @@
     <div class="col-md-2">
       <div class="box box-solid" th:classappend="${project.produceTasks[10].status == 0 ? 'box-default' : (project.produceTasks[10].status == 1 ? 'box-warning' : 'box-success')}">
         <div class="box-header with-border">
-          <h3 class="box-title" th:text="${project.produceTasks[10].produceName}" >签订协议</h3>
+          <h3 class="box-title" th:text="${project.produceTasks[10].produceName}" >技术协议</h3>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[10].startTime}">从<span th:text="${#dates.format(project.produceTasks[10].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[10].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -526,7 +526,7 @@
     <div class="col-md-2">
       <div class="box box-solid" th:classappend="${project.produceTasks[11].status == 0 ? 'box-default' : (project.produceTasks[11].status == 1 ? 'box-warning' : 'box-success')}">
         <div class="box-header with-border">
-          <h3 class="box-title" th:text="${project.produceTasks[11].produceName}" >签订协议</h3>
+          <h3 class="box-title" th:text="${project.produceTasks[11].produceName}" >技术协议</h3>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[11].startTime}">从<span th:text="${#dates.format(project.produceTasks[11].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[11].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -582,7 +582,7 @@
     <div class="col-md-2">
       <div class="box box-solid" th:classappend="${project.produceTasks[7].status == 0 ? 'box-default' : (project.produceTasks[7].status == 1 ? 'box-warning' : 'box-success')}">
         <div class="box-header with-border">
-          <h3 class="box-title" th:text="${project.produceTasks[7].produceName}" >签订协议</h3>
+          <h3 class="box-title" th:text="${project.produceTasks[7].produceName}" >技术协议</h3>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[7].startTime}">从<span th:text="${#dates.format(project.produceTasks[7].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[7].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -638,7 +638,7 @@
     <div class="col-md-2">
       <div class="box box-solid" th:classappend="${project.produceTasks[8].status == 0 ? 'box-default' : (project.produceTasks[8].status == 1 ? 'box-warning' : 'box-success')}">
         <div class="box-header with-border">
-          <h3 class="box-title" th:text="${project.produceTasks[8].produceName}" >签订协议</h3>
+          <h3 class="box-title" th:text="${project.produceTasks[8].produceName}" >技术协议</h3>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[8].startTime}">从<span th:text="${#dates.format(project.produceTasks[8].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[8].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -809,16 +809,16 @@
     if (status == 0) {
       $("#status").val(1);
       $("#btn-commit-produce").text("开始");
-      if (stepName == '签订协议') {
+      if (stepName == '技术协议') {
         $("#status").val(2);
         $("#btn-commit-produce").text("完成");
       }
     } else {
       switch (stepName) {
-        case '签订协议':
+        case '技术协议':
           $("#btn-cancel-sign").show();
           break;
-        case '签合同':
+        case '合同':
           $("#btn-cancel-contract").show();
           break;
         case '原材料外协计划':
