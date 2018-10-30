@@ -36,7 +36,7 @@ public interface ProjectService {
 
     Project updateProject(ProjectForm project);
 
-    void saveImage(Integer id, String fileName, String path);
+    void saveImage(Integer id, String fileName, String path, Integer type);
 
     void download(HttpServletResponse response, Integer[] id, String code);
 

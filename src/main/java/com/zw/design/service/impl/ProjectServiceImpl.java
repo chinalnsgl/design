@@ -452,13 +452,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void saveImage(Integer id, String fileName, String path) {
+    public void saveImage(Integer id, String fileName, String path, Integer type) {
         if (imageRepository.countByUrl(path) > 0) {
             return;
         }
         Image image = new Image();
         image.setName(fileName);
         image.setUrl(path);
+        image.setType(type);
         image.setUploadTime(new Date());
         imageRepository.save(image);
         Project project = projectRepository.findById(id).get();

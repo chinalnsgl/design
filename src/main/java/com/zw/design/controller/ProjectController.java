@@ -341,7 +341,11 @@ public class ProjectController {
     @ResponseBody
     @PostMapping("/upload")
 //    @LogAnnotation(action = "上传")
-    public BaseResponse upload(@RequestParam("file") MultipartFile[] file, @RequestParam("id") Integer id, @RequestParam("code") String code, HttpServletRequest request) {
+    public BaseResponse upload(@RequestParam("file") MultipartFile[] file,
+                               @RequestParam("id") Integer id,
+                               @RequestParam("code") String code,
+                               @RequestParam("type") Integer type,
+                               HttpServletRequest request) {
 
         if (null != file && file.length > 0) {
             //遍历并保存文件
@@ -360,7 +364,7 @@ public class ProjectController {
                     File saveFile = new File(path + fileName);
                     try {
                         f.transferTo(saveFile);
-                        projectService.saveImage(id, fileName, path + fileName);
+                        projectService.saveImage(id, fileName, path + fileName, type);
                     } catch (Exception e) {
                         return BaseResponse.STATUS_400;
                     }

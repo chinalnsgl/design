@@ -26,5 +26,6 @@ public class Image implements Serializable {
     private Date uploadTime; // 上传时间
     private String userId;
     private String userName;
+    private Integer type;
 
 }
