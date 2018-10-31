@@ -24,7 +24,7 @@
               <label for="permissionName" class="col-sm-2 control-label">权限名</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control" id="permissionName" name="permissionName"
-                       th:value="${permission.permissionName}" placeholder="权限名" disabled>
+                       th:value="${permission.permissionName}" placeholder="权限名" >
               </div>
             </div>
             <div class="form-group">
@@ -39,6 +39,13 @@
               <div class="col-sm-10">
                 <input type="text" class="form-control" id="description" name="description"
                        th:value="${permission.description}" placeholder="描述">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="orderNo" class="col-sm-2 control-label">分组排序</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="orderNo" name="orderNo"
+                       th:value="${permission.orderNo}" placeholder="请输入分组排序">
               </div>
             </div>
           </div>

@@ -47,7 +47,7 @@
     </a>
     <nav class="navbar navbar-static-top">
 
-      <!--<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">-->
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"></a>
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
@@ -72,6 +72,12 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">项目菜单</li>
+        <li shiro:hasPermission="meeting" >
+          <a th:href="@{/meeting/list}" target="content">
+            <i class="fa fa-book text-aqua"></i>
+            <span>公司战略纲领</span>
+          </a>
+        </li>
         <li shiro:hasPermission="project:create" >
           <a th:href="@{/project/create}" target="content">
             <i class="fa fa-book text-red"></i>

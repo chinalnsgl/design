@@ -30,12 +30,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="permissionDataTable" class="table table-bordered">
+              <table id="permissionDataTable" class="table table-bordered" width="100%">
                 <thead>
                 <tr>
                   <th>Id</th>
                   <th>权限名</th>
                   <th>URL</th>
+                  <th>分组排序</th>
                   <th>描述</th>
                   <!--<th>拥有子权限</th>-->
                   <th>操作</th>
@@ -71,6 +72,7 @@
               '<tr><td>' + v.id + '</td>' +
               '<td>' + v.permissionName + '</td>' +
               '<td>' + v.url + '</td>' +
+              '<td>' + v.orderNo + '</td>' +
               '<td>' + v.description + '</td>' +
               '<td><a style="margin-right: 5px" class="btn btn-warning btn-xs permission-update" href="/sys/permission/edit/' + v.id + '" >编辑</a><a class="btn btn-danger btn-xs permission-delete" href="javascript:void(0)" onclick="updateStatus('+v.id+', 0)" >删除</a></td></tr>';
               hasChildren = true;
@@ -124,6 +126,9 @@
               // "width": "10%"
             },
             { "data": "url",
+              // "width": "10%"
+            },
+            { "data": "orderNo",
               // "width": "10%"
             },
             { "data": "description",

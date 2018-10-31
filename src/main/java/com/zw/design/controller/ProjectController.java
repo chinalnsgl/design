@@ -353,7 +353,7 @@ public class ProjectController {
                 if (!f.isEmpty()) {
                     //取得当前上传文件的文件名称
                     String fileName = f.getOriginalFilename();
-                    String path = uploadPath + code + "/";
+                    String path = uploadPath + code + "/" + type + "/";
                     File dir = new File(path);
                     if (!dir.exists()) {
                         boolean mkdir = dir.mkdirs();
