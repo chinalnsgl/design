@@ -40,6 +40,7 @@ public class SysPermission implements Serializable {
     private SysPermission parent;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    @OrderBy("orderNo")
     @Where(clause = "status = 1")
     @JsonIgnoreProperties("parent")
     private List<SysPermission> children;

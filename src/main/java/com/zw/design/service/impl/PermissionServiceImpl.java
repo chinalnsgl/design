@@ -94,6 +94,7 @@ public class PermissionServiceImpl implements PermissionService {
         permission1.setDescription(permission.getDescription());
         permission1.setUrl(permission.getUrl());
         permission1.setPermissionName(permission.getPermissionName());
+        permission1.setOrderNo(permission.getOrderNo());
 //        permission1.getParent();
         return permissionRepository.saveAndFlush(permission1);
     }
