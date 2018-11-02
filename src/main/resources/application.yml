@@ -1,10 +1,10 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://192.168.50.1:1433;DatabaseName=DB_DESIGN
-#    url: jdbc:sqlserver://192.168.72.229:1433;DatabaseName=DB_DESIGN
+#    url: jdbc:sqlserver://192.168.50.1:1433;DatabaseName=DB_DESIGN
+    url: jdbc:sqlserver://192.168.72.229:1433;DatabaseName=DB_DESIGN
     username: sa
-#    password: 123
-    password: zw1234aA#
+    password: 123
+#    password: zw1234aA#
   jpa:
     hibernate:
       ddl-auto: update
@@ -18,8 +18,8 @@ spring:
   cache:
     type: redis
   redis:
-#    host: 192.168.72.158
-    host: 192.168.50.1
+    host: 192.168.72.158
+#    host: 192.168.50.1
   mvc:
     favicon:
       enabled: false
@@ -44,3 +44,8 @@ logging:
   path: e:/DesignProjectLog
 upload:
   path: e://upload/
+  temp: e://upload/__temp/
+server:
+  servlet:
+    session:
+      timeout: 3600s

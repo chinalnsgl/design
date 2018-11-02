@@ -226,25 +226,19 @@
             { "data": "signStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if(!row.signAnnotate)
-                  return statusName[data];
-                return '<span title="' + row.signAnnotate + '" class="title-alert">' + statusName[data] + '</span>';
+                return statusName[data];
               }
             },
             { "data": "contractStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if(!row.contractAnnotate)
-                  return statusName[data];
-                return '<span title="' + row.contractAnnotate + '" class="title-alert">' + statusName[data] + '</span>';
+                return statusName[data];
               }
             },
             { "data": "deptType",
               "width": "140px",
               render : function(data, type, row, meta) {
-                if (!row.annotates != null && !row.annotates != '')
-                  return deptName[data] + deptNum[row.deptNum];
-                return '<span title="' + row.annotates + '" class="title-alert">' + deptName[data] + deptNum[row.deptNum] + '</span>';
+                return deptName[data] + deptNum[row.deptNum];
               }
             },
             { "data": "deptStatus",
@@ -265,9 +259,6 @@
                 if(data === 6)
                   data = 2;
                 return statusName[data];
-                /*if (!row.produceAnnotate != null && !row.produceAnnotate != '')
-                  return statusName[data];
-                return '<span title="' + row.produceAnnotate + '" class="title-alert">' + statusName[data] + '</span>';*/
               }
             },
             { "data": "installStatus",
@@ -278,33 +269,24 @@
                 if(data === 6)
                   data = 2;
                 return statusName[data];
-                /*if (!row.installAnnotate != null && !row.installAnnotate != '')
-                  return statusName[data];
-                return '<span title="' + row.installAnnotate + '" class="title-alert">' + statusName[data] + '</span>';*/
               }
             },
             { "data": "debugStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if (!row.debugAnnotate != null && !row.debugAnnotate != '')
-                  return statusName[data];
-                return '<span title="' + row.debugAnnotate + '" class="title-alert">' + statusName[data] + '</span>';
+                return statusName[data];
               }
             },
             { "data": "acceptStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if (!row.acceptAnnotate != null && !row.acceptAnnotate != '')
-                  return statusName[data];
-                return '<span title="' + row.acceptAnnotate + '" class="title-alert">' + statusName[data] + '</span>';
+                return statusName[data];
               }
             },
             { "data": "saveStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if (!row.saveAnnotate != null && !row.saveAnnotate != '')
-                  return statusName[data];
-                return '<span title="' + row.saveAnnotate + '" class="title-alert">' + statusName[data] + '</span>';
+                return statusName[data];
               }
             },
             { "data": "comment",

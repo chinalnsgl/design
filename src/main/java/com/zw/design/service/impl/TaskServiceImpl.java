@@ -43,39 +43,36 @@ public class TaskServiceImpl implements TaskService {
     @CacheEvict(value = "projects",allEntries = true)
     public DeptTask saveDeptTask(DeptTask deptTask) {
         DeptTask t = deptTaskRepository.findById(deptTask.getId()).get();
-        if (deptTask.getAnnotate() != null) {
-            t.setAnnotate(deptTask.getAnnotate());
-            t = deptTaskRepository.saveAndFlush(t);
-        } else {
-            t.setComment(deptTask.getComment());
-            t.setPrincipal(deptTask.getPrincipal());
-            t.setPlanStartTime(deptTask.getPlanStartTime());
-            if (deptTask.getStatus() != null && deptTask.getStatus() != 0) {
-                t.setStatus(deptTask.getStatus());
-            }
-            if (deptTask.getStatus() != null && deptTask.getStatus() == 1) {
-                t.setStartTime(new Date());
-                // 设置部门执行顺序
-                /*Integer num = taskDao.findMaxStepNumByProjectId(t.getProject().getId());
-                if (num == null) {
-                    t.setStepNum(1);
-                } else {
-                    t.setStepNum(num + 1);
-                }*/
-            } else if (deptTask.getStatus() != null && deptTask.getStatus() == 2) {
-                t.setEndTime(new Date());
-            }
-            // 判断并设置项目完成状态
-            t = deptTaskRepository.saveAndFlush(t);
-            Project p = projectRepository.findById(t.getProject().getId()).get();
-            float produceStatus = taskDao.findProduceCompleteStatus(p.getId());
-            float deptStatus = taskDao.findDeptCompleteStatus(p.getId());
-            if (produceStatus == 2 && deptStatus == 2) {
-                p.setStatus(4);
-                p.setCompleteTime(new Date());
-                projectRepository.saveAndFlush(p);
-            }
+
+        t.setComment(deptTask.getComment());
+        t.setPrincipal(deptTask.getPrincipal());
+        t.setPlanStartTime(deptTask.getPlanStartTime());
+        if (deptTask.getStatus() != null && deptTask.getStatus() != 0) {
+            t.setStatus(deptTask.getStatus());
         }
+        if (deptTask.getStatus() != null && deptTask.getStatus() == 1) {
+            t.setStartTime(new Date());
+            // 设置部门执行顺序
+            /*Integer num = taskDao.findMaxStepNumByProjectId(t.getProject().getId());
+            if (num == null) {
+                t.setStepNum(1);
+            } else {
+                t.setStepNum(num + 1);
+            }*/
+        } else if (deptTask.getStatus() != null && deptTask.getStatus() == 2) {
+            t.setEndTime(new Date());
+        }
+        // 判断并设置项目完成状态
+        t = deptTaskRepository.saveAndFlush(t);
+        Project p = projectRepository.findById(t.getProject().getId()).get();
+        float produceStatus = taskDao.findProduceCompleteStatus(p.getId());
+        float deptStatus = taskDao.findDeptCompleteStatus(p.getId());
+        if (produceStatus == 2 && deptStatus == 2) {
+            p.setStatus(4);
+            p.setCompleteTime(new Date());
+            projectRepository.saveAndFlush(p);
+        }
+
         return t;
     }
 
@@ -86,45 +83,40 @@ public class TaskServiceImpl implements TaskService {
     @CacheEvict(value = "projects",allEntries = true)
     public ProduceTask saveProduceTask(ProduceTask produceTask) {
         ProduceTask t = produceTaskRepository.findById(produceTask.getId()).get();
-        // 处理批注
-        if (produceTask.getAnnotate() != null) {
-            t.setAnnotate(produceTask.getAnnotate());
-            t = produceTaskRepository.saveAndFlush(t);
-        } else {
-            // 单独处理签协议任务
-            if (t.getProduceNum() == 2) {
-                t.setComment(produceTask.getComment());
-                if (produceTask.getStatus() != null && produceTask.getStatus() != 0) {
-                    t.setStatus(2);
-                    t.setStartTime(new Date());
-                    t.setEndTime(new Date());
-                }
-            } else {
-                if (produceTask.getStatus() != null && produceTask.getStatus() != 0) {
-                    t.setStatus(produceTask.getStatus());
-                }
-                if (produceTask.getStatus() != null && produceTask.getStatus() == 1) {
-                    t.setStartTime(new Date());
-                } else if (produceTask.getStatus() != null && produceTask.getStatus() == 2) {
-                    t.setEndTime(new Date());
-                }
-            }
+        // 单独处理签协议任务
+        if (t.getProduceNum() == 2) {
             t.setComment(produceTask.getComment());
-            t.setContractNo(produceTask.getContractNo());
-            t.setPrincipal(produceTask.getPrincipal());
-            t.setPlanStartTime(produceTask.getPlanStartTime());
-
-            // 判断并设置项目完成状态
-            t = produceTaskRepository.saveAndFlush(t);
-            Project p = projectRepository.findById(t.getProject().getId()).get();
-            float produceStatus = taskDao.findProduceCompleteStatus(p.getId());
-            float deptStatus = taskDao.findDeptCompleteStatus(p.getId());
-            if (produceStatus == 2 && deptStatus == 2) {
-                p.setStatus(4);
-                p.setCompleteTime(new Date());
-                projectRepository.saveAndFlush(p);
+            if (produceTask.getStatus() != null && produceTask.getStatus() != 0) {
+                t.setStatus(2);
+                t.setStartTime(new Date());
+                t.setEndTime(new Date());
+            }
+        } else {
+            if (produceTask.getStatus() != null && produceTask.getStatus() != 0) {
+                t.setStatus(produceTask.getStatus());
+            }
+            if (produceTask.getStatus() != null && produceTask.getStatus() == 1) {
+                t.setStartTime(new Date());
+            } else if (produceTask.getStatus() != null && produceTask.getStatus() == 2) {
+                t.setEndTime(new Date());
             }
         }
+        t.setComment(produceTask.getComment());
+        t.setContractNo(produceTask.getContractNo());
+        t.setPrincipal(produceTask.getPrincipal());
+        t.setPlanStartTime(produceTask.getPlanStartTime());
+
+        // 判断并设置项目完成状态
+        t = produceTaskRepository.saveAndFlush(t);
+        Project p = projectRepository.findById(t.getProject().getId()).get();
+        float produceStatus = taskDao.findProduceCompleteStatus(p.getId());
+        float deptStatus = taskDao.findDeptCompleteStatus(p.getId());
+        if (produceStatus == 2 && deptStatus == 2) {
+            p.setStatus(4);
+            p.setCompleteTime(new Date());
+            projectRepository.saveAndFlush(p);
+        }
+
         return t;
     }
 
