@@ -76,6 +76,8 @@ public class ShiroConfig {
         //配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/project/**", "authc");
         filterChainDefinitionMap.put("/sys/**", "authc");
+        filterChainDefinitionMap.put("/update", "authc");
+        filterChainDefinitionMap.put("/meeting/**", "authc");
         shiroFilterFactoryBean.setLoginUrl("/");
         filterChainDefinitionMap.put("/logout", "logout");
         shiroFilterFactoryBean.setSuccessUrl("/index");

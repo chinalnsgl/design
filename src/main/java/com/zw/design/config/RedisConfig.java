@@ -22,7 +22,7 @@ import java.util.Set;
 
 @Configuration
 @EnableCaching
-@EnableRedisHttpSession
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
 public class RedisConfig extends CachingConfigurerSupport {
 
 

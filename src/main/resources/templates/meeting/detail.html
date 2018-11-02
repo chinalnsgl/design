@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+<div class="modal fade" id="modal-comment">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">评价</h4>
+      </div>
+      <div class="modal-body">
+        <form id="commentForm" class="form-horizontal" role="form">
+          <input type="hidden" class="form-control" name="id" th:value="${meeting.id}">
+          <div class="form-group">
+            <label for="contentInput" class="col-sm-2 control-label no-padding-right">内容</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="content" id="contentInput">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" id="btn-commit">确定</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<section class="content-header">
+  <h1>
+    [[${meeting.title}]]
+    <small th:text="${#dates.format(meeting.date,'yyyy-MM-dd')}">公司战略纲领</small>
+  </h1>
+</section>
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body" id="printDiv">
+          <div style="text-align: center;vertical-align: middle"><img style="display: inline-block;vertical-align: middle" th:src="@{/img/logo3.jpg}" width="74px" height="92px"><div style="font-size: 40px;vertical-align: middle;display: inline-block">辽宁忠旺机械设备制造有限公司</div></div>
+          <table style="margin-top: 16px;font-size: large" id="detailTable" width="100%" border="1" cellspacing="0" cellpadding="0">
+            <tr><td colspan="2" style="padding: 16px;height: 50px">主题：[[${meeting.title}]]</td></tr>
+            <tr>
+              <td width="50%" style="padding: 16px;height: 50px">会议时间：[[${#dates.format(meeting.date,'yyyy-MM-dd')}]]</td>
+              <td style="padding: 16px;height: 50px">会议地点：[[${meeting.address}]]</td></tr>
+            <tr><td colspan="2" style="padding: 16px;height: 50px">与会人员：[[${meeting.personnel}]]</td></tr>
+            <tr><td colspan="2" style="padding: 16px;height: 700px; vertical-align: top">会议内容：<div th:utext="${meeting.content}"></div></td></tr>
+          </table>
+        </div>
+        <div class="box-footer">
+
+          <div class="row">
+            <div class="col-md-12"><h3>评价</h3></div>
+            <div style="margin-top: 5px;margin-bottom: 5px;font-size: medium" class="col-md-12" th:each="comment:${meeting.comments}">
+              <div class="col-md-1" th:text="${comment.user.name}"></div>
+              <div class="col-md-9" th:text="${comment.content}"></div>
+              <div class="col-md-1" th:text="${#dates.format(comment.date, 'yyyy-MM-dd')}"></div>
+              <div class="col-md-1" th:if="${session.user.id == comment.user.id}">
+                <a href="javascript:void(0);" class="btn btn-xs btn-danger pull-right" th:onclick="|delComment(${comment.id})|">撤消</a>
+              </div>
+            </div>
+          </div>
+          <button shiro:hasPermission="meeting:comment" style="margin-top: 5px;margin-left: 5px" class="btn btn-success pull-right" id="btn-comment" >评价</button>
+          <button shiro:hasPermission="meeting:print" style="margin-top: 5px" class="btn btn-success pull-right" id="btn-print" >打印</button>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>
+<!-- /.content -->
+<div th:include="include :: footer"></div>
+<!-- page script -->
+<script th:inline="javascript">
+
+  /** 提交评价 */
+  function commentCommit() {
+    $.ajax({
+      url: /*[[@{/meeting/comment}]]*/,
+      type: "POST",
+      data: $("#commentForm").serialize(),
+      success: function (result) {
+        if (result.status === 200) {
+          //重新加载数据
+          $('#modal-comment').modal('hide');
+          location.reload();
+        } else {
+          toastr.error("评价失败！");
+        }
+      },
+      error: function () {
+        toastr.success("评价失败！");
+      }
+    });
+  }
+
+  /** 打印 */
+  function do_print(id_str)
+  {
+    debugger;
+    var el = document.getElementById(id_str);
+    var iframe = document.createElement('IFRAME');
+    var doc = null;
+    iframe.setAttribute('style', 'position:absolute;width:0px;height:0px;left:-500px;top:-500px;');
+    document.body.appendChild(iframe);
+    doc = iframe.contentWindow.document;
+    doc.write('<p>' + el.innerHTML + '</p>');
+    doc.close();
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
+    if (navigator.userAgent.indexOf("MSIE") > 0)
+    {
+      document.body.removeChild(iframe);
+    }
+  }
+
+  /** 删除评价 */
+  function delComment(id) {
+    bootbox.setLocale("zh_CN");
+    bootbox.confirm("确定撤消这条评价吗?", function (result) {
+      if (result) {
+        $.ajax({
+          url: "/meeting/comment/del/" + id,
+          type: "get",
+          success: function (result) {
+            if (result.status === 200) {
+              toastr.success("操作成功！");
+              //重新加载数据
+              location.reload();
+            } else {
+              toastr.error("操作失败！");
+            }
+          },
+          error: function () {
+            toastr.error("系统错误，操作失败！");
+          }
+        });
+      }
+    });
+    event.stopPropagation();
+  }
+
+  $(function () {
+
+    /** 显示评价模态框 */
+    $("#btn-comment").click(function () {
+      $("#modal-comment").modal("show");
+    });
+
+    /** 提交评价按钮 */
+    $("#btn-commit").click(function () {
+      commentCommit();
+    });
+
+    /** 打印按钮 */
+    $("#btn-print").click(function () {
+      do_print("printDiv");
+    });
+
+    var topDistance = 500;
+    var showDistance = 1;
+    var thisTop = $(window).scrollTop() + topDistance;
+    // $('#goToTop').css('top' ,thisTop);
+    if ($(window).scrollTop() < showDistance) {
+      $('#goToTop').hide();
+    }
+    $(window).scroll(function () {
+      thisTop = $(this).scrollTop() + topDistance;        //获取当前window向上滚动的距离
+      if ($(this).scrollTop() > showDistance) {
+        $('#goToTop').fadeIn();
+      } else {
+        $('#goToTop').fadeOut();
+      }
+    });
+
+  });
+
+</script>
+</body>
+</html>

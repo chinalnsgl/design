@@ -130,7 +130,7 @@
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
 
-      var projectTable, temp;
+      var projectTable, temp, rowIndex = 0;
       var deptName = ["","机械设计","液压设计","电气设计","软件设计"];
       var deptNum = ["","一科","二科","三科","四科","五科","六科","七科","八科"];
       var statusName = ["未开始","执行中","已完成","已取消"];
@@ -199,6 +199,9 @@
             { "data": "projectNo",
               "width": "8px"
             },
+            /*{ "data": null,
+              "width": "8px"
+            },*/
             { "data": "name",
               "width": "80px"
             },
@@ -388,6 +391,7 @@
             } else {
               temp = row;
               $('td', row).css("border-top", '1px solid black');
+              // $('td', row).eq(0).html(++rowIndex);
             }
           },
           "language" : { // 国际化配置
@@ -465,6 +469,7 @@
         // 分页按钮点击事件
         $('#projectDataTables').on( 'page.dt', function () {
           temp = null;
+          // rowIndex = 0;
         });
 
         // 日期控件配置

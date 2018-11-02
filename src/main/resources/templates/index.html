@@ -72,7 +72,7 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">项目菜单</li>
-        <li shiro:hasPermission="meeting" >
+        <li shiro:hasPermission="meeting:index" >
           <a th:href="@{/meeting/list}" target="content">
             <i class="fa fa-book text-aqua"></i>
             <span>公司战略纲领</span>
@@ -90,19 +90,19 @@
             <span>多项目看板</span>
           </a>
         </li>
-        <li shiro:hasPermission="depts">
+        <li shiro:hasPermission="depts:index">
           <a th:href="@{/project/depts}" target="content">
             <i class="fa fa-pencil text-red"></i>
             <span>设计进度看板</span>
           </a>
         </li>
-        <li shiro:hasPermission="process">
+        <li shiro:hasPermission="process:index">
           <a th:href="@{/project/process}" target="content">
             <i class="fa fa-table text-yellow"></i>
             <span>工艺进度看板</span>
           </a>
         </li>
-        <li shiro:hasPermission="produce">
+        <li shiro:hasPermission="produce:index">
           <a th:href="@{/project/produce}" target="content">
             <i class="fa fa-ambulance text-aqua"></i>
             <span>生产进度看板</span>

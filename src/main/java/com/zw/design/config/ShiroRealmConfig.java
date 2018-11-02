@@ -57,6 +57,7 @@ public class ShiroRealmConfig extends AuthorizingRealm {
             }
         }
         Session session = SecurityUtils.getSubject().getSession();
+        session.setTimeout(3600000);
         session.setAttribute("roles", simpleAuthorizationInfo.getRoles());
         session.setAttribute("permissions", simpleAuthorizationInfo.getStringPermissions());
         return simpleAuthorizationInfo;
