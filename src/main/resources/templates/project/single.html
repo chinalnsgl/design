@@ -249,11 +249,10 @@
       <div class="box box-success box-solid box-warning">
         <div class="box-header with-border">
           <h3 class="box-title" th:text="${project.produceTasks[0].produceName}">任务单</h3>
-          <small class="pull-right"></small>
+          <small class="pull-right" th:if="${taskCount != 0}" th:text="|已上传：${taskCount}|"></small>
         </div>
         <div class="box-body" style="display: block;">
           <div>时间：<span th:text="${#dates.format(project.produceTasks[0].startTime,'yyyy-MM-dd')}">2018-08-01</span></div>
-          <!--<div th:classappend="${project.images.size() > 0 ? 'text-yellow':''}" >上传文件数量：<span th:text="${project.images.size()}">2018-08-01</span></div>-->
         </div>
         <div class="box-footer">
           <button style="margin-right: 5px" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}', 1)|">文件</button>
@@ -264,6 +263,7 @@
       <div class="box box-solid" th:classappend="${project.produceTasks[1].status == 0 ? 'box-default' : (project.produceTasks[1].status == 1 ? 'box-warning' : 'box-success')}">
         <div class="box-header box- with-border">
           <h3 class="box-title" th:text="${project.produceTasks[1].produceName}" >技术协议</h3>
+          <small class="pull-right" th:if="${signCount != 0}" th:text="|已上传：${signCount}|"></small>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[1].startTime}">从<span th:text="${#dates.format(project.produceTasks[1].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[1].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -293,6 +293,7 @@
       <div class="box box-solid" th:classappend="${project.produceTasks[2].status == 0 ? 'box-default' : (project.produceTasks[2].status == 1 ? 'box-warning' :'box-success')}">
         <div class="box-header with-border">
           <h3 class="box-title" th:text="${project.produceTasks[2].produceName}" >合同</h3>
+          <small class="pull-right" th:if="${contractCount != 0}" th:text="|已上传：${contractCount}|"></small>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.produceTasks[2].startTime}">从<span th:text="${#dates.format(project.produceTasks[2].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.produceTasks[2].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>

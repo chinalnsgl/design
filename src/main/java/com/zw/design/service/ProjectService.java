@@ -41,4 +41,10 @@ public interface ProjectService {
     void download(HttpServletResponse response, Integer[] id, String code);
 
     void delFile(Integer[] ids);
+
+    Integer findTaskFileCount(Integer id);
+
+    Integer findSignFileCount(Integer id);
+
+    Integer findContractFileCount(Integer id);
 }

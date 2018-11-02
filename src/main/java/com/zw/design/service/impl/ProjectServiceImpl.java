@@ -456,15 +456,14 @@ public class ProjectServiceImpl implements ProjectService {
         if (imageRepository.countByUrl(path) > 0) {
             return;
         }
+        Project project = projectRepository.findById(id).get();
         Image image = new Image();
         image.setName(fileName);
         image.setUrl(path);
         image.setType(type);
         image.setUploadTime(new Date());
+        image.setProject(project);
         imageRepository.save(image);
-        Project project = projectRepository.findById(id).get();
-        project.getImages().add(image);
-        projectRepository.save(project);
     }
 
     @Override
@@ -512,5 +511,20 @@ public class ProjectServiceImpl implements ProjectService {
             }
             imageRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public Integer findTaskFileCount(Integer id) {
+        return imageRepository.countByProject_IdAndType(id, 1);
+    }
+
+    @Override
+    public Integer findSignFileCount(Integer id) {
+        return imageRepository.countByProject_IdAndType(id, 2);
+    }
+
+    @Override
+    public Integer findContractFileCount(Integer id) {
+        return imageRepository.countByProject_IdAndType(id, 3);
     }
 }

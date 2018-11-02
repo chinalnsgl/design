@@ -213,6 +213,12 @@ public class ProjectController {
         modelAndView.setViewName("project/single");
         Project p = projectService.findProjectById(id);
         modelAndView.addObject("project", p);
+        Integer taskCount = projectService.findTaskFileCount(id);
+        Integer signCount = projectService.findSignFileCount(id);
+        Integer contractCount = projectService.findContractFileCount(id);
+        modelAndView.addObject("taskCount", taskCount);
+        modelAndView.addObject("signCount", signCount);
+        modelAndView.addObject("contractCount", contractCount);
         return modelAndView;
     }
 

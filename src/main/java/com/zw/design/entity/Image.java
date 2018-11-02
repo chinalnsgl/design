@@ -26,6 +26,10 @@ public class Image implements Serializable {
     private Date uploadTime; // 上传时间
     private String userId;
     private String userName;
-    private Integer type;
+    private Integer type; // 1,任务单 2，技术协议 3，合同
+    @ManyToOne
+    @JoinColumn(name = "projectId")
+    @JsonIgnoreProperties("images")
+    private Project project;
 
 }

@@ -51,8 +51,8 @@ public class Project implements Serializable {
     @JsonIgnoreProperties("project")
     List<ProduceTask> produceTasks;
 
-    @OneToMany
-    @JoinColumn(name = "projectId")
+    @OneToMany(mappedBy = "project")
+    @JsonIgnoreProperties("project")
     List<Image> images;
 
 
