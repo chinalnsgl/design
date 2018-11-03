@@ -174,7 +174,7 @@
           <label for="info_principal" class="col-sm-2 no-padding-right">负责人</label>
           <div class="col-sm-10 center-info" id="info_principal"></div>
         </div>
-        <div class="row">
+        <div class="row" id="planTimeDiv">
           <label for="info_planTime" class="col-sm-2 no-padding-right">预计时间</label>
           <div class="col-sm-10 center-info" id="info_planTime"></div>
         </div>
@@ -315,7 +315,7 @@
           <!--<button th:if="${project.status == 2 and project.produceTasks[2].status == 2}" shiro:hasPermission="contract:cancel" type="button" class="btn btn-danger btn-xs pull-right" th:onclick="|cancelSignContractTaskSchedule(${project.produceTasks[2].id})|" id="btn-cancel-contract">撤消</button>-->
           <button th:if="${project.status == 2}" shiro:hasPermission="contract:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[2].id},'${project.name}','${project.produceTasks[2].produceName}',${project.produceTasks[2].status},'${project.produceTasks[2].principal}','${#dates.format(project.produceTasks[2].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[2].comment}','${project.produceTasks[2].contractNo}')|">编辑任务</button>
           <button style="margin-right: 5px" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}', 3)|">文件</button>
-          <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.produceTasks[1].produceName}',${project.produceTasks[2].status},'${project.produceTasks[2].principal}','${#dates.format(project.produceTasks[2].planStartTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[2].startTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[2].endTime,'yyyy-MM-dd')}','${project.produceTasks[2].comment}','${project.produceTasks[2].contractNo}')|">查看</button>
+          <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.produceTasks[2].produceName}',${project.produceTasks[2].status},'${project.produceTasks[2].principal}','${#dates.format(project.produceTasks[2].planStartTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[2].startTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[2].endTime,'yyyy-MM-dd')}','${project.produceTasks[2].comment}','${project.produceTasks[2].contractNo}')|">查看</button>
         </div>
       </div>
 
@@ -840,12 +840,14 @@
     $("#info_startTime").text(startTime != 'null' ? startTime : '');
     $("#info_endTime").text(endTime != 'null' ? endTime : '');
     $("#info_comment").text(comment != 'null' ? comment : '');
-    if (contractNo) {
+    if (contractNo != undefined) {
       $("#contractInfoDiv").show();
       $("#info_contract").text(contractNo != 'null' ? contractNo : '');
+      $("#planTimeDiv").hide();
     }
     else {
       $("#contractInfoDiv").hide();
+      $("#planTimeDiv").show();
     }
     $("#modal-info").modal('show');
   }
