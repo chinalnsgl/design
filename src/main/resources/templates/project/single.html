@@ -255,7 +255,7 @@
           <div>时间：<span th:text="${#dates.format(project.produceTasks[0].startTime,'yyyy-MM-dd')}">2018-08-01</span></div>
         </div>
         <div class="box-footer">
-          <button style="margin-right: 5px" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}', 1)|">文件</button>
+          <button style="margin-right: 5px" shiro:hasAnyPermissions="task:upload,task:download,task:del" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}', 1)|">文件</button>
         </div>
       </div>
     </div>
@@ -283,7 +283,7 @@
         <div class="box-footer">
           <!--<button th:if="${project.status == 2 and project.produceTasks[1].status == 2}" shiro:hasPermission="sign:cancel" type="button" class="btn btn-danger btn-xs pull-right" th:onclick="|cancelSignContractTaskSchedule(${project.produceTasks[1].id})|" id="btn-cancel-sign">撤消</button>-->
           <button th:if="${project.status == 2}" shiro:hasPermission="sign:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[1].id},'${project.name}','${project.produceTasks[1].produceName}',${project.produceTasks[1].status},'${project.produceTasks[1].principal}','${#dates.format(project.produceTasks[1].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[1].comment}')|">编辑任务</button>
-          <button style="margin-right: 5px" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}', 2)|">文件</button>
+          <button style="margin-right: 5px" shiro:hasAnyPermissions="sign:upload,sign:download,sign:del" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}', 2)|">文件</button>
           <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.produceTasks[1].produceName}',${project.produceTasks[1].status},'${project.produceTasks[1].principal}','${#dates.format(project.produceTasks[1].planStartTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[1].startTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[1].endTime,'yyyy-MM-dd')}','${project.produceTasks[1].comment}')|">查看</button>
         </div>
       </div>
@@ -314,7 +314,7 @@
         <div class="box-footer">
           <!--<button th:if="${project.status == 2 and project.produceTasks[2].status == 2}" shiro:hasPermission="contract:cancel" type="button" class="btn btn-danger btn-xs pull-right" th:onclick="|cancelSignContractTaskSchedule(${project.produceTasks[2].id})|" id="btn-cancel-contract">撤消</button>-->
           <button th:if="${project.status == 2}" shiro:hasPermission="contract:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editProduceTask(${project.produceTasks[2].id},'${project.name}','${project.produceTasks[2].produceName}',${project.produceTasks[2].status},'${project.produceTasks[2].principal}','${#dates.format(project.produceTasks[2].planStartTime,'yyyy-MM-dd')}','${project.produceTasks[2].comment}','${project.produceTasks[2].contractNo}')|">编辑任务</button>
-          <button style="margin-right: 5px" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}', 3)|">文件</button>
+          <button style="margin-right: 5px" shiro:hasAnyPermissions="contract:upload,contract:download,contract:del" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}', 3)|">文件</button>
           <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.produceTasks[2].produceName}',${project.produceTasks[2].status},'${project.produceTasks[2].principal}','${#dates.format(project.produceTasks[2].planStartTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[2].startTime,'yyyy-MM-dd')}','${#dates.format(project.produceTasks[2].endTime,'yyyy-MM-dd')}','${project.produceTasks[2].comment}','${project.produceTasks[2].contractNo}')|">查看</button>
         </div>
       </div>
