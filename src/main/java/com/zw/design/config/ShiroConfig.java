@@ -78,6 +78,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/sys/**", "authc");
         filterChainDefinitionMap.put("/update", "authc");
         filterChainDefinitionMap.put("/meeting/**", "authc");
+        filterChainDefinitionMap.put("/message/**", "authc");
         shiroFilterFactoryBean.setLoginUrl("/");
         filterChainDefinitionMap.put("/logout", "logout");
         shiroFilterFactoryBean.setSuccessUrl("/index");

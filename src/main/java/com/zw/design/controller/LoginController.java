@@ -29,13 +29,10 @@ public class LoginController {
     @ResponseBody
     @LogAnnotation(action = "登录")
     public BaseResponse login(SysUser user) throws Exception {
-//        log.info(user.getUserName() + "   " + user.getPassword());
         UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(user.getUserName(),user.getPassword());
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(usernamePasswordToken);   //完成登录
-            SysUser u = (SysUser) subject.getPrincipal();
-//            session.setAttribute("user", user);
             return BaseResponse.STATUS_200;
         } catch(Exception e) {
             return BaseResponse.STATUS_400;

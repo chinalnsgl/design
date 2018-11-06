@@ -65,25 +65,14 @@ public class ShiroRealmConfig extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-//        log.info("doGetAuthenticationInfo +"  + authenticationToken.toString());
         String userName = (String) authenticationToken.getPrincipal();
-        String password = new String((char[]) authenticationToken.getCredentials());
-
         SysUser user = userService.findByUserName(userName);
 
-        //这里校验了，CredentialsMatcher就不需要了，如果这里不校验，调用CredentialsMatcher校验
         if (user == null) {
             throw new UnknownAccountException("用户名或密码错误！");
         }
-        /*if (!password.equals(user.getPassword())) {
-            throw new IncorrectCredentialsException("用户名或密码错误！");
-        }
-        if (user.getStatus() == 1) {
-            throw new LockedAccountException("账号已被锁定,请联系管理员！");
-        }*/
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("user", user);
-        //也可以在此处更新最后登录时间（或在登录方法实现）
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getUserName()), getName());
         return info;
     }
