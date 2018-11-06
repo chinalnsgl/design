@@ -1,17 +1,11 @@
 package com.zw.design.controller;
 
-import com.zw.design.aspect.LogAnnotation;
 import com.zw.design.dto.BaseResponse;
 import com.zw.design.dto.DataTablesCommonDto;
 import com.zw.design.entity.LogInfo;
-import com.zw.design.entity.SysUser;
 import com.zw.design.query.LogQuery;
 import com.zw.design.service.LogService;
-import com.zw.design.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
