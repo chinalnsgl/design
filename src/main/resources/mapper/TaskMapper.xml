@@ -392,10 +392,9 @@
   <select id="findProcessList" resultType="com.zw.design.dto.DeptTaskDto" parameterType="com.zw.design.query.TaskQuery">
     select * from
     (
-      select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code) as rowId, * from
+      select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code) as projectNo, * from
       (
         select
-        t.projectNo,
         a.id,
         a.name,
         a.code,
@@ -424,19 +423,6 @@
         LEFT JOIN (
           select round(avg(CONVERT(float,status)),2) as status , project_id from produce_task where produce_num in (7,8,9) group by project_id
         ) f on f.project_id = a.id*/
-        left join
-          (select ROW_NUMBER() OVER(Order by order_no desc, code) as projectNo, id from project where 1 = 1
-          <if test="code != null and code != ''">
-            AND code like #{code}
-          </if>
-          <if test="name != null and name != ''">
-            AND name like #{name}
-          </if>
-          <if test="year != null">
-            AND year (create_time) = #{year}
-          </if>
-          ) t
-        on a.id = t.id
         where b.produce_num = 4 and c.produce_num = 5 and d.produce_num = 6
         <if test="code != null and code != ''">
           AND a.code like #{code}
@@ -457,7 +443,7 @@
           AND d.status = #{thirdStatus}
         </if>
       ) d
-    ) x where x.rowid BETWEEN #{start} and #{length}
+    ) x where x.projectNo BETWEEN #{start} and #{length}
   </select>
   <select id="findProcessCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
     select count(a.id)
@@ -489,10 +475,9 @@
   <select id="findProduceList" resultType="com.zw.design.dto.DeptTaskDto" parameterType="com.zw.design.query.TaskQuery">
     select * from
     (
-      select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code) as rowId, * from
+      select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code) as projectNo, * from
       (
         select
-        t.projectNo,
         a.id,
         a.name,
         a.code,
@@ -521,19 +506,6 @@
         LEFT JOIN (
           select round(avg(CONVERT(float,status)),2) as status , project_id from produce_task where produce_num in (4,5,6) group by project_id
         ) f on f.project_id = a.id*/
-        left join
-          (select ROW_NUMBER() OVER(Order by order_no desc, code) as projectNo, id from project where 1 = 1
-          <if test="code != null and code != ''">
-            AND code like #{code}
-          </if>
-          <if test="name != null and name != ''">
-            AND name like #{name}
-          </if>
-    <if test="year != null">
-      AND year (create_time) = #{year}
-    </if>
-          ) t
-        on a.id = t.id
         where b.produce_num = 7 and c.produce_num = 8 and d.produce_num = 9
         <if test="code != null and code != ''">
           AND a.code like #{code}
@@ -541,7 +513,7 @@
         <if test="name != null and name != ''">
           AND a.name like #{name}
         </if>
-    <if test="year != null">
+        <if test="year != null">
       AND year (a.create_time) = #{year}
     </if>
         <if test="firstStatus != null">
@@ -554,7 +526,7 @@
           AND d.status = #{thirdStatus}
         </if>
       ) d
-    ) x where x.rowid BETWEEN #{start} and #{length}
+    ) x where x.projectNo BETWEEN #{start} and #{length}
   </select>
   <select id="findProduceCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
     select count(a.id)
