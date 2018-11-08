@@ -47,7 +47,8 @@
     l.produce_name as contractName,
     l.status as contractStatus,
     l.annotate as contractAnnotate,
-    l.contract_no as contractNo
+    l.contract_no as contractNo,
+    m.message
     from 	(
     select dept_a.department_type,dept_a.project_id,min(department_num) as department_num,sum ( status ) AS status,
     stuff((select ',' + dept_c.annotate from dept_task dept_c where dept_c.department_type = dept_a.department_type and dept_c.project_id = dept_a.project_id for xml path('')),1,1,'') as annotates
@@ -101,6 +102,9 @@
     LEFT JOIN produce_task h on h.project_id = b.id
     LEFT JOIN produce_task i on i.project_id = b.id
     LEFT JOIN produce_task l on l.project_id = b.id
+    left join (
+    select count(id) as message ,project_id from message group by project_id
+    ) m on m.project_id = b.id
     WHERE c.produce_num = 1 and d.produce_num = 2 and g.produce_num = 10 and
     h.produce_num = 11 and i.produce_num = 12 and l.produce_num = 3
     <if test="code != null and code != ''">

@@ -85,7 +85,6 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
-
 <!--文件上传下载模态框-->
 <div class="modal fade" id="modal-upload">
   <div class="modal-dialog">
@@ -102,19 +101,19 @@
               <input type="hidden" name="id" id="upload_id">
               <input type="hidden" name="code" id="upload_code">
               <input type="hidden" name="type" id="upload_type">
-              <div class="form-group" id="taskGroup">
+              <div class="form-group"  shiro:hasPermission="task:download" id="taskGroup">
                 <div class="row" th:each="image: ${project.images}" th:if="${image.type == 1}">
                     <input style="margin-left: 20px" type="checkbox" name="ids" th:value="${image.id}" >
                     <label style="margin-left: 10px" th:text="${image.name}">项目</label>
                 </div>
               </div>
-              <div class="form-group" id="signGroup">
+              <div class="form-group" shiro:hasPermission="sign:download" id="signGroup">
                 <div class="row" th:each="image: ${project.images}" th:if="${image.type == 2}">
                   <input style="margin-left: 20px" type="checkbox" name="ids" th:value="${image.id}" >
                   <label style="margin-left: 10px" th:text="${image.name}">项目</label>
                 </div>
               </div>
-              <div class="form-group" id="contractGroup">
+              <div class="form-group" id="contractGroup" shiro:hasPermission="contract:download" >
                 <div class="row" th:each="image: ${project.images}" th:if="${image.type == 3}">
                   <input style="margin-left: 20px" type="checkbox" name="ids" th:value="${image.id}" >
                   <label style="margin-left: 10px" th:text="${image.name}">项目</label>
@@ -230,6 +229,50 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
+<!--互动专区模态框-->
+<div class="modal fade" id="modal-receiver">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">互动专区</h4>
+      </div>
+      <div class="modal-body">
+        <div class="box direct-chat direct-chat-primary">
+          <div class="box-body" id="message-box-body">
+            <div class="direct-chat-messages" id="message-box" style="height: 500px">
+              <div class="direct-chat-msg" th:each="message:${project.messages}"
+                   th:classappend="${message.user.id == session.user.id ? 'right':''}">
+                <div class="direct-chat-info clearfix">
+                  <span class="direct-chat-name"
+                        th:classappend="${message.user.id == session.user.id ? 'pull-right':'pull-left'}"
+                        th:text="${message.user.name}">Alexander Pierce</span>
+                  <span class="direct-chat-timestamp"
+                        th:classappend="${message.user.id == session.user.id ? 'pull-left':'pull-right'}"
+                        th:text="${#dates.format(message.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
+                <img class="direct-chat-img" th:src="@{/img/person.png}" alt="Message User Image">
+                <div class="direct-chat-text" th:text="${message.content}"></div>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer">
+            <form method="post" id="messageForm">
+              <div class="input-group">
+                <input type="hidden" name="projectId" th:value="${project.id}">
+                <input type="text" name="content" id="message" autocomplete="off" data-provide="typeahead" placeholder="请输入内容" class="form-control">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary btn-flat" id="btn-send">发送</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <section class="content-header">
   <button style="margin-right: 10px" th:if="${project.status == 2}" shiro:hasPermission="project:cancel" type="button" class="btn btn-danger pull-right" th:onclick="|updateStatus(${project.id}, 0, '${project.name}')|" >取消</button>
@@ -237,6 +280,7 @@
   <button style="margin-right: 10px" th:if="${project.status == 2}" shiro:hasPermission="project:pause" type="button" class="btn btn-danger pull-right" th:onclick="|updateStatus(${project.id}, 3, '${project.name}')|" >暂停</button>
   <button style="margin-right: 10px" th:if="${project.status == 3}" shiro:hasPermission="project:start" type="button" class="btn btn-success pull-right" th:onclick="|updateStatus(${project.id}, 2, '${project.name}')|" >启动</button>
   <a style="margin-right: 10px" shiro:hasPermission="project:update" class="btn btn-warning pull-right" th:href="@{'/project/update/'+${project.id}}">修改项目</a>
+  <!--<button style="margin-right: 10px" shiro:hasPermission="message:create" type="button" class="btn btn-info pull-right" id="messageModal" >发送消息</button>-->
   <h1>
     单项目看板
     <small th:text="|${project.code}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${project.name}|"></small>
@@ -246,16 +290,33 @@
 <section class="content">
   <div class="row" id="rowDiv">
     <div id="div1" class="col-md-2">
-      <div class="box box-success box-solid box-warning">
+      <div class="box box-success box-solid">
         <div class="box-header with-border">
           <h3 class="box-title" th:text="${project.produceTasks[0].produceName}">任务单</h3>
           <small class="pull-right" th:if="${taskCount != 0}" th:text="|已上传：${taskCount}|"></small>
         </div>
         <div class="box-body" style="display: block;">
           <div>时间：<span th:text="${#dates.format(project.produceTasks[0].startTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <br>
+          <br>
+          <br>
+          <br>
         </div>
         <div class="box-footer">
+          <span>&nbsp;</span>
           <button style="margin-right: 5px" shiro:hasAnyPermissions="task:upload,task:download,task:del" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},'${project.code}', 1)|">文件</button>
+        </div>
+      </div>
+
+      <div class="box box-info box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">互动专区</h3>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div th:each="message,stat:${project.messages}" th:if="${stat.index < 5}"><span th:text="${message.user.name}"></span>：<span th:text="${#strings.abbreviate(message.content,10)}"></span></div>
+        </div>
+        <div class="box-footer">
+          <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" onclick="messageInfo()">查看</button>
         </div>
       </div>
     </div>
@@ -958,6 +1019,38 @@
     $("#div3").css("margin-top", hi3);
   });
 
+  /** 发送消息 */
+  function sendMessage() {
+    $.ajax({
+      url: "/message/send",
+      type: "POST",
+      data: $("#messageForm").serialize(),
+      success: function (result) {
+        if (result.status === 200) {
+          $("#message-box").append('<div class="direct-chat-msg right">' +
+              '<div class="direct-chat-info clearfix">' +
+              '<span class="direct-chat-name pull-right">' + [[${session.user.name}]] +
+              '</span><span class="direct-chat-timestamp pull-left">' + new Date().format("yyyy-MM-dd hh:mm:ss") +
+              '</span></div>' +
+              '<img class="direct-chat-img" alt="Message User Image" src="' + /*[[@{/img/person.png}]]*/
+              + '"><div class="direct-chat-text">' + $("#message").val() +
+              '</div></div>');
+          $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;
+          $("#message").val('');
+        }
+      },
+      error: function () {
+        toastr.success("编辑失败！");
+      }
+    });
+  }
+
+  /** 显示互动专区模态框 */
+  function messageInfo() {
+    $("#modal-receiver").modal("show");
+    $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;
+  }
+
   $(function () {
 
     $(window).resize();
@@ -1020,6 +1113,11 @@
       pauseProject();
     });
 
+    /** 提交消息按钮 */
+    $("#btn-send").click(function () {
+      sendMessage();
+    });
+
     /** 日期控件加载， 并触发验证 */
     $('.datepicker').datepicker({
       format: 'yyyy-mm-dd',
@@ -1027,6 +1125,51 @@
       autoclose: true,
       clearBtn: true
     });
+
+    /** 获取用户列表载入自动完成数据 */
+    $.ajax({
+      url: "/sys/user/list",
+      type: "get",
+      success: function (result) {
+        if (result.status === 200) {
+          $("#message").typeahead({
+            items:10,
+            source: result.content,
+            matcher: function (item) {
+              return ~item.name.indexOf(this.query.substring(this.query.lastIndexOf("@") + 1));
+            },
+            updater: function (item) {
+              return  this.query.substring(0,this.query.lastIndexOf("@") + 1) + item.name + " ";
+            },
+            afterSelect: function () {
+              window.document.getElementById("message").focus();
+            }
+          });
+        }
+      }
+    });
+
+    Date.prototype.format = function (format) {
+      var args = {
+        "M+": this.getMonth() + 1,
+        "d+": this.getDate(),
+        "h+": this.getHours(),
+        "m+": this.getMinutes(),
+        "s+": this.getSeconds(),
+        "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
+        "S": this.getMilliseconds()
+      };
+      if (/(y+)/.test(format))
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+      for (var i in args) {
+        var n = args[i];
+        if (new RegExp("(" + i + ")").test(format))
+          format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+      }
+      return format;
+    };
+
+    window.parent.getReceiver();
 
   });
 </script>

@@ -51,6 +51,17 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+
+          <li class="dropdown messages-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-envelope-o"></i>
+              <span class="label label-success" id="messageCount"></span>
+            </a>
+            <ul class="dropdown-menu" id="unread-message">
+              <!--<li class="header" id="topic-message">未读消息</li>-->
+            </ul>
+          </li>
+
           <li shiro:authenticated="true">
             <a id="account" th:text="${session.user.name}" ></a>
           </li>
@@ -133,7 +144,7 @@
 <!-- ./wrapper -->
 
 <div th:include="include :: footer"></div>
-<script>
+<script th:inline="javascript">
     function changeFrameHeight() {
         var ifm = document.getElementById("content");
         ifm.height = document.documentElement.clientHeight - 56;
@@ -182,6 +193,37 @@
       });
     }
 
+    function getReceiver() {
+      $("#unread-message").html('');
+      $("#messageCount").html('');
+      // $("#topic-message").html('无新消息');
+      $.ajax({
+        url: "/message/user/receiver",
+        type:"get",
+        data : userForm.serialize(),
+        success: function(result){
+          if (result.status === 200) {
+            debugger;
+            if (result.content.length > 0) {
+              $("#messageCount").html(result.content.length);
+              // $("#topic-message").html('未读消息');
+              var data = result.content;
+              for (var i=0;i<data.length;i++){
+                $("#unread-message").append('<li><ul class="menu"><li><a class="message-single" href="/project/single/message/' + data[i].project.id + '/' + data[i].id +
+                    '" target="content"><div class="pull-left">' +
+                    '<img class="img-circle" alt="User Image" src="' + /*[[@{/img/person.png}]]*/
+                    + '"></div><h4>' + data[i].message.user.name +
+                    '<small><i class="fa fa-clock-o"></i>' + data[i].message.createTime +
+                    '</small></h4>' +
+                    '<p>' +data[i].message.content +
+                    '</p></a></li></ul></li>');
+              }
+            }
+          }
+        }
+      });
+    }
+
     $(function () {
 
       setValid();
@@ -204,6 +246,9 @@
       });
 
       changeFrameHeight();
+
+      getReceiver();
+
     })
 </script>
 </body>

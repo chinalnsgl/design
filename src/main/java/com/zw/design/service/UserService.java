@@ -4,6 +4,8 @@ import com.zw.design.dto.DataTablesCommonDto;
 import com.zw.design.entity.SysUser;
 import com.zw.design.query.UserQuery;
 
+import java.util.List;
+
 public interface UserService {
 
     SysUser findByUserName(String userName);
@@ -19,4 +21,6 @@ public interface UserService {
     SysUser updateUser(SysUser user, Integer[] role);
 
     SysUser updateUser(SysUser sysUser);
+
+    List<SysUser> findUserList();
 }

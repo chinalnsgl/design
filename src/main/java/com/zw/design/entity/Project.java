@@ -28,32 +28,36 @@ public class Project implements Serializable {
     private String comment; // 备注
     private Integer status = 1; // 状态 0：取消项目  1：未下达任务单  2：已下达任务单  3：暂停项目 4,已完成
     private Integer preStatus;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date planStartTime; // 计划开始时间
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date planEndTime; // 计划结束时间
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime = new Date(); // 创建时间
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date planTime = new Date(); // 计划完成时间
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date completeTime; // 完成时间
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date deliveryDate; // 交货日期
 
     @OneToMany(mappedBy = "project")
     @OrderBy("departmentType,id")
     @JsonIgnoreProperties("project")
-    List<DeptTask> deptTasks;
+    List<DeptTask> deptTasks; // 设计任务
 
     @OneToMany(mappedBy = "project")
     @OrderBy("produceNum,id")
     @JsonIgnoreProperties("project")
-    List<ProduceTask> produceTasks;
+    List<ProduceTask> produceTasks; // 生产任务
 
     @OneToMany(mappedBy = "project")
     @JsonIgnoreProperties("project")
-    List<Image> images;
+    List<Image> images; // 项目文件
+
+    @OneToMany(mappedBy = "project")
+    @JsonIgnoreProperties("project")
+    List<Message> messages; // 项目互动消息
 
 
 }

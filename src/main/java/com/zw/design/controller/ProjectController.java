@@ -4,6 +4,7 @@ import com.zw.design.dto.*;
 import com.zw.design.entity.DeptTask;
 import com.zw.design.entity.ProduceTask;
 import com.zw.design.entity.Project;
+import com.zw.design.entity.Receiver;
 import com.zw.design.form.ProjectForm;
 import com.zw.design.form.ProjectSendForm;
 import com.zw.design.query.ProjectQuery;
@@ -211,6 +212,25 @@ public class ProjectController {
     public ModelAndView single(@PathVariable("id") Integer id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("project/single");
+        Project p = projectService.findProjectById(id);
+        modelAndView.addObject("project", p);
+        Integer taskCount = projectService.findTaskFileCount(id);
+        Integer signCount = projectService.findSignFileCount(id);
+        Integer contractCount = projectService.findContractFileCount(id);
+        modelAndView.addObject("taskCount", taskCount);
+        modelAndView.addObject("signCount", signCount);
+        modelAndView.addObject("contractCount", contractCount);
+        return modelAndView;
+    }
+
+    /**
+     * 单项目列表
+     */
+    @GetMapping("/single/message/{id}/{receiverId}")
+    public ModelAndView single(@PathVariable("id") Integer id, @PathVariable("receiverId") Integer receiverId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("project/single");
+        projectService.updateReceiverStatus(receiverId);
         Project p = projectService.findProjectById(id);
         modelAndView.addObject("project", p);
         Integer taskCount = projectService.findTaskFileCount(id);

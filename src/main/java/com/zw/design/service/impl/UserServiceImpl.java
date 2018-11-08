@@ -123,4 +123,10 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         return user;
     }
+
+    @Override
+    public List<SysUser> findUserList() {
+        return sysUserRepository.findByStatus(1);
+    }
+
 }

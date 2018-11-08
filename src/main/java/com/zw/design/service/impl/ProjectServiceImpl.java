@@ -1,17 +1,11 @@
 package com.zw.design.service.impl;
 
 import com.zw.design.dto.DataTablesCommonDto;
-import com.zw.design.entity.DeptTask;
-import com.zw.design.entity.Image;
-import com.zw.design.entity.ProduceTask;
-import com.zw.design.entity.Project;
+import com.zw.design.entity.*;
 import com.zw.design.form.ProjectForm;
 import com.zw.design.form.ProjectSendForm;
 import com.zw.design.query.ProjectQuery;
-import com.zw.design.repository.DeptTaskRepository;
-import com.zw.design.repository.ImageRepository;
-import com.zw.design.repository.ProduceTaskRepository;
-import com.zw.design.repository.ProjectRepository;
+import com.zw.design.repository.*;
 import com.zw.design.service.ProjectService;
 import com.zw.design.utils.Const;
 import com.zw.design.utils.FileUtils;
@@ -51,6 +45,9 @@ public class ProjectServiceImpl implements ProjectService {
     private ProduceTaskRepository produceTaskRepository;
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private ReceiverRepository receiverRepository;
+
 
     @Override
     @CacheEvict(value = "projects",allEntries = true)
@@ -526,5 +523,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Integer findContractFileCount(Integer id) {
         return imageRepository.countByProject_IdAndType(id, 3);
+    }
+
+    @Override
+    public void updateReceiverStatus(Integer receiverId) {
+        Receiver receiver = receiverRepository.findById(receiverId).get();
+        receiver.setStatus(2);
+        receiverRepository.save(receiver);
     }
 }
