@@ -101,9 +101,9 @@
                   <th>任务单号</th>
                   <th>数量</th>
                   <th>设计计划完成时间</th>
+                  <th>设计科室</th>
                   <th>技术<br>协议</th>
                   <th>合同</th>
-                  <th>设计科室</th>
                   <th>设计</th>
                   <th>工艺</th>
                   <th>制造及安装</th>
@@ -223,6 +223,12 @@
             { "data": "planTime",
               "width": "100px"
             },
+            { "data": "deptType",
+              "width": "140px",
+              render : function(data, type, row, meta) {
+                return deptName[data] + deptNum[row.deptNum];
+              }
+            },
             { "data": "signStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
@@ -235,12 +241,7 @@
                 return statusName[data];
               }
             },
-            { "data": "deptType",
-              "width": "140px",
-              render : function(data, type, row, meta) {
-                return deptName[data] + deptNum[row.deptNum];
-              }
-            },
+
             { "data": "deptStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
@@ -310,15 +311,15 @@
           ],
           "createdRow": function ( row, data, index ) {
             if(data.signStatus === 1)
-              $('td', row).eq(8).css("background", '#f39c12');
+              $('td', row).eq(9).css("background", '#f39c12');
             if(data.signStatus === 2)
             // $('td', row).eq(8).addClass("success-status");
-              $('td', row).eq(8).css("background", '#00a65a');
+              $('td', row).eq(9).css("background", '#00a65a');
 
             if(data.contractStatus === 1)
-              $('td', row).eq(9).css("background", '#f39c12');
+              $('td', row).eq(10).css("background", '#f39c12');
             if(data.contractStatus === 2)
-              $('td', row).eq(9).css("background", '#00a65a');
+              $('td', row).eq(10).css("background", '#00a65a');
             /*if (data.contractStatus === 2 && (data.contractNo == null || data.contractNo == '')) {
               $('td', row).eq(9).css("background", '#3c8dbc');
               $('td', row).eq(9).text("不签");

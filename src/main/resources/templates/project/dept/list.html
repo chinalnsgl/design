@@ -98,9 +98,9 @@
                       设计状态
                     </label>
                     <select id="status" name="status" class="form-control select2" >
-                      <option value="" selected="selected">全部</option>
-                      <option value="1" >未完成</option>
+                      <option value="1" selected="selected">未完成</option>
                       <option value="2">已完成</option>
+                      <option value="">全部</option>
                       <!--<option value="3">已取消</option>-->
                     </select>
                   </div>
@@ -124,8 +124,8 @@
                   <th>任务单号</th>
                   <th>数量</th>
                   <th>计划完成时间</th>
-                  <th>签技术协议</th>
                   <th>科室</th>
+                  <th>签技术协议</th>
                   <th>设计</th>
                   <th>条件相关</th>
                   <th>采购计划</th>
@@ -233,16 +233,16 @@
             { "data": "planTime",
               "width": "100px"
             },
-            { "data": "signStatus",
-              "width": "70px",
-              render : function(data, type, row, meta) {
-                return '<span>' + statusName[data] + '</span>';
-              }
-            },
             { "data": "type",
               "width": "140px",
               render : function(data, type, row, meta) {
                 return deptName[data] + deptNum[row.deptNum];
+              }
+            },
+            { "data": "signStatus",
+              "width": "70px",
+              render : function(data, type, row, meta) {
+                return '<span>' + statusName[data] + '</span>';
               }
             },
             { "data": "firstStep",
@@ -295,7 +295,7 @@
           ],
           "createdRow": function ( row, data, index ) {
             if($("#departmentQuery").find("option:selected").text() == (deptName[data.type] + deptNum[data.deptNum]) && data.projectStatus !== 0 && data.projectStatus !== 3){
-              $('td', row).eq(9).css("background", '#e0e0e0');
+              $('td', row).eq(8).css("background", '#e0e0e0');
               $('td', row).eq(10).css("background", '#e0e0e0');
               $('td', row).eq(11).css("background", '#e0e0e0');
               $('td', row).eq(12).css("background", '#e0e0e0');
@@ -303,10 +303,10 @@
             }
 
             if(data.signStatus === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(8).css("background", '#f39c12');
+              $('td', row).eq(9).css("background", '#f39c12');
             if(data.signStatus === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
             // $('td', row).eq(8).addClass("success-status");
-              $('td', row).eq(8).css("background", '#00a65a');
+              $('td', row).eq(9).css("background", '#00a65a');
 
             if(data.firstStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(10).css("background", '#f39c12');
@@ -356,7 +356,7 @@
                 rowspan = $('td', temp).eq(4).attr("rowSpan");
               }
               rowspan = Number(rowspan)+1;
-              merge(temp, row, rowspan, [0,1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16]);
+              merge(temp, row, rowspan, [0,1, 2, 3, 4, 5, 6, 7, 9, 14, 15, 16]);
             } else {
               temp = row;
               $('td', row).css("border-top", '1px solid black');
