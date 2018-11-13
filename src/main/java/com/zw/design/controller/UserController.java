@@ -8,14 +8,18 @@ import com.zw.design.query.UserQuery;
 import com.zw.design.service.LogService;
 import com.zw.design.service.RoleService;
 import com.zw.design.service.UserService;
+import com.zw.design.utils.FileUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/sys")
@@ -31,6 +35,9 @@ public class UserController {
 
     @Autowired
     private LogService logService;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     /**
      * 用户列表页面
@@ -127,5 +134,23 @@ public class UserController {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(users);
         return baseResponse;
+    }
+
+    /**
+     * 修改头像
+     */
+    @ResponseBody
+    @PostMapping("/user/updateImage")
+    public BaseResponse updateImage(String imageData) {
+        String imgName = UUID.randomUUID().toString() + ".png";
+        SysUser user = userService.updateImage("/files/" + imgName);
+        try {
+            FileUtils.decodeBase64DataURLToImage(imageData, uploadPath, imgName);
+            BaseResponse baseResponse = new BaseResponse();
+            baseResponse.setContent(user.getImg());
+            return baseResponse;
+        } catch (IOException e) {
+            return BaseResponse.STATUS_400;
+        }
     }
 }

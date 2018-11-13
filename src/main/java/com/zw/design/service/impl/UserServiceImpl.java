@@ -7,6 +7,7 @@ import com.zw.design.query.UserQuery;
 import com.zw.design.repository.SysRoleRepository;
 import com.zw.design.repository.SysUserRepository;
 import com.zw.design.service.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,4 +130,13 @@ public class UserServiceImpl implements UserService {
         return sysUserRepository.findByStatus(1);
     }
 
+    @Override
+    public SysUser updateImage(String s) {
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        SysUser saveUser = sysUserRepository.findById(user.getId()).get();
+        saveUser.setImg(s);
+        SysUser u = sysUserRepository.save(saveUser);
+        SecurityUtils.getSubject().getSession().setAttribute("user", u);
+        return u;
+    }
 }

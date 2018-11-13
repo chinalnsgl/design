@@ -23,4 +23,6 @@ public interface UserService {
     SysUser updateUser(SysUser sysUser);
 
     List<SysUser> findUserList();
+
+    SysUser updateImage(String s);
 }

@@ -252,7 +252,7 @@
                         th:classappend="${message.user.id == session.user.id ? 'pull-left':'pull-right'}"
                         th:text="${#dates.format(message.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
                 </div>
-                <img class="direct-chat-img" th:src="@{/img/person.png}" alt="Message User Image">
+                <img class="direct-chat-img" th:src="${#strings.isEmpty(message.user.img)}?@{/img/person.png}:${message.user.img}" alt="Message User Image">
                 <div class="direct-chat-text" th:text="${message.content}"></div>
               </div>
             </div>
@@ -1031,12 +1031,18 @@
       data: $("#messageForm").serialize(),
       success: function (result) {
         if (result.status === 200) {
+          var img = /*[[@{/img/person.png}]]*/;
+
+          if ([[${session.user.img}]] != null) {
+            img = [[${session.user.img}]];
+          }
+
           $("#message-box").append('<div class="direct-chat-msg right">' +
               '<div class="direct-chat-info clearfix">' +
               '<span class="direct-chat-name pull-right">' + [[${session.user.name}]] +
               '</span><span class="direct-chat-timestamp pull-left">' + new Date().format("yyyy-MM-dd hh:mm:ss") +
               '</span></div>' +
-              '<img class="direct-chat-img" alt="Message User Image" src="' + /*[[@{/img/person.png}]]*/
+              '<img class="direct-chat-img" alt="Message User Image" src="' + img
               + '"><div class="direct-chat-text">' + $("#message").val() +
               '</div></div>');
           $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;

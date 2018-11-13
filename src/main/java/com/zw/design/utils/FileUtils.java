@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.Base64;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -28,6 +29,18 @@ public class FileUtils {
             }
         }
         return false;
+    }
+
+    public static void decodeBase64DataURLToImage(String dataURL, String path, String imgName) throws IOException {
+        String base64 = dataURL.substring(dataURL.indexOf(",") + 1);
+        File dir = new File(path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        FileOutputStream write = new FileOutputStream(new File(path + imgName));
+        byte[] decoderBytes = Base64.getDecoder().decode(base64);
+        write.write(decoderBytes);
+        write.close();
     }
 
     public static void zipFileAll(List<File> files, ZipOutputStream outputStream) {
