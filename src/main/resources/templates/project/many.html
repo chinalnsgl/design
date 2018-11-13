@@ -145,7 +145,7 @@
       function getProjectList() {
 
         projectTable = $('#projectDataTables').DataTable( {
-          /*buttons: [
+          buttons: [
             {
               extend: 'excel',
               text: '导出Excel',
@@ -153,10 +153,10 @@
               filename: 'projects',
               exportOptions: {
                 // 将打印 id 和 title 列
-                columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+                columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
               }
             }
-          ],*/
+          ],
           fixedHeader: true,
           scrollX: false,
           "info": false,
@@ -164,8 +164,8 @@
           "autoWidth": true,
           "lengthChange": false,  //每页显示的记录数
           "pageLength": 300,
-          // "dom": "<'row'<'col-sm-6'><'col-sm-6'p>>t<'row'<'col-sm-6'B><'col-sm-6'p>>",
-          "dom": "<'row'<'col-sm-6'><'col-sm-6'p>>t<'row'<'col-sm-6'><'col-sm-6'p>>",
+          "dom": "<'row'<'col-sm-6'><'col-sm-6'p>>t<'row'<'col-sm-6'B><'col-sm-6'p>>",
+          // "dom": "<'row'<'col-sm-6'><'col-sm-6'p>>t<'row'<'col-sm-6'><'col-sm-6'p>>",
           "searching":false,//禁用搜索
           "processing": true,
           "serverSide": true,
