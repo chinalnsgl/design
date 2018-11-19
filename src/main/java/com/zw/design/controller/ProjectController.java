@@ -90,6 +90,7 @@ public class ProjectController {
     @ResponseBody
     @PostMapping("/create")
     public BaseResponse create(Project project, HttpServletRequest request) {
+        project.setCode(project.getCode().trim());
         Project p = projectService.saveProject(project);
         logService.saveLog("创建项目：" + p.getName() + " 项目号：" + p.getCode(), request);
         return BaseResponse.toResponse(p.getId());
