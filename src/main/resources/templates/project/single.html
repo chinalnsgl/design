@@ -827,7 +827,7 @@
     if (status == 0) {
       $("#status").val(1);
       $("#btn-commit-produce").text("开始");
-      if (stepName == '技术协议') {
+      if (stepName == '技术协议' || stepName == '基础条件') {
         $("#status").val(2);
         $("#btn-commit-produce").text("完成");
       }

@@ -83,9 +83,8 @@ public class TaskServiceImpl implements TaskService {
     @CacheEvict(value = "projects",allEntries = true)
     public ProduceTask saveProduceTask(ProduceTask produceTask) {
         ProduceTask t = produceTaskRepository.findById(produceTask.getId()).get();
-        // 单独处理签协议任务
-        if (t.getProduceNum() == 2) {
-            t.setComment(produceTask.getComment());
+        // 单独处理签协议和基础条件任务
+        if (t.getProduceNum() == 2 || t.getProduceNum() == 9) {
             if (produceTask.getStatus() != null && produceTask.getStatus() != 0) {
                 t.setStatus(2);
                 t.setStartTime(new Date());
