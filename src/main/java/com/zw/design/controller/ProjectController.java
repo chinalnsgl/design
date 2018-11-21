@@ -218,9 +218,11 @@ public class ProjectController {
         Integer taskCount = projectService.findTaskFileCount(id);
         Integer signCount = projectService.findSignFileCount(id);
         Integer contractCount = projectService.findContractFileCount(id);
+        Integer acceptCount = projectService.findAcceptFileCount(id);
         modelAndView.addObject("taskCount", taskCount);
         modelAndView.addObject("signCount", signCount);
         modelAndView.addObject("contractCount", contractCount);
+        modelAndView.addObject("acceptCount", acceptCount);
         return modelAndView;
     }
 
@@ -237,9 +239,11 @@ public class ProjectController {
         Integer taskCount = projectService.findTaskFileCount(id);
         Integer signCount = projectService.findSignFileCount(id);
         Integer contractCount = projectService.findContractFileCount(id);
+        Integer acceptCount = projectService.findAcceptFileCount(id);
         modelAndView.addObject("taskCount", taskCount);
         modelAndView.addObject("signCount", signCount);
         modelAndView.addObject("contractCount", contractCount);
+        modelAndView.addObject("acceptCount", acceptCount);
         return modelAndView;
     }
 

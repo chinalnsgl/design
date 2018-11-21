@@ -49,4 +49,6 @@ public interface ProjectService {
     Integer findContractFileCount(Integer id);
 
     void updateReceiverStatus(Integer receiverId);
+
+    Integer findAcceptFileCount(Integer id);
 }

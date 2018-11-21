@@ -134,6 +134,7 @@
                   <!--<th>工艺</th>-->
                   <th>铆焊制作</th>
                   <th>机加外协<br>装配</th>
+                  <th>基础条件</th>
                   <th>现场安装</th>
                   <th>备注</th>
                   <th>操作</th>
@@ -175,7 +176,7 @@
               filename: '生产进度',
               exportOptions: {
                 // 将打印 id 和 title 列
-                columns: [ 0,1,2,3,4,5,6,7,8,9,10]
+                columns: [ 0,1,2,3,4,5,6,7,8,9,10,11]
               }
             }
           ],
@@ -266,6 +267,14 @@
                 return statusName[data];
               }
             },
+            { "data": "fourthStep",
+              "width": "70px",
+              render : function(data, type, row, meta) {
+                if(data > 2)
+                  data = 3;
+                return statusName[data];
+              }
+            },
             { "data": "thirdStep",
               "width": "70px",
               render : function(data, type, row, meta) {
@@ -320,18 +329,18 @@
               $('td', row).eq(8).css("background", 'red');
 
             if(data.thirdStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(9).css("background", '#f39c12');
+              $('td', row).eq(10).css("background", '#f39c12');
             if(data.thirdStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(9).css("background", '#00a65a');
+              $('td', row).eq(10).css("background", '#00a65a');
             if(data.thirdStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(9).css("background", 'red');
+              $('td', row).eq(10).css("background", 'red');
 
-            /*if(data.fourthStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(13).css("background", '#f39c12');
+            if(data.fourthStep === 1 && data.projectStatus !== 0 && data.projectStatus !== 3)
+              $('td', row).eq(9).css("background", '#f39c12');
             if(data.fourthStep === 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(13).css("background", '#00a65a');
+              $('td', row).eq(9).css("background", '#00a65a');
             if(data.fourthStep >= 100 && data.projectStatus !== 0 && data.projectStatus !== 3)
-              $('td', row).eq(13).css("background", 'red');*/
+              $('td', row).eq(9).css("background", 'red');
 
             /*if(data.processStatus > 0 && data.processStatus < 2 && data.projectStatus !== 0 && data.projectStatus !== 3)
               $('td', row).eq(8).css("background", '#f39c12');

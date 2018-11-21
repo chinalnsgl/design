@@ -526,6 +526,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Integer findAcceptFileCount(Integer id) {
+        return imageRepository.countByProject_IdAndType(id, 4);
+    }
+
+    @Override
     public void updateReceiverStatus(Integer receiverId) {
         Receiver receiver = receiverRepository.findById(receiverId).get();
         receiver.setStatus(2);

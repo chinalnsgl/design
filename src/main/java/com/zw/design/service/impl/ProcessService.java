@@ -27,20 +27,17 @@ public class ProcessService {
         int b = deptTaskDao.updateProcess2();
         int c = deptTaskDao.updateProcess3();
         int d = deptTaskDao.updateProcess4();
-        int e = deptTaskDao.updateProcess5();
+//        int e = deptTaskDao.updateProcess5();
 
         List<Project> projects = projectRepository.findAll();
         for (Project project : projects) {
-            for (int i = 2; i < 9; i++) {
-                if (i == 3 || i == 6) {
-                    continue;
-                }
+
                 ProduceTask task = new ProduceTask();
-                task.setProduceName(Const.PRODUCE_TASK_STEP_NAME[i]);
-                task.setProduceNum(i + 1);
+                task.setProduceName(Const.PRODUCE_TASK_STEP_NAME[8]);
+                task.setProduceNum(9);
                 task.setProject(project);
                 produceTaskRepository.save(task);
-            }
+
         }
 
     }

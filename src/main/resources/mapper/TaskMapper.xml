@@ -31,9 +31,9 @@
     d.produce_name as signName,
     d.status as signStatus,
     d.annotate as signAnnotate,
-    j.status as produceStatus,
+    j.status as produceStatus,  /*工艺状态*/
     j.annotates as produceAnnotate,
-    k.status as installStatus,
+    k.status as installStatus,  /*生产状态*/
     k.annotates as installAnnotate,
     g.produce_name as debugName,
     g.status as debugStatus,
@@ -65,7 +65,7 @@
     left join (
     select pro_b.project_id, sum(pro_b.status) as status,
     stuff((select ',' + pro_d.annotate from produce_task pro_d where pro_d.produce_num in(7,8,9) and pro_d.project_id = pro_b.project_id for xml path('')),1,1,'') as annotates
-    from produce_task pro_b where pro_b.produce_num in(7,8,9)
+    from produce_task pro_b where pro_b.produce_num in(7,8,9,10)
     group by pro_b.project_id
     ) as k on k.project_id = a.project_id
     inner JOIN (
@@ -105,8 +105,8 @@
     left join (
     select count(id) as message ,project_id from message group by project_id
     ) m on m.project_id = b.id
-    WHERE c.produce_num = 1 and d.produce_num = 2 and g.produce_num = 10 and
-    h.produce_num = 11 and i.produce_num = 12 and l.produce_num = 3
+    WHERE c.produce_num = 1 and d.produce_num = 2 and g.produce_num = 11 and
+    h.produce_num = 12 and i.produce_num = 13 and l.produce_num = 3
     <if test="code != null and code != ''">
       AND b.code like #{code}
     </if>
@@ -489,13 +489,16 @@
         a.order_no as orderNo,
         b.status as firstStep,
         c.status as secondStep,
-        d.status as thirdStep
+        d.status as thirdStep,
+        e.status as fourthStep
         /*e.status as deptStatus,
         f.status as processStatus*/
         from project a
         left JOIN produce_task b on b.project_id = a.id
         left join produce_task c on c.project_id = a.id
         left join produce_task d on d.project_id = a.id
+        left join produce_task e on e.project_id = a.id
+
         /*LEFT JOIN (
           select round(avg(CONVERT(float,status)),2) as status , project_id from dept_task
           <![CDATA[ where status <=2   ]]>
@@ -504,7 +507,7 @@
         LEFT JOIN (
           select round(avg(CONVERT(float,status)),2) as status , project_id from produce_task where produce_num in (4,5,6) group by project_id
         ) f on f.project_id = a.id*/
-        where b.produce_num = 7 and c.produce_num = 8 and d.produce_num = 9
+        where b.produce_num = 7 and c.produce_num = 8 and e.produce_num = 9 and d.produce_num = 10
         <if test="code != null and code != ''">
           AND a.code like #{code}
         </if>
@@ -518,7 +521,7 @@
           AND (b.status != 2 or c.status != 2 or d.status != 2)
         </if>
         <if test="firstStatus == 2">
-          AND b.status = 2 and c.status = 2 and d.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
+          AND b.status = 2 and c.status = 2 and d.status = 2 and e.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
         </if>
       ) d
     ) x where x.projectNo BETWEEN #{start} and #{length}
@@ -529,7 +532,8 @@
     left JOIN produce_task b on b.project_id = a.id
     left join produce_task c on c.project_id = a.id
     left join produce_task d on d.project_id = a.id
-    where 1 = 1 and b.produce_num = 4 and c.produce_num = 5 and d.produce_num = 6
+    left join produce_task e on e.project_id = a.id
+    where 1 = 1 and b.produce_num = 4 and c.produce_num = 5 and e.produce_num = 9 and d.produce_num = 10
     <if test="code != null and code != ''">
       AND a.code like #{code}
     </if>
@@ -543,7 +547,7 @@
       AND (b.status != 2 or c.status != 2 or d.status != 2)
     </if>
     <if test="firstStatus == 2">
-      AND b.status = 2 and c.status = 2 and d.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
+      AND b.status = 2 and c.status = 2 and d.status = 2 and e.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
     </if>
   </select>
 
@@ -559,16 +563,16 @@
   </select>
 
   <update id="updateProcess1">
-    update produce_task set produce_num = 12 where produce_num = 7
+    update produce_task set produce_num = 13 where produce_num = 12
   </update>
   <update id="updateProcess2">
-    update produce_task set produce_num = 11 where produce_num = 6
+    update produce_task set produce_num = 12 where produce_num = 11
   </update>
   <update id="updateProcess3">
-    update produce_task set produce_num = 10 where produce_num = 5
+    update produce_task set produce_num = 11 where produce_num = 10
   </update>
   <update id="updateProcess4">
-    update produce_task set produce_num = 7, produce_name = '铆焊制作' where produce_num = 4
+    update produce_task set produce_num = 10 where produce_num = 9
   </update>
   <update id="updateProcess5">
     update produce_task set produce_num = 4, produce_name = '原材料外协计划' where produce_num = 3

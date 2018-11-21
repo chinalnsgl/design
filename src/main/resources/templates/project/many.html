@@ -265,9 +265,9 @@
             { "data": "installStatus",
               "width": "70px",
               render : function(data, type, row, meta) {
-                if(data > 0 && data < 6)
+                if(data > 0 && data < 8)
                   data = 1;
-                if(data === 6)
+                if(data === 8)
                   data = 2;
                 return statusName[data];
               }
@@ -335,9 +335,9 @@
             if(data.produceStatus === 6)
               $('td', row).eq(12).css("background", '#00a65a');
 
-            if(data.installStatus > 0 && data.installStatus < 6)
+            if(data.installStatus > 0 && data.installStatus < 8)
               $('td', row).eq(13).css("background", '#f39c12');
-            if(data.installStatus === 6)
+            if(data.installStatus === 8)
               $('td', row).eq(13).css("background", '#00a65a');
 
             if(data.debugStatus === 1)
