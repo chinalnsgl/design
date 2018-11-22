@@ -518,7 +518,7 @@
           AND year (a.create_time) = #{year}
         </if>
         <if test="firstStatus == 1">
-          AND (b.status != 2 or c.status != 2 or d.status != 2)
+          AND (b.status != 2 or c.status != 2 or d.status != 2 or e.status != 2)
         </if>
         <if test="firstStatus == 2">
           AND b.status = 2 and c.status = 2 and d.status = 2 and e.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
@@ -544,7 +544,7 @@
       AND year (a.create_time) = #{year}
     </if>
     <if test="firstStatus == 1">
-      AND (b.status != 2 or c.status != 2 or d.status != 2)
+      AND (b.status != 2 or c.status != 2 or d.status != 2 or e.status != 2)
     </if>
     <if test="firstStatus == 2">
       AND b.status = 2 and c.status = 2 and d.status = 2 and e.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
