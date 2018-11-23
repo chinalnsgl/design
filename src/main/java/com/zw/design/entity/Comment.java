@@ -18,7 +18,7 @@ public class Comment implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date date = new Date();
     private String content;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "userId")
     private SysUser user;
     @ManyToOne
