@@ -243,7 +243,7 @@
     on a.id = t.id
     LEFT JOIN produce_task e on e.project_id = a.id
     LEFT JOIN produce_task f on f.project_id = a.id
-    where e.produce_num = 2 and f.produce_num = 10
+    where e.produce_num = 2 and f.produce_num = 11
     <if test="code != null and code != ''">
       AND a.code like #{code}
     </if>

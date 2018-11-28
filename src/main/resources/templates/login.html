@@ -15,7 +15,7 @@
   <div class="login-box-body">
     <p class="login-box-msg">登录</p>
 
-    <form id="userForm">
+    <form id="userForm" th:action="@{/login}" method="post">
       <div class="form-group has-feedback">
         <input type="text" class="form-control" name="userName" placeholder="请输入用户名">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -102,6 +102,12 @@
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
       increaseArea: '20%' /* optional */
+    });
+
+    $("body").keydown(function(event) {
+      if (event.keyCode == "13") {//keyCode=13是回车键
+        $("#btn_commit").click();
+      }
     });
   });
 </script>
