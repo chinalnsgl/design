@@ -67,6 +67,11 @@ public class ProjectServiceImpl implements ProjectService {
             deptTask.setEndTime(null);
             deptTask.setStatus(1);
         }
+        Project project = deptTask.getProject();
+        if (project.getStatus() == 4) {
+            project.setStatus(2);
+            projectRepository.save(project);
+        }
         return deptTaskRepository.saveAndFlush(deptTask);
     }
 
@@ -85,11 +90,11 @@ public class ProjectServiceImpl implements ProjectService {
                 produceTask.setStatus(0);
                 produceTask.setStartTime(null);
             }
-            if (produceTask.getProduceNum() == 12) {
-                Project project = produceTask.getProject();
-                project.setStatus(2);
-                projectRepository.saveAndFlush(project);
-            }
+        }
+        Project project = produceTask.getProject();
+        if (project.getStatus() == 4) {
+            project.setStatus(2);
+            projectRepository.saveAndFlush(project);
         }
         return produceTaskRepository.saveAndFlush(produceTask);
     }
