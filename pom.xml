@@ -5,11 +5,11 @@
 
     <groupId>com.zw</groupId>
     <artifactId>design</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>war</packaging>
 
     <name>design</name>
-    <description>Demo project for Spring Boot</description>
+    <description>项目看板系统</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -112,6 +112,7 @@
     </dependencies>
 
     <build>
+        <finalName>ROOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
