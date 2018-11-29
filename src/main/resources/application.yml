@@ -43,8 +43,8 @@ logging:
           mapper: debug
   path: e:/DesignProjectLog
 upload:
-  path: e://upload/
-  temp: e://upload/__temp/
+  path: e:/upload/
+  temp: e:/upload/__temp/
 server:
   servlet:
     session:
