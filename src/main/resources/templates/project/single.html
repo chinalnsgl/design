@@ -287,8 +287,8 @@
 <section class="content-header">
   <button style="margin-right: 10px" th:if="${project.status == 2}" shiro:hasPermission="project:cancel" type="button" class="btn btn-danger pull-right" th:onclick="|updateStatus(${project.id}, 0, '${project.name}')|" >取消</button>
   <button style="margin-right: 10px" th:if="${project.status == 0}" shiro:hasPermission="project:regain" type="button" class="btn btn-success pull-right" th:onclick="|updateStatus(${project.id}, 2, '${project.name}')|" >恢复</button>
-  <button style="margin-right: 10px" th:if="${project.status == 2}" shiro:hasPermission="project:pause" type="button" class="btn btn-danger pull-right" th:onclick="|updateStatus(${project.id}, 3, '${project.name}')|" >暂停</button>
-  <button style="margin-right: 10px" th:if="${project.status == 3}" shiro:hasPermission="project:start" type="button" class="btn btn-success pull-right" th:onclick="|updateStatus(${project.id}, 2, '${project.name}')|" >启动</button>
+  <!--<button style="margin-right: 10px" th:if="${project.status == 2}" shiro:hasPermission="project:pause" type="button" class="btn btn-danger pull-right" th:onclick="|updateStatus(${project.id}, 3, '${project.name}')|" >暂停</button>-->
+  <!--<button style="margin-right: 10px" th:if="${project.status == 3}" shiro:hasPermission="project:start" type="button" class="btn btn-success pull-right" th:onclick="|updateStatus(${project.id}, 2, '${project.name}')|" >启动</button>-->
   <a style="margin-right: 10px" shiro:hasPermission="project:update" class="btn btn-warning pull-right" th:href="@{'/project/update/'+${project.id}}">修改项目</a>
   <!--<button style="margin-right: 10px" shiro:hasPermission="message:create" type="button" class="btn btn-info pull-right" id="messageModal" >发送消息</button>-->
   <h1>

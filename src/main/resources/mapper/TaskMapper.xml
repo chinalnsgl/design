@@ -84,7 +84,7 @@
       AND year (create_time) = #{year}
     </if>
     <if test="statusQuery == 1">
-      AND status != 4
+      AND status = 2
     </if>
     <if test="statusQuery == 2">
       AND status = 4
@@ -126,7 +126,7 @@
       AND a.department_num = #{num}
     </if>
     <if test="statusQuery == 1">
-      AND b.status != 4
+      AND b.status = 2
     </if>
     <if test="statusQuery == 2">
       AND b.status = 4
@@ -168,7 +168,7 @@
       AND a.department_num = #{num}
     </if>
     <if test="statusQuery == 1">
-      AND b.status != 4
+      AND b.status = 2
     </if>
     <if test="statusQuery == 2">
       AND b.status = 4
@@ -239,6 +239,12 @@
     <if test="ids != null and ids != '' ">
       and id in (${ids})
     </if>
+    <if test="status == 1">
+      and status = 2
+    </if>
+    <if test="status == 2">
+      and status = 4
+    </if>
     ) t
     on a.id = t.id
     LEFT JOIN produce_task e on e.project_id = a.id
@@ -252,6 +258,12 @@
     </if>
     <if test="ids != null and ids != '' ">
       and a.id in (${ids})
+    </if>
+    <if test="status == 1">
+      and a.status = 2
+    </if>
+    <if test="status == 2">
+      and a.status = 4
     </if>
     ) d
     ) x
@@ -281,6 +293,12 @@
     </if>
     <if test="ids != null and ids != '' ">
       and a.id in (${ids})
+    </if>
+    <if test="status == 1">
+      and a.status = 2
+    </if>
+    <if test="status == 2">
+      and a.status = 4
     </if>
   </select>
 
@@ -438,10 +456,10 @@
           AND year (a.create_time) = #{year}
         </if>
         <if test="firstStatus == 1">
-          AND (b.status != 2 or c.status != 2 or d.status != 2)
+          AND (b.status != 2 or c.status != 2 or d.status != 2) and a.status = 2
         </if>
         <if test="firstStatus == 2">
-          AND b.status = 2 and c.status = 2 and d.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
+          AND b.status = 2 and c.status = 2 and d.status = 2 and a.status  = 4
         </if>
       ) d
     ) x where x.projectNo BETWEEN #{start} and #{length}
@@ -463,10 +481,10 @@
       AND year (a.create_time) = #{year}
     </if>
     <if test="firstStatus == 1">
-      AND (b.status != 2 or c.status != 2 or d.status != 2)
+      AND (b.status != 2 or c.status != 2 or d.status != 2) and a.status = 2
     </if>
     <if test="firstStatus == 2">
-      AND b.status = 2 and c.status = 2 and d.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
+      AND b.status = 2 and c.status = 2 and d.status = 2 and a.status = 4
     </if>
   </select>
 
@@ -518,10 +536,10 @@
           AND year (a.create_time) = #{year}
         </if>
         <if test="firstStatus == 1">
-          AND (b.status != 2 or c.status != 2 or d.status != 2 or e.status != 2)
+          AND (b.status != 2 or c.status != 2 or d.status != 2 or e.status != 2) and a.status = 2
         </if>
         <if test="firstStatus == 2">
-          AND b.status = 2 and c.status = 2 and d.status = 2 and e.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
+          AND b.status = 2 and c.status = 2 and d.status = 2 and e.status = 2 and a.status = 4
         </if>
       ) d
     ) x where x.projectNo BETWEEN #{start} and #{length}
@@ -544,10 +562,10 @@
       AND year (a.create_time) = #{year}
     </if>
     <if test="firstStatus == 1">
-      AND (b.status != 2 or c.status != 2 or d.status != 2 or e.status != 2)
+      AND (b.status != 2 or c.status != 2 or d.status != 2 or e.status != 2) and a.status = 2
     </if>
     <if test="firstStatus == 2">
-      AND b.status = 2 and c.status = 2 and d.status = 2 and e.status = 2 and a.status != 0 and a.status != 1 and a.status != 3
+      AND b.status = 2 and c.status = 2 and d.status = 2 and e.status = 2 and a.status = 4
     </if>
   </select>
 
