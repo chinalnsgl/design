@@ -9,4 +9,14 @@ public interface ProjectRepository extends JpaRepository<Project, Integer>, JpaS
     Project findByCode(String code);
 
     Project findByCodeAndStatus(String code, Integer status);
+
+    Integer countByStatusNot(Integer status);
+
+    Integer countByStatus(Integer status);
+
+    Integer countByStatusNotAndDesignTaskStatus(Integer status, Integer designStatus);
+
+    Integer countByStatusNotAndProcessTaskStatus(Integer status, Integer processStatus);
+
+    Integer countByStatusNotAndProduceTaskStatus(Integer status, Integer produceStatus);
 }

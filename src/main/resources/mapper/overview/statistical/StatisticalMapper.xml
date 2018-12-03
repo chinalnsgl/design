@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.overview.statistical.mapper.StatisticalMapper">
+
+  <select id="countExecutingProjectBySection" resultType="java.lang.Integer">
+    select count(0) from (
+                         select project_id from task where section_id = #{sectionId} and status = 1 group by project_id having
+                                 <![CDATA[ sum(comp_status) > 0 and sum(comp_status) < 8 ]]>
+                         ) a
+  </select>
+
+  <select id="countNotStartedProjectBySection" resultType="java.lang.Integer">
+    select count(0) from (
+                         select project_id from task where section_id = #{sectionId} and status = 1 group by project_id having sum(comp_status) = 0
+                         ) a
+  </select>
+
+  <select id="countProjectTotalByYear" resultType="java.lang.Integer">
+    select count(0) from project where status != 1 and year(create_time) = #{year}
+  </select>
+
+  <select id="countFinishedProjectByYear" resultType="java.lang.Integer">
+    select count(0) from project where status = 4 and year(complete_time) = #{year}
+  </select>
+
+  <select id="countUnFinishedProjectByYear" resultType="java.lang.Integer">
+    select count(0) from project where status = 2 and year(create_time) = #{year}
+  </select>
+
+  <select id="countCancelProjectByYear" resultType="java.lang.Integer">
+    select count(0) from project where status = 0 and year(create_time) = #{year}
+  </select>
+
+  <select id="countDesignFinishedProjectByYear" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and year(design_complete_time) = #{year} and design_task_status = 2
+  </select>
+
+  <select id="countDesignUnFinishedProjectByYear" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and year(create_time) = #{year} and
+    <![CDATA[ design_task_status < 2 ]]>
+  </select>
+
+  <select id="countProcessFinishedProjectByYear" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and year(process_complete_time) = #{year} and process_task_status = 2
+  </select>
+
+  <select id="countProcessUnFinishedProjectByYear" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and year(create_time) = #{year} and
+    <![CDATA[ process_task_status < 2 ]]>
+  </select>
+
+  <select id="countProduceFinishedProjectByYear" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and year(produce_complete_time) = #{year} and produce_task_status = 2
+  </select>
+
+  <select id="countProduceUnFinishedProjectByYear" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and year(create_time) = #{year} and
+    <![CDATA[ produce_task_status < 2 ]]>
+  </select>
+
+
+
+  <select id="countProjectTotalByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status != 1 and month(create_time) = #{month}
+  </select>
+
+  <select id="countFinishedProjectByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status = 4 and month(complete_time) = #{month}
+  </select>
+
+  <select id="countUnFinishedProjectByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status = 2 and month(create_time) = #{month}
+  </select>
+
+  <select id="countCancelProjectByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status = 0 and month(create_time) = #{month}
+  </select>
+
+  <select id="countDesignFinishedProjectByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and month(design_complete_time) = #{month} and design_task_status = 2
+  </select>
+
+  <select id="countDesignUnFinishedProjectByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and month(create_time) = #{month} and
+    <![CDATA[ design_task_status < 2 ]]>
+  </select>
+
+  <select id="countProcessFinishedProjectByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and month(process_complete_time) = #{month} and process_task_status = 2
+  </select>
+
+  <select id="countProcessUnFinishedProjectByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and month(create_time) = #{month} and
+    <![CDATA[ process_task_status < 2 ]]>
+  </select>
+
+  <select id="countProduceFinishedProjectByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and month(produce_complete_time) = #{month} and produce_task_status = 2
+  </select>
+
+  <select id="countProduceUnFinishedProjectByMonth" resultType="java.lang.Integer">
+    select count(0) from project where status != 0 and month(create_time) = #{month} and
+    <![CDATA[ produce_task_status < 2 ]]>
+  </select>
+
+</mapper>
