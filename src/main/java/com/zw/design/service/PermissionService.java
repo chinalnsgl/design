@@ -21,6 +21,4 @@ public interface PermissionService {
     SysPermission findbyId(Integer id);
 
     SysPermission updatePermission(SysPermission permission);
-
-    List<SysPermission> findPermissionByRoleId(Integer id);
 }

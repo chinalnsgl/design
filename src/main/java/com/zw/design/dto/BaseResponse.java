@@ -15,8 +15,8 @@ public class BaseResponse implements Serializable{
 	private int status = 200;
 	private Object content;
 	
-	public static BaseResponse STATUS_200 = new BaseResponse(200, "成功");
-	public static BaseResponse STATUS_400 = new BaseResponse(400, "失败");
+	public static BaseResponse STATUS_200 = new BaseResponse(200, "操作成功 O(∩_∩)O~ ！");
+	public static BaseResponse STATUS_400 = new BaseResponse(400, "操作失败 (┬＿┬) ！！");
 
 	public BaseResponse(){
 	}

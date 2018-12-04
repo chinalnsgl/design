@@ -18,35 +18,63 @@
             <div class="box-header">
 
               <div class="row">
+
                 <div class="form-inline">
                   <div class="form-group" style="margin-right: 10px;">
                     <label>帐号</label>
-                    <input type="text" id="userName" name="userName" class="form-control" placeholder="请输入用户名">
+                    <input type="text" id="account" name="userName" class="form-control" placeholder="请输入帐号">
                   </div>
                   <div class="form-group" style="margin-right: 10px;">
                     <label>用户名</label>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入用户名">
+                    <input type="text" id="account_Name" name="name" class="form-control" placeholder="请输入用户名">
                   </div>
                   <button class="btn btn-default" id="btn_search">搜索</button>
                   <a shiro:hasPermission="user:create" th:href="@{/sys/user/create}" class="btn btn-info pull-right" >添加</a>
                 </div>
+
               </div>
 
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+              <div class="row">
+                <div class="col-md-7">
+                  <table id="userDataTables" class="table table-bordered table-hover" width="100%">
+                  <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>帐号</th>
+                    <th>名称</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                </table></div>
+                <div class="col-md-5">
+                  <form id="userForm" class="form-horizontal">
+                    <input type="hidden" id="id" name="id">
+                    <div class="box-body">
+                      <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="name" name="name" placeholder="用户名">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">角色</label>
+                        <div class="col-sm-10">
+                          <div id="roleTree" class="ztree"></div>
+                        </div>
+                      </div>
+                    </div>
 
-              <table id="userDataTables" class="table table-bordered" width="100%">
-                <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>帐号</th>
-                  <th>名称</th>
-                  <th>角色</th>
-                  <th>操作</th>
-                </tr>
-                </thead>
-              </table>
+                    <div class="box-footer">
+                      <button shiro:hasPermission="user:edit" type="button" id="btn_edit" class="btn btn-info pull-right" disabled>提交</button>
+                    </div>
+                    <!-- /.box-footer -->
+                  </form>
+                </div>
+              </div>
+
 
             </div>
             <!-- /.box-body -->
@@ -62,152 +90,96 @@
     <!-- page script -->
     <script th:inline="javascript">
 
-      var userTable;
-      /** 刷新列表 */
-      function reloadTable() {
-        userTable.destroy();
-        getUserList();
-      }
-
-      /** 加载列表 */
-      function getUserList() {
-        userTable = $('#userDataTables').DataTable( {
-          "info": true,
-          "ordering": false,
-          "autoWidth": true,
-          "lengthChange": false,  //每页显示的记录数
-          "pageLength": 10,
-          "dom": "Tft<'row DTTTFooter'<'col-sm-6'li><'col-sm-6'p>>",
-          "searching":false,//禁用搜索
-          "processing": true,
-          "serverSide": true,
-          "ajax": {
-            url : "/sys/user/list",
-            type : "POST",
-            data : {
-              "userName": $("#userName").val(),
-              "name": $("#name").val()
-            },
-            dataSrc : function (json) {
-              if (json.status === 200) {
-                json.draw = json.content.draw;
-                json.recordsTotal = json.content.recordsTotal;
-                json.recordsFiltered = json.content.recordsFiltered;
-                json.data = json.content.data;
-              }
-              return json.data;
-            }
-          },
-          "columns": [
-            { "data": "id",
-              // "width": "8%"
-            },
-            { "data": "userName",
-              // "width": "10%"
-            },
-            { "data": "name",
-              // "width": "10%"
-            },
-            { "data": "roles",
-              // "width": "5%",
-              render : function(data, type, row, meta) {
-                var html = '';
-                $.each(data,function (i, v) {
-                  html += '<span style="margin-left: 5px">' + v.roleName + '</span>'
-                  if (i === 4) {
-                    html += ' 等...';
-                    return false;
-                  }
-                });
-                return html;
-              }
-            },
-            { "data": "id",
-              // "width": "5%",
-              render : function(data, type, row, meta) {
-                if (row.status === 1) {
-                  return '<a style="margin-right: 5px" class="btn btn-warning btn-xs user-edit" href="/sys/user/edit/'+data+'" >编辑</a>' +
-                      '<a class="btn btn-danger btn-xs user-lock" href="javascript:void(0);" onclick="updateStatus(' + data + ',0)">锁定</a>';
-                }else if (row.status === 0) {
-                  return '<a class="btn btn-success btn-xs user-unlock" href="javascript:void(0);" onclick="updateStatus(' + data + ',1)">解锁</a>';
-                }
-              }
-            }
-          ],
-          "language" : { // 国际化配置
-            "sProcessing" : "正在获取数据，请稍后...",
-            "sLengthMenu" : "显示 _MENU_ 条",
-            "sZeroRecords" : "没有找到数据",
-            "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
-            "infoEmpty" : "记录数为0",
-            "infoFiltered" : "(全部记录数 _MAX_ 条)",
-            "paginate" : {
-              "first" : "第一页",
-              "previous" : "上一页",
-              "next" : "下一页",
-              "last" : "最后一页"
-            }
-          }
-        });
-      }
-
+      // 锁定用户
       function updateStatus(id,status) {
-        bootbox.setLocale("zh_CN");
-        bootbox.confirm("确定修改这个用户吗?", function (result) {
-          if (result) {
-            $.ajax({
-              url: "/sys//user/status",
-              type:"POST",
-              data: {"id": id, "status": status},
-              success: function(result){
-                if (result.status === 200) {
-                  toastr.success("操作成功！");
-                  //重新加载数据
-                  userTable.ajax.reload();
-                } else {
-                  toastr.error("操作失败！");
-                }
-              },
-              error: function() {
-                toastr.error("系统错误，操作失败！");
-              }
-            });
-          }
+        $.modal.confirm("确定修改这个用户吗?",function () {
+          $.operate.post(ctx + "sys/user/status", {"id": id, "status": status}, function () {
+            $.table.refresh();
+          })
         });
         event.stopPropagation();
       }
 
-      /** 搜索按钮事件 */
-      function searchEvent() {
-        $("#btn_search").click(function () {
-          reloadTable();
-        });
-      }
-
-      function setPermission() {
-        userTable.on( 'draw.dt', function () {
-          var roles = [[${session.roles}]];
-          var permissions = [[${session.permissions}]];
-          if ($.inArray('user:edit', permissions) === -1) {
-            $(".user-edit").hide();
-          }
-          if ($.inArray('user:lock', permissions) === -1) {
-            $(".user-status").hide();
-          }
-          if ($.inArray('user:unlock', permissions) === -1) {
-            $(".user-status").hide();
-          }
-        } );
-      }
-
       $(function () {
-
-        getUserList();
-
-        searchEvent();
-
-        setPermission();
-
+        // 加载表格
+        $.table.init({
+          id: "userDataTables",
+          info: true,
+          url: ctx + "sys/user/list",
+          pageLength: 15,
+          data : {
+            userName: $("#account").val(),
+            name: $("#account_Name").val()
+          },
+          columns: [
+            {
+              data: null,
+              render : function (data, type, row, meta) {
+                return meta.row + 1;
+              }
+            },
+            { data: "userName"},
+            { data: "name"},
+            { data: "id",
+              render : function(data, type, row, meta) {
+                if (row.status === 1) {
+                  var html = [];
+                  html.push('<a class="btn btn-danger btn-xs user-lock" shiro:hasPermission="user:lock" href="javascript:void(0);" onclick="updateStatus(' + data + ', 0)">锁定</a>');
+                  return html.join('');
+                }else if (row.status === 0) {
+                  return '<a class="btn btn-success btn-xs user-unlock" href="javascript:void(0);" onclick="updateStatus(' + data + ', 1)">解锁</a>';
+                }
+              }
+            }
+          ],
+          drawCallback: function () {
+            if ($.inArray('*:*:*', permissions) === 0) {
+              return;
+            }
+            if ($.inArray('user:edit', permissions) === -1) {
+              $(".user-edit").remove();
+            }
+            if ($.inArray('user:lock', permissions) === -1) {
+              $(".user-lock").remove();
+            }
+            if ($.inArray('user:unlock', permissions) === -1) {
+              $(".user-unlock").remove();
+            }
+          }
+        });
+        // 点击行
+        $.table.rowClick(function (data) {
+          $("#id").val(data.id);
+          $("#name").val(data.name);
+          $.tree.init({
+            id: "roleTree",
+            url: ctx + "sys/user/roles/" + data.id,
+            name: "roleName"
+          });
+          $("#btn_edit").removeAttr("disabled");
+        });
+        // 搜索
+        $("#btn_search").click(function () {
+          $.table.search({
+            userName: $("#account").val(),
+            name: $("#account_Name").val()
+          });
+        });
+        // 验证
+        $.validate.init("userForm",{
+          fields: {
+            name: {validators: {notEmpty: {message: '请输入用户名'}}}
+          }
+        });
+        // 编辑用户
+        $("#btn_edit").click(function () {
+          if ($.validate.isValid()) {
+            $.operate.post(ctx + "sys/user/update",$("#userForm").serialize() + "&role=" + $.tree.getCheckedNodes(),function () {
+              $.table.refresh();
+            });
+            $.validate.reset();
+          }
+        });
       });
 
     </script>

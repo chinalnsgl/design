@@ -27,8 +27,6 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Autowired
     private SysPermissionRepository permissionRepository;
-    @Autowired
-    private SysRoleRepository sysRoleRepository;
 
     @Override
     public SysPermission savePermission(SysPermission sysPermission) {
@@ -42,7 +40,7 @@ public class PermissionServiceImpl implements PermissionService {
     public DataTablesCommonDto<SysPermission> findPermissionByCriteria(PermissionQuery query) {
         Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(),Sort.by("orderNo"));
         Page<SysPermission> permissionPage = permissionRepository.findAll((Specification<SysPermission>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> list = new ArrayList<Predicate>();
+            List<Predicate> list = new ArrayList<>();
             if (null != query.getPermissionName() && !"".equals(query.getPermissionName())) {
                 list.add(criteriaBuilder.like(root.get("permissionName").as(String.class), "%" + query.getPermissionName() + "%"));
             }
@@ -73,14 +71,12 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<SysPermission> findPermissionAll() {
-        List<SysPermission> permissionList = permissionRepository.findAll((Specification<SysPermission>) (root, query, criteriaBuilder) -> {
-            List<Predicate> list = new ArrayList<Predicate>();
+        return permissionRepository.findAll((Specification<SysPermission>) (root, query, criteriaBuilder) -> {
+            List<Predicate> list = new ArrayList<>();
             list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), 1));
-//            list.add(criteriaBuilder.isNull(root.get("parent")));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
         },Sort.by("orderNo"));
-        return permissionList;
     }
 
     @Override
@@ -95,31 +91,6 @@ public class PermissionServiceImpl implements PermissionService {
         permission1.setUrl(permission.getUrl());
         permission1.setPermissionName(permission.getPermissionName());
         permission1.setOrderNo(permission.getOrderNo());
-//        permission1.getParent();
         return permissionRepository.saveAndFlush(permission1);
-    }
-
-    @Override
-    public List<SysPermission> findPermissionByRoleId(Integer id) {
-        List<SysPermission> permissionList = permissionRepository.findAll((Specification<SysPermission>) (root, query, criteriaBuilder) -> {
-            List<Predicate> list = new ArrayList<Predicate>();
-            list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), 1));
-            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 3));
-            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 6));
-            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 7));
-            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 19));
-            Predicate[] p = new Predicate[list.size()];
-            return criteriaBuilder.and(list.toArray(p));
-        }, Sort.by("orderNo"));
-//        List<SysPermission> permissionList = findPermissionAll();
-        SysRole role = sysRoleRepository.findById(id).get();
-        for (SysPermission permission : permissionList) {
-            for (SysPermission p : role.getPermissions()) {
-                if (p.getId() == permission.getId()) {
-                    permission.setCheckFlag(true);
-                }
-            }
-        }
-        return permissionList;
     }
 }

@@ -5,31 +5,34 @@ import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 系统 用户表
+ */
 @Entity
 @Getter
 @Setter
-public class SysUser implements Serializable /*implements UserDetails */{
+public class SysUser implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @Column(unique = true)
-    private String userName;
+    @Column(unique = true, nullable = false)
+    private String userName; // 帐号
 
-    private String name;
+    private String name; // 真实姓名
 
-    @NotNull
-    private String password;
+    @Column(nullable = false)
+    private String password; // 密码
+
     private Integer status = 1; // 0: 锁定  1: 正常
-    private String img;
+
+    private String img; // 头像URI
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Where(clause = "status > 0")
-    private List<SysRole> roles;
+    private List<SysRole> roles; // 包含角色
 }

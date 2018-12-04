@@ -26,25 +26,19 @@ public class ShiroRealmConfig extends AuthorizingRealm {
     private UserService userService;
     @Autowired
     private RoleService roleService;
-    @Autowired
-    private PermissionService permissionService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-//        log.info("doGetAuthorizationInfo+"+principalCollection.toString());
         //获取登录用户
         SysUser user = (SysUser) principalCollection.getPrimaryPrincipal();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         if ("admin".equals(user.getUserName())) {
             List<SysRole> roleList = roleService.findAll();
             for (SysRole sysRole : roleList) {
-                simpleAuthorizationInfo.addRole(sysRole.getRoleName());
+                simpleAuthorizationInfo.addRole(sysRole.getRoleCode());
             }
-            simpleAuthorizationInfo.addRole("8");
-            List<SysPermission> permissionList = permissionService.findPermissionAll();
-            for (SysPermission permission : permissionList) {
-                simpleAuthorizationInfo.addStringPermission(permission.getPermissionName());
-            }
+            simpleAuthorizationInfo.addRole("*");
+            simpleAuthorizationInfo.addStringPermission("*:*:*");
         } else {
             //添加角色和权限
             for (SysRole role:user.getRoles()) {
@@ -67,12 +61,9 @@ public class ShiroRealmConfig extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String userName = (String) authenticationToken.getPrincipal();
         SysUser user = userService.findByUserName(userName);
-
         if (user == null) {
             throw new UnknownAccountException("用户名或密码错误！");
         }
-        Session session = SecurityUtils.getSubject().getSession();
-        session.setAttribute("user", user);
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getUserName()), getName());
         return info;
     }

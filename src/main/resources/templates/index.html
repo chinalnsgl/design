@@ -3,37 +3,8 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-<style type="text/css">
-  #photo {
-    max-width:100%;
-    max-height:350px;
-  }
-  .img-preview-box {
-    text-align: center;
-  }
-  .img-preview-box > div {
-    display: inline-block;;
-    margin-right: 10px;
-  }
-  .img-preview {
-    overflow: hidden;
-  }
-  .img-preview-box .img-preview-lg {
-    width: 150px;
-    height: 150px;
-  }
-  .img-preview-box .img-preview-md {
-    width: 100px;
-    height: 100px;
-  }
-  .img-preview-box .img-preview-sm {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-  }
-</style>
 <!--修改密码-->
-<div class="modal fade" id="modal-info">
+<div class="modal fade" id="modal-updatePassword">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -59,7 +30,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-info" id="btn-commit">确定</button>
+        <button type="button" class="btn btn-info" id="btn-updatePassword">确定</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -133,13 +104,13 @@
           </li>
 
           <li shiro:authenticated="true" class="dropdown user user-menu">
-            <a href="#" id="account" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="#" id="account" class="dropdown-toggle" data-toggle="dropdown" onclick="$.modal.open('modal-upload')">
               <img th:src="${#strings.isEmpty(session.user.img)}?@{/img/person.png}:${session.user.img}" id="userImage" class="user-image img-circle" alt="User Image">
               <span class="hidden-xs" th:text="${session.user.name}">Alexander Pierce</span>
             </a>
           </li>
           <li shiro:authenticated="true">
-            <a href="#" id="updatePassword" ><i class="fa fa-edit">&nbsp;修改密码</i></a>
+            <a href="#" id="updatePassword" onclick="$.modal.open('modal-updatePassword')" ><i class="fa fa-edit">&nbsp;修改密码</i></a>
           </li>
           <li>
             <a th:href="@{/logout}" ><i class="fa fa-sign-out">&nbsp;退出</i></a>
@@ -155,7 +126,84 @@
     <section class="sidebar">
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">项目菜单</li>
+
+        <li shiro:hasPermission="overview:menu" class="treeview menu-open">
+          <a href="#">
+            <i class="fa fa-folder-open text-danger"></i>
+            <span>总览</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+          </a>
+          <ul class="treeview-menu" style="display: block;">
+            <li class="active"><a th:href="@{/sys/users}" shiro:hasPermission="overview:statistics" target="content"><i class="fa fa-circle-o text-red"></i> 项目统计</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 公司战略纲领</a></li>
+          </ul>
+        </li>
+
+        <li shiro:hasPermission="project:menu" class="treeview">
+          <a href="#">
+            <i class="fa fa-folder-open text-success"></i>
+            <span>立项管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a th:href="@{/sys/users}" shiro:hasPermission="overview:statistics" target="content"><i class="fa fa-circle-o text-red"></i> 创建项目</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 下达设计任务</a></li>
+          </ul>
+        </li>
+
+        <li shiro:hasPermission="project:menu" class="treeview">
+          <a href="#">
+            <i class="fa fa-folder-open text-success"></i>
+            <span>项目看板</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a th:href="@{/sys/users}" shiro:hasPermission="overview:statistics" target="content"><i class="fa fa-circle-o text-red"></i> 多项目看板</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 设计任务进度看板</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 工艺任务进度看板</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 生产任务进度看板</a></li>
+          </ul>
+        </li>
+
+        <li shiro:hasPermission="project:menu" class="treeview">
+          <a href="#">
+            <i class="fa fa-folder-open text-success"></i>
+            <span>项目综合管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a th:href="@{/sys/users}" shiro:hasPermission="overview:statistics" target="content"><i class="fa fa-circle-o text-red"></i> 人力成本</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 互动专区</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 文件管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 任务单查询</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 技术协议查询</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 合同查询</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 验收查询</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 存档查询</a></li>
+          </ul>
+        </li>
+
+        <!--<li shiro:hasPermission="project:menu" class="treeview">-->
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-folder-open text-success"></i>
+            <span>系统管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a th:href="@{/sys/users}" shiro:hasPermission="user:list" target="content"><i class="fa fa-circle-o text-red"></i> 帐号管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="role:list" target="content"><i class="fa fa-circle-o text-success"></i> 角色管理</a></li>
+            <li><a th:href="@{/sys/permissions}" shiro:hasPermission="permission:list" target="content"><i class="fa fa-circle-o text-warning"></i> 权限管理</a></li>
+            <li><a th:href="@{/sys/depts}" shiro:hasPermission="dept:list" target="content"><i class="fa fa-circle-o text-info"></i> 部门管理</a></li>
+            <li><a th:href="@{/sys/employees}" shiro:hasPermission="employee:list" target="content"><i class="fa fa-circle-o text-success"></i> 员工管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 科室类型管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 科室管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 项目类型管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 项目任务管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 设计任务管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 工艺任务管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 生产任务管理</a></li>
+            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 操作日志</a></li>
+          </ul>
+        </li>
+
+
+        <!--<li class="header">项目菜单</li>
         <li shiro:hasPermission="meeting:index" >
           <a th:href="@{/meeting/list}" target="content">
             <i class="fa fa-book text-aqua"></i>
@@ -203,7 +251,7 @@
             <li><a th:href="@{/sys/permissions}" shiro:hasPermission="permission:list" target="content"><i class="fa fa-circle-o text-blue"></i> 权限列表</a></li>
             <li><a th:href="@{/sys/logs}" shiro:hasPermission="log:list" target="content"><i class="fa fa-circle-o text-green"></i> 操作日志</a></li>
           </ul>
-        </li>
+        </li>-->
       </ul>
     </section>
     <!-- /.sidebar -->
@@ -217,219 +265,6 @@
 <!-- ./wrapper -->
 
 <div th:include="include :: footer"></div>
-<script th:inline="javascript">
-    function changeFrameHeight() {
-        var ifm = document.getElementById("content");
-        ifm.height = document.documentElement.clientHeight - 56;
-    }
-
-    window.onresize = function () {
-        changeFrameHeight();
-    };
-
-    var userForm = $("#userForm");
-
-    function setValid() {
-      userForm.bootstrapValidator({
-        feedbackIcons: {
-          valid: 'glyphicon glyphicon-ok',
-          invalid: 'glyphicon glyphicon-remove',
-          validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-          password: {validators: {notEmpty: {message: '请输入密码'}}},
-          rePassword: {validators: {notEmpty: {message: '请确认密码'},identical: { field: 'password', message: '两次密码不一致'}}}
-        }
-      });
-    }
-
-    /** 修改密码 */
-    function createEvent() {
-      $("#btn-commit").click(function () {
-        userForm.bootstrapValidator('validate');//提交验证
-        if (userForm.data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
-          $.ajax({
-            url: "/update",
-            type:"POST",
-            data : userForm.serialize(),
-            success: function(result){
-              if (result.status === 200) {
-                $("#modal-info").modal('hide');
-                toastr.success("编辑成功！");
-              }
-            },
-            error: function() {
-              toastr.success("编辑失败！");
-            }
-          });
-        }
-      });
-    }
-
-    function getReceiver() {
-      $("#unread-message").html('');
-      $("#messageCount").html('');
-      // $("#topic-message").html('无新消息');
-      $.ajax({
-        url: "/message/user/receiver",
-        type:"get",
-        data : userForm.serialize(),
-        success: function(result){
-          if (result.status === 200) {
-            if (result.content.length > 0) {
-              $("#messageCount").html(result.content.length);
-              // $("#topic-message").html('未读消息');
-              var data = result.content;
-              for (var i=0;i<data.length;i++){
-                var img = data[i].message.user.img;
-                if (img == null) {
-                  img = /*[[@{/img/person.png}]]*/;
-                }
-                $("#unread-message").append('<li><ul class="menu"><li><a class="message-single" href="/project/single/message/' + data[i].project.id + '/' + data[i].id +
-                    '" target="content"><div class="pull-left">' +
-                    '<img class="img-circle" alt="User Image" src="' + img
-                    + '"></div><h4>' + data[i].message.user.name +
-                    '<small><i class="fa fa-clock-o"></i>' + data[i].message.createTime +
-                    '</small></h4>' +
-                    '<p>' +data[i].message.content +
-                    '</p></a></li></ul></li>');
-              }
-            }
-          }
-        }
-      });
-    }
-
-    var initCropperInModal = function(img, input, modal){
-      var $image = img;
-      var $inputImage = input;
-      var $modal = modal;
-      var options = {
-        aspectRatio: 1, // 纵横比
-        viewMode: 2,
-        preview: '.img-preview' // 预览图的class名
-      };
-      // 模态框隐藏后需要保存的数据对象
-      var saveData = {};
-      var URL = window.URL || window.webkitURL;
-      var blobURL;
-      $modal.on('show.bs.modal',function () {
-        // 如果打开模态框时没有选择文件就点击“打开图片”按钮
-        if(!$inputImage.val()){
-          $inputImage.click();
-        }
-      }).on('shown.bs.modal', function () {
-        // 重新创建
-        $image.cropper( $.extend(options, {
-          ready: function () {
-            // 当剪切界面就绪后，恢复数据
-            if(saveData.canvasData){
-              $image.cropper('setCanvasData', saveData.canvasData);
-              $image.cropper('setCropBoxData', saveData.cropBoxData);
-            }
-          }
-        }));
-      }).on('hidden.bs.modal', function () {
-        // 保存相关数据
-        saveData.cropBoxData = $image.cropper('getCropBoxData');
-        saveData.canvasData = $image.cropper('getCanvasData');
-        // 销毁并将图片保存在img标签
-        $image.cropper('destroy').attr('src',blobURL);
-      });
-      if (URL) {
-        $inputImage.change(function() {
-          var files = this.files;
-          var file;
-          if (!$image.data('cropper')) {
-            return;
-          }
-          if (files && files.length) {
-            file = files[0];
-            if (/^image\/\w+$/.test(file.type)) {
-
-              if(blobURL) {
-                URL.revokeObjectURL(blobURL);
-              }
-              blobURL = URL.createObjectURL(file);
-
-              // 重置cropper，将图像替换
-              $image.cropper('reset').cropper('replace', blobURL);
-
-              // 选择文件后，显示和隐藏相关内容
-              $('.img-container').removeClass('hidden');
-              $('.img-preview-box').removeClass('hidden');
-              $('#btn-upload').removeAttr('disabled').removeClass('disabled');
-              $('.tip-info').addClass('hidden');
-
-            } else {
-              window.alert('请选择一个图像文件！');
-            }
-          }
-        });
-      } else {
-        $inputImage.prop('disabled', true).addClass('disabled');
-      }
-    }
-
-
-    var sendPhoto = function(){
-      var photo = $('#photo').cropper('getCroppedCanvas', {
-        width: 300,
-        height: 300
-      }).toDataURL('image/png');
-      $.ajax({
-        url: '/sys/user/updateImage', // 要上传的地址
-        type: 'post',
-        data: {
-          'imageData': photo
-        },
-        dataType: 'json',
-        success: function (data) {
-          if (data.status === 200) {
-            // 将上传的头像的地址填入，为保证不载入缓存加个随机数
-            debugger;
-            $('#userImage').attr('src', data.content);
-            $('#modal-upload').modal('hide');
-
-          } else {
-            toastr.success("编辑失败！");
-          }
-        }
-      });
-    }
-
-    $(function () {
-
-      setValid();
-
-      createEvent();
-
-      $(".sidebar-menu>li").click(function () {
-        $(".sidebar-menu>li").removeClass("active");
-        // $(".treeview").removeClass("menu-open");
-        $(this).addClass("active");
-      });
-
-      $(".treeview-menu>li").click(function () {
-        $(".treeview-menu>li").removeClass("active");
-        $(this).addClass("active");
-      });
-
-      $("#updatePassword").click(function () {
-        $('#modal-info').modal('show');
-      });
-
-      $("#account").click(function () {
-        $('#modal-upload').modal('show');
-      });
-
-      changeFrameHeight();
-
-      getReceiver();
-
-      initCropperInModal($('#photo'),$('#photoInput'),$('#modal-upload'));
-
-    })
-</script>
+<script th:src="@{/js/index.js}"></script>
 </body>
 </html>

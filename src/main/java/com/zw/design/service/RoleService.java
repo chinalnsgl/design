@@ -1,6 +1,7 @@
 package com.zw.design.service;
 
 import com.zw.design.dto.DataTablesCommonDto;
+import com.zw.design.entity.SysPermission;
 import com.zw.design.entity.SysRole;
 import com.zw.design.query.RoleQuery;
 
@@ -22,4 +23,6 @@ public interface RoleService {
     SysRole updateRole(SysRole role, Integer[] permissions);
 
     SysRole findRoleById(Integer id);
+
+    List<SysPermission> findRolePermissionById(Integer id);
 }

@@ -41,15 +41,7 @@ public class UserServiceImpl implements UserService {
         int hashIterations = 8;
         Object obj = new SimpleHash(hashAlgorithmName, credentials, ByteSource.Util.bytes(user.getUserName()), hashIterations);
         user.setPassword(obj.toString());
-        if (role != null) {
-            List<SysRole> roles = new ArrayList<>();
-            for (Integer integer : role) {
-                SysRole sysRole = new SysRole();
-                sysRole.setId(integer);
-                roles.add(sysRole);
-            }
-            user.setRoles(roles);
-        }
+        user.setRoles(createRoles(role));
         return sysUserRepository.save(user);
     }
 
@@ -58,6 +50,11 @@ public class UserServiceImpl implements UserService {
         SysUser sysUser = sysUserRepository.findById(user.getId()).get();
         sysUser.setName(user.getName());
         sysUser.getRoles().removeAll(sysUser.getRoles());
+        sysUser.setRoles(createRoles(role));
+        return sysUserRepository.saveAndFlush(sysUser);
+    }
+
+    private List<SysRole> createRoles(Integer[] role) {
         if (role != null) {
             List<SysRole> roles = new ArrayList<>();
             for (Integer integer : role) {
@@ -65,9 +62,9 @@ public class UserServiceImpl implements UserService {
                 sysRole.setId(integer);
                 roles.add(sysRole);
             }
-            sysUser.setRoles(roles);
+            return roles;
         }
-        return sysUserRepository.saveAndFlush(sysUser);
+        return null;
     }
 
     @Override
@@ -84,7 +81,7 @@ public class UserServiceImpl implements UserService {
     public DataTablesCommonDto<SysUser> findUserByCriteria(UserQuery query) {
         Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength());
         Page<SysUser> userPage = sysUserRepository.findAll((Specification<SysUser>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> list = new ArrayList<Predicate>();
+            List<Predicate> list = new ArrayList<>();
             if (null != query.getUserName() && !"".equals(query.getUserName())) {
                 list.add(criteriaBuilder.like(root.get("userName").as(String.class), "%" + query.getUserName() + "%"));
             }
@@ -111,7 +108,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public SysUser findUserRoleById(Integer id) {
+    public List<SysRole> findUserRoleById(Integer id) {
         List<SysRole> roles = sysRoleRepository.findAllByStatus(1);
         SysUser user = sysUserRepository.findById(id).get();
         for (SysRole role : roles) {
@@ -121,8 +118,7 @@ public class UserServiceImpl implements UserService {
                 }
             }
         }
-        user.setRoles(roles);
-        return user;
+        return roles;
     }
 
     @Override

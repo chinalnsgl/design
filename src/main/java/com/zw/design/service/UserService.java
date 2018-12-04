@@ -1,6 +1,7 @@
 package com.zw.design.service;
 
 import com.zw.design.dto.DataTablesCommonDto;
+import com.zw.design.entity.SysRole;
 import com.zw.design.entity.SysUser;
 import com.zw.design.query.UserQuery;
 
@@ -16,7 +17,7 @@ public interface UserService {
 
     SysUser updateUserStatus(Integer id, Integer status);
 
-    SysUser findUserRoleById(Integer id);
+    List<SysRole> findUserRoleById(Integer id);
 
     SysUser updateUser(SysUser user, Integer[] role);
 

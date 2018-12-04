@@ -61,55 +61,25 @@
     <div th:include="include :: footer"></div>
     <!-- page script -->
     <script>
-
-      var userForm = $("#userForm");
-
-      /** 表单验证设置 */
-      function setValid() {
-        userForm.bootstrapValidator({
-          feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-          },
+      $(function () {
+        // 验证初始化
+        $.validate.init("userForm",{
           fields: {
             name: {validators: {notEmpty: {message: '请输入用户名'}}}
           }
         });
-      }
-
-      /** 创建项目事件 */
-      function createEvent() {
+        // 编辑用户
         $("#btn_create").click(function () {
-          userForm.bootstrapValidator('validate');//提交验证
-          if (userForm.data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
-            $.ajax({
-              url: "/sys/user/update",
-              type:"POST",
-              data: userForm.serialize(),
-              success: function(result){
-                if (result.status === 200) {
-                  toastr.success("修改成功！");
-                  //重新加载数据
-                  location.href = "/sys/users";
-                } else {
-                  toastr.error("修改失败！");
-                }
-              },
-              error: function() {
-                toastr.error("系统错误，修改失败！");
+          if ($.validate.isValid("userForm")) {
+            $.operate.post(ctx + "sys/user/update",$("#userForm").serialize(), function (result) {
+              if (result.status === 200) {
+                location.href = ctx + "sys/users";
+              } else {
+                $.modal.fail("系统错误！");
               }
             });
           }
         });
-      }
-
-      $(function () {
-
-        setValid();
-
-        createEvent();
-
       });
 
     </script>

@@ -4,6 +4,7 @@ import com.zw.design.dto.DataTablesCommonDto;
 import com.zw.design.entity.SysPermission;
 import com.zw.design.entity.SysRole;
 import com.zw.design.query.RoleQuery;
+import com.zw.design.repository.SysPermissionRepository;
 import com.zw.design.repository.SysRoleRepository;
 import com.zw.design.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,14 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private SysRoleRepository sysRoleRepository;
 
+    @Autowired
+    private SysPermissionRepository sysPermissionRepository;
+
     @Override
     public DataTablesCommonDto<SysRole> findRoleByCriteria(RoleQuery query) {
         Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(), Sort.by(Sort.Direction.ASC,"roleName"));
         Page<SysRole> rolePage = sysRoleRepository.findAll((Specification<SysRole>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> list = new ArrayList<Predicate>();
+            List<Predicate> list = new ArrayList<>();
             if (null != query.getRoleName() && !"".equals(query.getRoleName())) {
                 list.add(criteriaBuilder.like(root.get("roleName").as(String.class), "%" + query.getRoleName() + "%"));
             }
@@ -53,6 +57,14 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public SysRole saveRole(SysRole role, Integer[] permissions) {
+        if (role.getParent() != null && role.getParent().getId() == null) {
+            role.setParent(null);
+        }
+        role.setPermissions(createPermissions(permissions));
+        return sysRoleRepository.save(role);
+    }
+
+    private List<SysPermission> createPermissions(Integer[] permissions) {
         if (permissions != null) {
             List<SysPermission> permissionList = new ArrayList<>();
             for (Integer integer : permissions) {
@@ -60,9 +72,9 @@ public class RoleServiceImpl implements RoleService {
                 permission.setId(integer);
                 permissionList.add(permission);
             }
-            role.setPermissions(permissionList);
+            return permissionList;
         }
-        return sysRoleRepository.save(role);
+        return null;
     }
 
     @Override
@@ -72,8 +84,31 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<SysRole> findAll() {
-        List<SysRole> roles = sysRoleRepository.findAll((Specification<SysRole>) (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status").as(Integer.class), 1), Sort.by(Sort.Direction.ASC, "roleName"));
-        return roles;
+        return sysRoleRepository.findAllByStatus(1);
+//        return sysRoleRepository.findAll((Specification<SysRole>) (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status").as(Integer.class), 1), Sort.by(Sort.Direction.ASC, "roleName"));
+    }
+
+    @Override
+    public List<SysPermission> findRolePermissionById(Integer id) {
+        List<SysPermission> permissionList = sysPermissionRepository.findAll((Specification<SysPermission>) (root, query, criteriaBuilder) -> {
+            List<Predicate> list = new ArrayList<Predicate>();
+            list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), 1));
+            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 3));
+            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 6));
+            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 7));
+            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 19));
+            Predicate[] p = new Predicate[list.size()];
+            return criteriaBuilder.and(list.toArray(p));
+        }, Sort.by("orderNo"));
+        SysRole role = sysRoleRepository.findById(id).get();
+        for (SysPermission permission : permissionList) {
+            for (SysPermission p : role.getPermissions()) {
+                if (p.getId() == permission.getId()) {
+                    permission.setCheckFlag(true);
+                }
+            }
+        }
+        return permissionList;
     }
 
     @Override
@@ -84,17 +119,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public SysRole updateRole(SysRole role, Integer[] permissions) {
         SysRole sysRole = sysRoleRepository.findById(role.getId()).get();
+        sysRole.setRoleName(role.getRoleName());
         sysRole.getPermissions().removeAll(sysRole.getPermissions());
-//        sysRole.setRoleName(role.getRoleName());
-        if (permissions != null) {
-            List<SysPermission> permissionList = new ArrayList<>();
-            for (Integer integer : permissions) {
-                SysPermission permission = new SysPermission();
-                permission.setId(integer);
-                permissionList.add(permission);
-            }
-            sysRole.setPermissions(permissionList);
-        }
+        sysRole.setPermissions(createPermissions(permissions));
         return sysRoleRepository.save(sysRole);
     }
 }
