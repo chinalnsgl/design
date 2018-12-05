@@ -42,7 +42,7 @@ public class DeptController {
      */
     @ResponseBody
     @GetMapping("/dept/all")
-    @RequiresPermissions(value = {"dept:list"})
+    @RequiresPermissions(value = {"dept:list","emp:list"}, logical = Logical.OR)
     public List<Department> findAllDept() {
         return deptService.findAll();
     }
@@ -100,7 +100,5 @@ public class DeptController {
         logService.saveLog("修改部门：" + department.getDeptName(), request);
         return BaseResponse.toResponse(dept);
     }
-
-
 
 }

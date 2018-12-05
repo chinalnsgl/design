@@ -30,6 +30,9 @@ public class Department implements Serializable {
 
     private Integer orderNo = 1; // 排序（保留字段）
 
+    @Transient
+    private boolean checkFlag = false; // 冗余字段
+
     @Column(updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime = new Date(); // 创建时间

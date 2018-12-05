@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        添加员工
+        <small>Create Role</small>
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3>员工基本信息</h3>
+            </div>
+            <form id="empForm" class="form-horizontal">
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="name" class="col-sm-2 control-label">员工姓名</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="员工姓名">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="code" class="col-sm-2 control-label">员工编号</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="code" name="code" placeholder="员工编号">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">所属部门</label>
+                  <div class="col-sm-10">
+                    <div id="deptTree" class="ztree"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="box-footer">
+                <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          <!-- /.box -->
+        </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+    <div th:include="include::footer"></div>
+    <script>
+      $(function () {
+        // 初始化tree
+        $.tree.init({
+          id: "deptTree",
+          url: ctx + "sys/dept/all",
+          name: "deptName",
+          chkStyle: "radio"
+        });
+        // 验证
+        $.validate.init("empForm",{
+          fields: {
+            name: {
+              validators: {
+                notEmpty: {message: '请输入角色名称'}
+              }
+            }
+          }
+        });
+        // 提交
+        $("#btn_create").click(function () {
+          if ($.tree.getCheckedNodes().length === 0) {
+            $.modal.warning("请选择部门！");
+            return false;
+          }
+          if ($.validate.isValid()) {
+            $.operate.post(ctx + "sys/emp/save",$("#empForm").serialize() + "&deptId=" + $.tree.getCheckedNodes(), function () {
+              location.href = ctx + "sys/emps";
+            });
+          }
+        });
+
+      });
+
+    </script>
+</body>
+</html>

@@ -21,7 +21,10 @@ public class Employee implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private String name; // 名称
+
+    private String code; // 编号
 
     private int status = 1; // 基础状态 0：删除  1：正常
 

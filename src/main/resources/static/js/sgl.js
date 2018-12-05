@@ -324,12 +324,22 @@
             type: options.type ? options.type : "get"                                         // 请求方式
           },
           check: {
-            enable: true,                                                                     // 是否显示多选框
-            chkboxType: { "Y": "p", "N": "" }                                                 // 父子节点的关联关系   Y 属性定义 checkbox 被勾选后的情况；N 属性定义 checkbox 取消勾选后的情况； "p" 表示操作会影响父级节点； "s" 表示操作会影响子级节点。
+            enable: !options.check,                                                                     // 是否显示多选框
+            chkStyle: options.chkStyle ? options.chkStyle : 'checkbox',
+            chkboxType: { "Y": "p", "N": "" },                                                 // 父子节点的关联关系   Y 属性定义 checkbox 被勾选后的情况；N 属性定义 checkbox 取消勾选后的情况； "p" 表示操作会影响父级节点； "s" 表示操作会影响子级节点。
+            radioType: "all"
           },
           callback: {
             beforeClick: function () {                                                       // 节点不可选择
-              return false;
+              return !!options.click;
+            },
+            onClick: function (event, treeId, treeNode) {
+              if (options.click) {
+                options.click(treeNode);
+              }
+            },
+            onAsyncSuccess: function () {
+              $.tree._tree.expandAll(true);
             }
           },
           view: {
@@ -382,6 +392,9 @@
       },
       refresh: function () {
         $.tree._tree.reAsyncChildNodes(null, "refresh");
+      },
+      cancelSelect: function (node) {
+        $.tree._tree.cancelSelectedNode(node);
       }
     },
     // 树插件封装处理
