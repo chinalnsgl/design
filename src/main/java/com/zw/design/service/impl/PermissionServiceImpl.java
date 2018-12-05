@@ -45,7 +45,7 @@ public class PermissionServiceImpl implements PermissionService {
                 list.add(criteriaBuilder.like(root.get("permissionName").as(String.class), "%" + query.getPermissionName() + "%"));
             }
             list.add(criteriaBuilder.isNull(root.get("parent")));
-            list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), 1));
+            list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("status").as(Integer.class), 1));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
         }, pageable);

@@ -93,10 +93,6 @@ public class RoleServiceImpl implements RoleService {
         List<SysPermission> permissionList = sysPermissionRepository.findAll((Specification<SysPermission>) (root, query, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<Predicate>();
             list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), 1));
-            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 3));
-            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 6));
-            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 7));
-            list.add(criteriaBuilder.notEqual(root.get("id").as(Integer.class), 19));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
         }, Sort.by("orderNo"));
