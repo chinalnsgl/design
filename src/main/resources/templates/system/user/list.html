@@ -124,7 +124,7 @@
               render : function(data, type, row, meta) {
                 if (row.status === 1) {
                   var html = [];
-                  html.push('<a class="btn btn-danger btn-xs user-lock" shiro:hasPermission="user:lock" href="javascript:void(0);" onclick="updateStatus(' + data + ', 0)">锁定</a>');
+                  html.push('<a class="btn btn-danger btn-xs user-lock" href="javascript:void(0);" onclick="updateStatus(' + data + ', 0)">锁定</a>');
                   return html.join('');
                 }else if (row.status === 0) {
                   return '<a class="btn btn-success btn-xs user-unlock" href="javascript:void(0);" onclick="updateStatus(' + data + ', 1)">解锁</a>';
