@@ -30,5 +30,8 @@ public class Meeting implements Serializable {
     @OneToMany(mappedBy = "meeting")
     @JsonIgnoreProperties("meeting")
     List<Comment> comments;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private SysUser user;
 
 }
