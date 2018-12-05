@@ -83,7 +83,8 @@ public class RoleController {
      */
     @GetMapping("/role/create/{id}")
     @RequiresPermissions({"role:create"})
-    public String roleCreate(@PathVariable("id") Integer id) {
+    public String roleCreate(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("id", id);
         return prefix + "/role/create";
     }
 
