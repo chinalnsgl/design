@@ -243,11 +243,12 @@
           render: function (data, type, row, meta) {
             if (row.status === 1) {
               return '<a style="margin-left: 5px" class="btn btn-info btn-xs" href="/meeting/'+data+'" >查看</a>' +
-              '<a style="margin-left: 5px" class="btn btn-warning btn-xs meeting-return" href="javascript:void(0);" onclick="returnMeeting(' + data + ')">退回</a>'
-                  + '<a style="margin-left: 5px" class="btn btn-danger btn-xs meeting-del" href="javascript:void(0);" onclick="delMeeting(' + data + ')">删除</a>';
-            } else {
-              return '<a style="margin-left: 5px" class="btn btn-info btn-xs" href="/meeting/'+data+'" >查看</a>' +
                   '<a style="margin-left: 5px" class="btn btn-warning btn-xs meeting-update" href="javascript:void(0);" onclick="updateMeeting(' + data + ',\''+row.title+'\',\''+row.content+'\',\''+row.date+'\',\''+row.address+'\',\''+row.personnel+'\')">修改</a>'
+              + '<a style="margin-left: 5px" class="btn btn-warning btn-xs meeting-return" href="javascript:void(0);" onclick="returnMeeting(' + data + ', 2)">提交</a>'
+                  + '<a style="margin-left: 5px" class="btn btn-danger btn-xs meeting-del" href="javascript:void(0);" onclick="delMeeting(' + data + ')">删除</a>';
+            } else if(row.status ===2 ) {
+              return '<a style="margin-left: 5px" class="btn btn-info btn-xs" href="/meeting/'+data+'" >查看</a>' +
+                  '<a style="margin-left: 5px" class="btn btn-warning btn-xs meeting-return" href="javascript:void(0);" onclick="returnMeeting(' + data + ', 1)">退回</a>'
                   + '<a style="margin-left: 5px" class="btn btn-danger btn-xs meeting-del" href="javascript:void(0);" onclick="delMeeting(' + data + ')">删除</a>';
             }
           }
@@ -321,14 +322,14 @@
   }
 
   /** 退回会议 */
-  function returnMeeting(id) {
+  function returnMeeting(id, status) {
     bootbox.setLocale("zh_CN");
     bootbox.confirm("确定退回这个会议吗?", function (result) {
       if (result) {
         $.ajax({
           url: /*[[@{/meeting/return}]]*/,
           type: "POST",
-          data: {"id": id},
+          data: {"id": id, status: status},
           success: function (result) {
             if (result.status === 200) {
               toastr.success("操作成功！");

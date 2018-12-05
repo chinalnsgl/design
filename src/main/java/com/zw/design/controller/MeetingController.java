@@ -90,11 +90,11 @@ public class MeetingController {
      */
     @ResponseBody
     @PostMapping("/return")
-    public BaseResponse returnMeeting(@RequestParam("id")Integer id, HttpServletRequest request) {
+    public BaseResponse returnMeeting(@RequestParam("id")Integer id, @RequestParam("status") Integer status,  HttpServletRequest request) {
         Meeting meeting = meetingService.findMeetingById(id);
-        meeting.setStatus(2);
+        meeting.setStatus(status);
         meetingService.saveMeeting(meeting);
-        logService.saveLog("退回会议：" + meeting.getTitle(), request);
+        logService.saveLog("提交/退回会议：" + meeting.getTitle(), request);
         return BaseResponse.STATUS_200;
     }
 
