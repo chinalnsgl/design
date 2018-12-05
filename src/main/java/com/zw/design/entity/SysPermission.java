@@ -43,7 +43,7 @@ public class SysPermission implements Serializable {
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
     @OrderBy("orderNo")
-    @Where(clause = "status = 1")
+    @Where(clause = "status > 1")
     @JsonIgnoreProperties("parent")
     private List<SysPermission> children; // 权限资源包含的有效权限资源
 }
