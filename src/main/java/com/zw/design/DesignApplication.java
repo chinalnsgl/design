@@ -7,7 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-@MapperScan("com.zw.design.mapper")
+@MapperScan("com.zw.design.modules.*.*.mapper")
 public class DesignApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

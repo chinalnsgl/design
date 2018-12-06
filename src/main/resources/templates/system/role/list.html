@@ -97,6 +97,12 @@
                 $.modal.confirm("确定删除这个角色吗?",function () {
                   $.operate.post(ctx + "sys/role/status", {id: treeNode.id}, function () {
                     $.tree.refresh();
+                    if (treeNode.id == $("#id").val()) {
+                      $("#btn_edit").attr("disabled", true);
+                      $("#id").val('');
+                      $("#name").val('');
+                      $.doubleTree._tree.destroy();
+                    }
                   })
                 });
               });

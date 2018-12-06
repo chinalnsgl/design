@@ -419,6 +419,9 @@
           callback: {
             beforeClick: function () {                                                       // 节点不可选择
               return false;
+            },
+            onAsyncSuccess: function () {
+              $.doubleTree._tree.expandAll(true);
             }
           },
           view: {
@@ -471,6 +474,9 @@
       },
       refresh: function () {
         $.doubleTree._tree.reAsyncChildNodes(null, "refresh");
+      },
+      destroy: function () {
+        $.fn.zTree.destroy($.doubleTree._option.id);
       }
     },
     // 通用方法封装处理

@@ -8,6 +8,7 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="order_no" jdbcType="INTEGER" property="orderNo" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, description, permission_name, status, url, pid
+    id, description, permission_name, status, url, pid, order_no
   </sql>
   <select id="selectByExample" parameterType="com.zw.design.entity.dbo.SysPermissionExample" resultMap="BaseResultMap">
     select
@@ -102,9 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.zw.design.entity.dbo.SysPermission">
     insert into dbo.sys_permission (id, description, permission_name, 
-      status, url, pid)
+      status, url, pid, order_no
+      )
     values (#{id,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{permissionName,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER})
+      #{status,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER}, #{orderNo,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zw.design.entity.dbo.SysPermission">
     insert into dbo.sys_permission
@@ -127,6 +130,9 @@
       <if test="pid != null">
         pid,
       </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -146,6 +152,9 @@
       </if>
       <if test="pid != null">
         #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -176,6 +185,9 @@
       <if test="record.pid != null">
         pid = #{record.pid,jdbcType=INTEGER},
       </if>
+      <if test="record.orderNo != null">
+        order_no = #{record.orderNo,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -188,7 +200,8 @@
       permission_name = #{record.permissionName,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       url = #{record.url,jdbcType=VARCHAR},
-      pid = #{record.pid,jdbcType=INTEGER}
+      pid = #{record.pid,jdbcType=INTEGER},
+      order_no = #{record.orderNo,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -211,6 +224,9 @@
       <if test="pid != null">
         pid = #{pid,jdbcType=INTEGER},
       </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -220,7 +236,8 @@
       permission_name = #{permissionName,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       url = #{url,jdbcType=VARCHAR},
-      pid = #{pid,jdbcType=INTEGER}
+      pid = #{pid,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

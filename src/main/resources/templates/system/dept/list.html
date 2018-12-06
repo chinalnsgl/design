@@ -86,6 +86,11 @@
                 $.modal.confirm("确定删除这个部门吗?",function () {
                   $.operate.post(ctx + "sys/dept/status", {id: treeNode.id}, function () {
                     $.tree.refresh();
+                    if (treeNode.id == $("#id").val()) {
+                      $("#btn_edit").attr("disabled",true);
+                      $("#id").val('');
+                      $("#name").val('');
+                    }
                   })
                 });
               });

@@ -16,8 +16,8 @@ public class CompareUtil {
                 Method getMethod = pd.getReadMethod();
                 Object obj1 = getMethod.invoke(o1);
                 Object obj2 = getMethod.invoke(o2);
-                String s1 = obj1 == null ? "" : o1.toString();//避免空指针异常
-                String s2 = obj2 == null ? "" : o2.toString();//避免空指针异常
+                String s1 = obj1 == null ? "" : obj1.toString();//避免空指针异常
+                String s2 = obj2 == null ? "" : obj2.toString();//避免空指针异常
                 if (!s1.equals(s2) && Const.FIELD_NAME.get(field.getName()) != null) {
                     sb.append(Const.FIELD_NAME.get(field.getName()))
                             .append("：【")
