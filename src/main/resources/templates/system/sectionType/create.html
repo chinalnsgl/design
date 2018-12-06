@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        添加用户
+        <small>Create User</small>
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <form id="userForm" class="form-horizontal">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3>用户基本信息</h3>
+            </div>
+
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group" >
+                    <label for="userName" class="col-sm-2 control-label">帐号</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="userName" name="userName" placeholder="帐号">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">用户名</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="name" name="name" placeholder="用户名">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">密码</label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" id="password" name="password" placeholder="密码">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="password2" class="col-sm-2 control-label">确认密码</label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" id="password2" name="password2" placeholder="确认密码">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="col-sm-12 control-label">角色</label>
+                    <div class="col-sm-12">
+                      <div id="roleTree" class="ztree"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="box-footer">
+              <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
+            </div>
+              <!-- /.box-footer -->
+
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+      </form>
+    </section>
+    <!-- /.content -->
+    <!-- jQuery 3 -->
+    <div th:include="include :: footer"></div>
+    <!-- page script -->
+    <script>
+      $(function () {
+        // 验证初始化
+        $.validate.init("userForm",{
+          fields: {
+            userName: {
+              validators: {
+                notEmpty: {message: '请输入帐号'},
+                remote: {
+                  url: ctx + "sys/user/checkUserNameUnique",
+                  message: '帐号已存在',
+                  delay: 500,
+                  type: 'POST',
+                  data: {userName: $("#userName").val()}
+                }
+              }
+            },
+            name: {validators: {notEmpty: {message: '请输入用户名'}}},
+            password: {validators: {notEmpty: {message: '请输入密码'}}},
+            password2: {validators: {notEmpty: {message: '请确认密码'},identical: { field: 'password', message: '两次密码不一致'}}}
+          }
+        });
+        // tree初始化
+        $.tree.init({
+          id: "roleTree",
+          url: ctx + "sys/role/all",
+          name: "roleName"
+        });
+        // 创建用户
+        $("#btn_create").click(function () {
+          if ($.validate.isValid()) {
+            $.operate.post(ctx + "sys/user/save",$("#userForm").serialize()+ "&role=" + $.tree.getCheckedNodes(), function () {
+              location.href = ctx + "sys/users";
+            });
+          }
+        });
+
+      });
+
+    </script>
+</body>
+</html>

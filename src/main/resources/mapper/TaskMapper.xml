@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zw.design.mapper.DeptTaskDao">
+<mapper namespace="com.zw.design.modules.build.distribute.mapper.DeptTaskDao">
 
-  <select id="findTasks" resultType="com.zw.design.dto.TaskDto" parameterType="com.zw.design.query.ProjectQuery">
+  <select id="findTasks" resultType="com.zw.design.modules.build.distribute.model.TaskDto" parameterType="com.zw.design.modules.build.distribute.query.ProjectQuery">
     select * from (
     select
     ROW_NUMBER() OVER(Order by t.order_no desc, t.code, t.deptType) as rowId,* from (
@@ -140,7 +140,7 @@
     ) as t ) p
     where p.rowId BETWEEN #{start} and #{length}
 	</select>
-  <select id="findTasksCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.ProjectQuery">
+  <select id="findTasksCount" resultType="java.lang.Integer" parameterType="com.zw.design.modules.build.distribute.query.ProjectQuery">
     select count(b.id) from (
     select department_type,project_id,min(department_num) as department_num,sum ( status ) AS status
     from dept_Task
@@ -191,7 +191,7 @@
     select max(step_num) from dept_task where project_id = #{id}
   </select>
 
-  <select id="findIdsByDept" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findIdsByDept" resultType="java.lang.Integer" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select DISTINCT project_id from dept_task GROUP BY project_id, department_type, department_num HAVING 1=1
     <if test="type != null and num != null">
       and department_type = #{type} and department_num = #{num}
@@ -209,7 +209,7 @@
 
   </select>
 
-  <select id="findDeptTaskList" resultType="com.zw.design.dto.DeptTaskDto" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findDeptTaskList" resultType="com.zw.design.modules.build.distribute.model.DeptTaskDto" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select * from
     (
     select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code, d.type) as rowId, * from
@@ -269,7 +269,7 @@
     ) x
     where x.rowid BETWEEN #{start} and #{length}
   </select>
-  <select id="findDeptTaskCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findDeptTaskCount" resultType="java.lang.Integer" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select count(a.id)
     from project a
     left JOIN
@@ -302,7 +302,7 @@
     </if>
   </select>
 
-  <select id="findProjectCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findProjectCount" resultType="com.zw.design.modules.build.distribute.model.CollectDto" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select count(c.id) as projectNum, sum(c.num) as productNum from
     (
     select a.id, a.num from project as a
@@ -322,7 +322,7 @@
     </if>
     ) c
   </select>
-  <select id="findProjectDelCompCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findProjectDelCompCount" resultType="com.zw.design.modules.build.distribute.model.CollectDto" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select count(c.id) as projectNum, sum(c.num) as productNum from
     (
     select a.id, a.num from project as a
@@ -344,7 +344,7 @@
     </if>
     ) c
   </select>
-  <select id="findProjectDelUnCompCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findProjectDelUnCompCount" resultType="com.zw.design.modules.build.distribute.model.CollectDto" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select count(c.id) as projectNum, sum(c.num) as productNum from
     (
     select a.id, a.num from project as a
@@ -366,7 +366,7 @@
     </if>
     ) c
   </select>
-  <select id="findDeptUndoneCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findDeptUndoneCount" resultType="com.zw.design.modules.build.distribute.model.CollectDto" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select count(c.id) as projectNum, sum(c.num) as productNum from
     (
     select a.id, a.num from project as a
@@ -388,7 +388,7 @@
     </if>
     ) c
   </select>
-  <select id="findDeptdoneCount" resultType="com.zw.design.dto.CollectDto" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findDeptdoneCount" resultType="com.zw.design.modules.build.distribute.model.CollectDto" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select count(c.id) as projectNum, sum(c.num) as productNum from
     (
     select a.id, a.num from project as a
@@ -411,7 +411,7 @@
     ) c
   </select>
 
-  <select id="findProcessList" resultType="com.zw.design.dto.DeptTaskDto" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findProcessList" resultType="com.zw.design.modules.build.distribute.model.DeptTaskDto" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select * from
     (
       select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code) as projectNo, * from
@@ -464,7 +464,7 @@
       ) d
     ) x where x.projectNo BETWEEN #{start} and #{length}
   </select>
-  <select id="findProcessCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findProcessCount" resultType="java.lang.Integer" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select count(a.id)
     from project a
     left JOIN produce_task b on b.project_id = a.id
@@ -488,7 +488,7 @@
     </if>
   </select>
 
-  <select id="findProduceList" resultType="com.zw.design.dto.DeptTaskDto" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findProduceList" resultType="com.zw.design.modules.build.distribute.model.DeptTaskDto" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select * from
     (
       select ROW_NUMBER() OVER(Order by d.orderNo desc, d.code) as projectNo, * from
@@ -544,7 +544,7 @@
       ) d
     ) x where x.projectNo BETWEEN #{start} and #{length}
   </select>
-  <select id="findProduceCount" resultType="java.lang.Integer" parameterType="com.zw.design.query.TaskQuery">
+  <select id="findProduceCount" resultType="java.lang.Integer" parameterType="com.zw.design.modules.build.distribute.query.TaskQuery">
     select count(a.id)
     from project a
     left JOIN produce_task b on b.project_id = a.id

@@ -1,11 +1,10 @@
 package com.zw.design.config;
 
-import com.zw.design.entity.SysPermission;
-import com.zw.design.entity.SysRole;
-import com.zw.design.entity.SysUser;
-import com.zw.design.service.PermissionService;
-import com.zw.design.service.RoleService;
-import com.zw.design.service.UserService;
+import com.zw.design.modules.system.permission.entity.SysPermission;
+import com.zw.design.modules.system.role.entity.SysRole;
+import com.zw.design.modules.system.user.entity.SysUser;
+import com.zw.design.modules.system.role.service.RoleService;
+import com.zw.design.modules.system.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;

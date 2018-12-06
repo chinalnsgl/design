@@ -1,8 +1,8 @@
 package com.zw.design.aspect;
 
-import com.zw.design.entity.LogInfo;
-import com.zw.design.entity.SysUser;
-import com.zw.design.service.LogService;
+import com.zw.design.modules.system.log.entity.LogInfo;
+import com.zw.design.modules.system.user.entity.SysUser;
+import com.zw.design.modules.system.log.service.LogService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
@@ -42,7 +42,7 @@ public class LogAspect {
         LogInfo logInfo = new LogInfo();
         logInfo.setAccount(user.getUserName());
         logInfo.setName(user.getName());
-        logInfo.setOperationName(logAnnotation.action());
+        logInfo.setOperationName(logAnnotation.value());
         logInfo.setOperationTime(new Date());
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         if (request != null) {

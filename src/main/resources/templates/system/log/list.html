@@ -41,6 +41,7 @@
                   <th>帐号</th>
                   <th>用户名</th>
                   <th>操作名</th>
+                  <th>操作内容</th>
                   <th>时间</th>
                   <th>IP地址</th>
                 </tr>
@@ -59,111 +60,35 @@
     <div th:include="include :: footer"></div>
 
     <script th:inline="javascript">
-
-      var logDataTable;
-      /** 刷新列表 */
-      function reloadTable() {
-        logDataTable.destroy();
-        getLogList();
-      }
-
-      /** 加载列表 */
-      function getLogList() {
-
-        logDataTable = $('#logDataTable').DataTable( {
-          buttons: [
-            {
-              extend: 'excel',
-              text: '导出Excel',
-              className: 'btn btn-success pull-right',
-              filename: 'log',
-              exportOptions: {
-                // 将打印 id 和 title 列
-                columns: [ 0,1,2,3,4]
-              }
-            },
-          ],
-          "info": true,
-          "ordering": false,
-          "autoWidth": true,
-          // "scrollX": true,
-          "lengthChange": false,  //每页显示的记录数
-          "pageLength": 100,
-          // "dom": "Tft<'row DTTTFooter'<'col-sm-6'li><'col-sm-6'p>>",
-          "searching":false,//禁用搜索
-          "dom": "t<'row'<'col-sm-6'B><'col-sm-6'p>>",
-          "processing": true,
-          "serverSide": true,
-          "ajax": {
-            url : "/sys/log/list",
-            type : "POST",
-            data : {
-              "name": $("#name").val(),
-              "startTime" :$("#startTime").val(),
-              "endTime" : $("#endTime").val()
-            },
-            dataSrc : function (json) {
-              if (json.status === 200) {
-                json.draw = json.content.draw;
-                json.recordsTotal = json.content.recordsTotal;
-                json.recordsFiltered = json.content.recordsFiltered;
-                json.data = json.content.data;
-              }
-              return json.data;
-            }
-          },
-          "columns": [
-            { "data": "account",
-              // width: '1500px'
-            },
-            { "data": "name",
-              // "width": "10%"
-            },
-            { "data": "operationName",
-              "width": "60%"
-            },
-            { "data": "operationTime",
-              // "width": "10%"
-            },
-            { "data": "address",
-              // "width": "10%"
-            }
-          ],
-          "language" : { // 国际化配置
-            "sProcessing" : "正在获取数据，请稍后...",
-            "sLengthMenu" : "显示 _MENU_ 条",
-            "sZeroRecords" : "没有找到数据",
-            "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
-            "infoEmpty" : "记录数为0",
-            "infoFiltered" : "(全部记录数 _MAX_ 条)",
-            "paginate" : {
-              "first" : "第一页",
-              "previous" : "上一页",
-              "next" : "下一页",
-              "last" : "最后一页"
-            }
-          }
-        });
-      }
-
-      /** 搜索按钮事件 */
-      function searchEvent() {
-        $("#btn_search").click(function () {
-          reloadTable();
-        });
-      }
-
       $(function () {
-        getLogList();
-        searchEvent();
-
-        // 日期控件配置
-        $('.datepicker').datepicker({
-          format: 'yyyy-mm-dd',
-          language: 'zh-cn',
-          autoclose: true,
-          clearBtn: true
+        // 加载列表
+        $.table.init({
+          id: "logDataTable",
+          info: true,
+          url: ctx + "sys/log/list",
+          pageLength: 15,
+          data : {
+            userName: $("#account").val(),
+            name: $("#account_Name").val()
+          },
+          columns: [
+            { data: "account"},
+            { data: "name"},
+            { data: "operationName"},
+            { data: "operationContent", width: "50%"},
+            { data: "operationTime"},
+            { "data": "address"}
+          ]
         });
+        // 搜索
+        $("#btn_search").click(function () {
+          $.table.search({
+            name: $("#name").val(),
+            startTime :$("#startTime").val(),
+            endTime : $("#endTime").val()
+          });
+        });
+
       });
 
     </script>

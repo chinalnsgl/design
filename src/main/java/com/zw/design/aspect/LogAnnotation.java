@@ -6,7 +6,5 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)//目标是方法
 public @interface LogAnnotation {
 
-    String action() default "";
-//    String targetType() default "";
-//    String remark() default "";
+    String value() default "";
 }

@@ -511,5 +511,13 @@ alertStatus = {
   WARNING: 3
 };
 
+// 日期控件配置
+$('.datepicker').datepicker({
+  format: 'yyyy-mm-dd',
+  language: 'zh-cn',
+  autoclose: true,
+  clearBtn: true
+});
+
 /** 设置bootbox中文 */
 bootbox.setLocale("zh_CN");
