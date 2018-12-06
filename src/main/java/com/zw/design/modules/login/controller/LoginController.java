@@ -47,7 +47,7 @@ public class LoginController {
     public BaseResponse updatePassword(String password) {
         SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         sysUser.setPassword(password);
-        sysUser = userService.updateUser(sysUser);
+        sysUser = userService.updateUserPassword(sysUser);
         return BaseResponse.toResponse(sysUser);
     }
 }

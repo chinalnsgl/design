@@ -47,7 +47,7 @@ public class UserController {
     @PostMapping("/user/list")
     @RequiresPermissions({"user:list"})
     public BaseResponse userList(UserQuery query) {
-        BaseDataTableModel<SysUser> dto = userService.findUserByCriteria(query);
+        BaseDataTableModel<SysUser> dto = userService.findUserByQuery(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;
@@ -123,7 +123,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("/user/all")
     public BaseResponse getAll() {
-        List<SysUser> users = userService.findUserList();
+        List<SysUser> users = userService.findAllByStatus();
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(users);
         return baseResponse;
