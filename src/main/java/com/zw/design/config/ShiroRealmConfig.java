@@ -32,7 +32,7 @@ public class ShiroRealmConfig extends AuthorizingRealm {
         SysUser user = (SysUser) principalCollection.getPrimaryPrincipal();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         if ("admin".equals(user.getUserName())) {
-            List<SysRole> roleList = roleService.findAll();
+            List<SysRole> roleList = roleService.findAllByStatus();
             for (SysRole sysRole : roleList) {
                 simpleAuthorizationInfo.addRole(sysRole.getRoleCode());
             }

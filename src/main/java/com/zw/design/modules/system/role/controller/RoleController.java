@@ -36,7 +36,7 @@ public class RoleController {
     @PostMapping("/role/list")
     @RequiresPermissions({"role:list"})
     public BaseResponse roleList(RoleQuery query) {
-        BaseDataTableModel<SysRole> dto = roleService.findRoleByCriteria(query);
+        BaseDataTableModel<SysRole> dto = roleService.findRoleByQuery(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;
@@ -89,7 +89,7 @@ public class RoleController {
     @PostMapping("/role/checkRoleNameUnique")
     @RequiresPermissions({"role:create"})
     public BaseValidResponse checkRoleNameUnique(@RequestParam("roleName") String roleName) {
-        SysRole role = roleService.findByRoleName(roleName);
+        SysRole role = roleService.findByRoleNameAndStatus(roleName);
         return BaseValidResponse.toResponse(role);
     }
     /**
@@ -130,6 +130,6 @@ public class RoleController {
     @GetMapping("/role/all")
     @RequiresPermissions({"user:create"})
     public List<SysRole> findAllRole() {
-        return roleService.findAll();
+        return roleService.findAllByStatus();
     }
 }
