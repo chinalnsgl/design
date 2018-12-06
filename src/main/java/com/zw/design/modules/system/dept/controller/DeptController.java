@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -38,7 +37,7 @@ public class DeptController {
     @GetMapping("/dept/all")
     @RequiresPermissions(value = {"dept:list","emp:list"}, logical = Logical.OR)
     public List<Department> findAllDept() {
-        return deptService.findAll();
+        return deptService.findAllByStatus();
     }
 
 
@@ -87,7 +86,7 @@ public class DeptController {
     @ResponseBody
     @PostMapping("/dept/update")
     @RequiresPermissions({"dept:edit"})
-    public BaseResponse deptUpdate(Department department, HttpServletRequest request) {
+    public BaseResponse deptUpdate(Department department) {
         Department dept = deptService.updateDept(department);
         return BaseResponse.toResponse(dept);
     }

@@ -6,14 +6,19 @@ import java.util.List;
 
 public interface DeptService {
 
-    Department updateDeptStatus(Integer id, Integer status);
+    // 查询所有部门
+    List<Department> findAllByStatus();
 
+    // 按ID查询部门
+    Department findDeptById(Integer id);
+
+    // 保存部门
     Department saveDept(Department department);
 
-    List<Department> findAll();
-
+    // 修改部门
     Department updateDept(Department department);
 
-    Department findDeptById(Integer id);
+    // 修改部门状态
+    Department updateDeptStatus(Integer id, Integer status);
 
 }

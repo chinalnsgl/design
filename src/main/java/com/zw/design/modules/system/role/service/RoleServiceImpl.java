@@ -88,7 +88,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<SysRole> findAll() {
         return sysRoleRepository.findAllByStatus(1);
-//        return sysRoleRepository.findAll((Specification<SysRole>) (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status").as(Integer.class), 1), Sort.by(Sort.Direction.ASC, "roleName"));
+//        return sysRoleRepository.findAllByStatus((Specification<SysRole>) (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status").as(Integer.class), 1), Sort.by(Sort.Direction.ASC, "roleName"));
     }
 
     @Override
