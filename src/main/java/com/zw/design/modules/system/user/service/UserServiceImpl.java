@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
         Object obj = new SimpleHash(hashAlgorithmName, credentials, ByteSource.Util.bytes(user.getUserName()), hashIterations);
         user.setPassword(obj.toString());
         user.setRoles(createRoles(role));
-        logService.saveLog("创建用户：", user.getName());
+        logService.saveLog("创建用户", user.getName());
         return sysUserRepository.save(user);
     }
 
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public SysUser updateUser(SysUser user, Integer[] role) {
         SysUser sysUser = sysUserRepository.findById(user.getId()).get();
-        logService.saveLog("修改用户：", sysUser, user);
+        logService.saveLog("修改用户", sysUser, user);
         sysUser.setName(user.getName());
         sysUser.getRoles().removeAll(sysUser.getRoles());
         sysUser.setRoles(createRoles(role));
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
     public SysUser updateUserStatus(Integer id, Integer status) {
         SysUser user = sysUserRepository.findById(id).get();
         user.setStatus(status);
-        logService.saveLog((status == 1 ? "解锁用户：" : "锁定用户：") ,user.getName());
+        logService.saveLog((status == 1 ? "解锁用户" : "锁定用户") ,user.getName());
         return sysUserRepository.save(user);
     }
 

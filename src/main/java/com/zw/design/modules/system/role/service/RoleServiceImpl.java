@@ -110,7 +110,7 @@ public class RoleServiceImpl implements RoleService {
             role.setParent(null);
         }
         role.setPermissions(createPermissions(permissions));
-        logService.saveLog("新建角色：" , role.getRoleName());
+        logService.saveLog("新建角色" , role.getRoleName());
         return sysRoleRepository.save(role);
     }
 
@@ -118,7 +118,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public SysRole updateRole(SysRole role, Integer[] permissions) {
         SysRole sysRole = sysRoleRepository.findById(role.getId()).get();
-        logService.saveLog("修改角色：", sysRole, role);
+        logService.saveLog("修改角色", sysRole, role);
         sysRole.setRoleName(role.getRoleName());
         sysRole.getPermissions().removeAll(sysRole.getPermissions());
         sysRole.setPermissions(createPermissions(permissions));
@@ -129,7 +129,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public SysRole updateRoleStatus(Integer id,Integer status) {
         SysRole role = sysRoleRepository.findById(id).get();
-        logService.saveLog("删除角色：" , role.getRoleName());
+        logService.saveLog("删除角色" , role.getRoleName());
         role.setStatus(status);
         return sysRoleRepository.save(role);
     }

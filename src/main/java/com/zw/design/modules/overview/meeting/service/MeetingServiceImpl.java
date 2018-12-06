@@ -54,7 +54,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public Meeting saveMeeting(Meeting meeting) {
-        logService.saveLog("新建会议：", meeting.getTitle());
+        logService.saveLog("新建会议", meeting.getTitle());
         meeting.setContent(meeting.getContent()
                 .replaceAll("\r\n|\r|\n|\n\r","<br>")
                 .replaceAll(" ", "&ensp;"));
@@ -77,7 +77,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public Meeting updateMeeting(Meeting meeting) {
         Meeting meeting1 = findMeetingById(meeting.getId());
-        logService.saveLog("修改会议：", meeting1, meeting);
+        logService.saveLog("修改会议", meeting1, meeting);
         meeting1.setStatus(1);
         meeting1.setAddress(meeting.getAddress());
         meeting1.setContent(meeting.getContent()

@@ -31,7 +31,7 @@ public class DeptServiceImpl implements DeptService {
     // 保存部门
     @Override
     public Department saveDept(Department department) {
-        logService.saveLog("新建部门：" , department.getDeptName());
+        logService.saveLog("新建部门" , department.getDeptName());
         if (department.getParent() != null && department.getParent().getId() == null) {
             department.setParent(null);
         }
@@ -42,7 +42,7 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public Department updateDept(Department dept) {
         Department department = findDeptById(dept.getId());
-        logService.saveLog("修改部门：", department, dept);
+        logService.saveLog("修改部门", department, dept);
         department.setDeptName(dept.getDeptName());
         return deptRepository.save(department);
     }
@@ -51,7 +51,7 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public Department updateDeptStatus(Integer id, Integer status) {
         Department department = findDeptById(id);
-        logService.saveLog("删除部门：" , department.getDeptName());
+        logService.saveLog("删除部门" , department.getDeptName());
         department.setStatus(status);
         return deptRepository.save(department);
     }

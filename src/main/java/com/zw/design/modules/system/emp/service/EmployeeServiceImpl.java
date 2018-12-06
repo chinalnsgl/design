@@ -82,7 +82,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     // 保存员工
     @Override
     public Employee saveEmployee(Employee employee) {
-        logService.saveLog("新建员工：", employee.getName());
+        logService.saveLog("新建员工", employee.getName());
         return employeeRepository.save(employee);
     }
 
@@ -90,7 +90,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee updateEmployee(Employee employee) {
         Employee emp = findEmployeeById(employee.getId());
-        logService.saveLog("修改员工：", emp, employee);
+        logService.saveLog("修改员工", emp, employee);
         emp.setName(employee.getName());
         emp.setCode(employee.getCode());
         emp.setDepartment(employee.getDepartment());
@@ -101,7 +101,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee updateEmployeeStatus(Integer id, Integer status) {
         Employee employee = findEmployeeById(id);
-        logService.saveLog("删除员工：",  employee.getName());
+        logService.saveLog("删除员工",  employee.getName());
         employee.setStatus(status);
         return employeeRepository.save(employee);
     }

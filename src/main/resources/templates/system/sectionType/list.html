@@ -78,11 +78,16 @@
     <!-- page script -->
     <script th:inline="javascript">
 
-      // 锁定用户
+      // 删除部门类型
       function updateStatus(id) {
         $.modal.confirm("确定删除这个部门类型吗?",function () {
           $.operate.post(ctx + "sys/sectype/status", {"id": id}, function () {
             $.table.refresh();
+            if (id == $("#id").val()) {
+              $("#id").val('');
+              $("#name").val('');
+              $("#btn_edit").attr("disabled",true);
+            }
           })
           event.stopPropagation();
         });
@@ -107,7 +112,7 @@
               render : function(data, type, row, meta) {
                 if (row.sections.length === 0) {
                   var html = [];
-                  html.push('<a class="btn btn-danger btn-xs sectype-edit" href="javascript:void(0);" onclick="updateStatus(' + data + ')">删除</a>');
+                  html.push('<a class="btn btn-danger btn-xs sectype-del" href="javascript:void(0);" onclick="updateStatus(' + data + ')">删除</a>');
                   return html.join('');
                 }
                 return '';
@@ -118,8 +123,8 @@
             if ($.inArray('*:*:*', permissions) === 0) {
               return;
             }
-            if ($.inArray('sectype:edit', permissions) === -1) {
-              $(".sectype-edit").remove();
+            if ($.inArray('sectype:del', permissions) === -1) {
+              $(".sectype-del").remove();
             }
           }
         });
