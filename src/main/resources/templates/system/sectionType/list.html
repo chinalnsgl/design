@@ -47,6 +47,7 @@
                 <div class="col-md-5">
                   <form id="secTypeForm" class="form-horizontal">
                     <input type="hidden" id="id" name="id">
+                    <input type="hidden" id="code" name="code">
                     <div class="box-body">
                       <div class="form-group">
                         <label for="name" class="col-sm-2 control-label">名称</label>
@@ -86,9 +87,10 @@
             if (id == $("#id").val()) {
               $("#id").val('');
               $("#name").val('');
+              $("#code").val('');
               $("#btn_edit").attr("disabled",true);
             }
-          })
+          });
           event.stopPropagation();
         });
       }
@@ -132,6 +134,7 @@
         $.table.rowClick(function (data) {
           $("#id").val(data.id);
           $("#name").val(data.name);
+          $("#code").val(data.code);
           $("#btn_edit").removeAttr("disabled");
         });
         // 搜索

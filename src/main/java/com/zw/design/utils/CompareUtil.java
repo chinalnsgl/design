@@ -31,7 +31,7 @@ public class CompareUtil {
             System.out.println(e.getMessage());
         }
         if (sb.toString().length() == 0) {
-            sb.append("调整配置");
+            sb.append("基本内容无变化，调整配置");
         }
         return sb.toString();
     }

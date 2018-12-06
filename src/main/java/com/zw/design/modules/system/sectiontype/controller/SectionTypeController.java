@@ -3,21 +3,14 @@ package com.zw.design.modules.system.sectiontype.controller;
 import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.base.BaseResponse;
 import com.zw.design.base.BaseValidResponse;
-import com.zw.design.modules.system.role.entity.SysRole;
-import com.zw.design.modules.system.user.entity.SysUser;
-import com.zw.design.modules.system.user.query.UserQuery;
-import com.zw.design.modules.system.user.service.UserService;
-import com.zw.design.utils.FileUtils;
-import org.apache.shiro.authz.annotation.Logical;
+import com.zw.design.modules.system.sectiontype.entity.SectionType;
+import com.zw.design.modules.system.sectiontype.query.SectionTypeQuery;
+import com.zw.design.modules.system.sectiontype.service.SectionTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/sys")
@@ -26,125 +19,83 @@ public class SectionTypeController {
     private String prefix = "system";
 
     @Autowired
-    private UserService userService;
+    private SectionTypeService sectionTypeService;
 
     @Value("${upload.path}")
     private String uploadPath;
 
 
     /**
-     * 到达用户列表页面
+     * 到达部门类型列表页面
      */
-    @GetMapping("/users")
-    @RequiresPermissions({"user:list"})
+    @GetMapping("/sectypes")
+    @RequiresPermissions({"sectype:list"})
     public String users() {
-        return prefix + "/user/list";
+        return prefix + "/sectionType/list";
     }
     /**
-     * 用户列表数据
+     * 部门类型列表数据
      */
     @ResponseBody
-    @PostMapping("/user/list")
-    @RequiresPermissions({"user:list"})
-    public BaseResponse userList(UserQuery query) {
-        BaseDataTableModel<SysUser> dto = userService.findUserByQuery(query);
+    @PostMapping("/sectype/list")
+    @RequiresPermissions({"sectype:list"})
+    public BaseResponse sectionTypeList(SectionTypeQuery query) {
+        BaseDataTableModel<SectionType> dto = sectionTypeService.findByQuery(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;
     }
-    /**
-     * 用户拥有角色
-     */
-    @GetMapping("/user/roles/{id}")
-    @ResponseBody
-    @RequiresPermissions({"user:list"})
-    public List<SysRole> userRoles(@PathVariable Integer id) {
-        return userService.findUserRoleById(id);
-    }
-
 
     /**
-     * 锁定/解锁用户
+     * 删除部门类型
      */
     @ResponseBody
-    @PostMapping("/user/status")
-    @RequiresPermissions(value = {"user:lock","user:unlock"}, logical = Logical.OR)
-    public BaseResponse updateUserStatus(@RequestParam("id")Integer id, @RequestParam("status") Integer status) {
-        SysUser user = userService.updateUserStatus(id,status);
-        return BaseResponse.toResponse(user);
+    @PostMapping("/sectype/status")
+    @RequiresPermissions(value = {"sectype:del"})
+    public BaseResponse updateSectionTypeStatus(@RequestParam("id")Integer id) {
+        SectionType sectionType = sectionTypeService.updateSectionTypeStatus(id,0);
+        return BaseResponse.toResponse(sectionType);
     }
 
 
     /**
      * 添加页面
      */
-    @GetMapping("/user/create")
-    @RequiresPermissions({"user:create"})
-    public String userCreate() {
-        return  prefix + "/user/create";
+    @GetMapping("/sectype/create")
+    @RequiresPermissions({"sectype:create"})
+    public String sectionTypeCreate() {
+        return  prefix + "/sectionType/create";
     }
     /**
-     * 帐号唯一验证
+     * 部门类型唯一验证
      */
     @ResponseBody
-    @PostMapping("/user/checkUserNameUnique")
-    @RequiresPermissions({"user:create"})
-    public BaseValidResponse checkUserNameUnique(@RequestParam("userName") String userName) {
-        SysUser user = userService.findByUserName(userName);
-        return BaseValidResponse.toResponse(user);
+    @PostMapping("/sectype/checkSecTypeNameUnique")
+    @RequiresPermissions({"sectype:create"})
+    public BaseValidResponse checkSectionTypeNameUnique(@RequestParam("name") String name) {
+        SectionType sectionType = sectionTypeService.findByName(name);
+        return BaseValidResponse.toResponse(sectionType);
     }
     /**
-     * 保存用户
+     * 保存部门类型
      */
     @ResponseBody
-    @PostMapping("/user/save")
-    @RequiresPermissions({"user:create"})
-    public BaseResponse userSave(SysUser user, Integer[] role) {
-        SysUser sysUser = userService.saveUser(user,role);
-        return BaseResponse.toResponse(sysUser);
-    }
-
-
-    /**
-     * 修改用户
-     */
-    @ResponseBody
-    @PostMapping("/user/update")
-    @RequiresPermissions({"user:edit"})
-    public BaseResponse userUpdate(SysUser user, Integer[] role) {
-        SysUser sysUser = userService.updateUser(user,role);
-        return BaseResponse.toResponse(sysUser);
+    @PostMapping("/sectype/save")
+    @RequiresPermissions({"sectype:create"})
+    public BaseResponse userSave(SectionType sectionType) {
+        SectionType secType = sectionTypeService.saveSectionType(sectionType);
+        return BaseResponse.toResponse(secType);
     }
 
 
     /**
-     * 所有用户列表
+     * 修改部门类型
      */
     @ResponseBody
-    @GetMapping("/user/all")
-    public BaseResponse getAll() {
-        List<SysUser> users = userService.findAllByStatus();
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setContent(users);
-        return baseResponse;
-    }
-
-
-    /**
-     * 修改头像
-     */
-    @ResponseBody
-    @PostMapping("/user/updateImage")
-    public BaseResponse updateImage(String imageData) {
-        String imgName = UUID.randomUUID().toString() + ".png";
-        SysUser user = userService.updateImage("/files/" + imgName);
-        try {
-            FileUtils.decodeBase64DataURLToImage(imageData, uploadPath, imgName);
-            BaseResponse baseResponse = new BaseResponse();
-            baseResponse.setContent(user.getImg());
-            return baseResponse;
-        } catch (IOException e) {
-            return BaseResponse.STATUS_400;
-        }
+    @PostMapping("/sectype/update")
+    @RequiresPermissions({"sectype:edit"})
+    public BaseResponse sectionTypeUpdate(SectionType sectionType) {
+        SectionType secType = sectionTypeService.updateSectionType(sectionType);
+        return BaseResponse.toResponse(secType);
     }
 }

@@ -2,18 +2,9 @@ package com.zw.design.modules.system.sectiontype.service;
 
 import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.modules.system.log.service.LogService;
-import com.zw.design.modules.system.role.entity.SysRole;
-import com.zw.design.modules.system.role.repository.SysRoleRepository;
 import com.zw.design.modules.system.sectiontype.entity.SectionType;
 import com.zw.design.modules.system.sectiontype.query.SectionTypeQuery;
 import com.zw.design.modules.system.sectiontype.repository.SectionTypeRepository;
-import com.zw.design.modules.system.user.entity.SysUser;
-import com.zw.design.modules.system.user.query.UserQuery;
-import com.zw.design.modules.system.user.repository.SysUserRepository;
-import com.zw.design.modules.system.user.service.UserService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,8 +30,8 @@ public class SectionTypeServiceImpl implements SectionTypeService {
         Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength());
         Page<SectionType> secTypePage = sectionTypeRepository.findAll((Specification<SectionType>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<>();
-            if (null != query.getName() && !"".equals(query.getName())) {
-                list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + query.getName() + "%"));
+            if (null != query.getNameQuery() && !"".equals(query.getNameQuery())) {
+                list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + query.getNameQuery() + "%"));
             }
             list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), 1));
             Predicate[] p = new Predicate[list.size()];
@@ -52,6 +43,12 @@ public class SectionTypeServiceImpl implements SectionTypeService {
         baseDataTableModel.setRecordsTotal((int)secTypePage.getTotalElements());
         baseDataTableModel.setRecordsFiltered((int)secTypePage.getTotalElements());
         return baseDataTableModel;
+    }
+
+    // 按名称查询部门类型
+    @Override
+    public SectionType findByName(String name) {
+        return sectionTypeRepository.findByName(name);
     }
 
     // 保存部门类型

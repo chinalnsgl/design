@@ -9,6 +9,9 @@ public interface SectionTypeService {
     // 按条件查询部门类型表格模型数据
     BaseDataTableModel<SectionType> findByQuery(SectionTypeQuery query);
 
+    // 按名称查询部门类型
+    SectionType findByName(String name);
+
     // 保存部门类型
     SectionType saveSectionType(SectionType sectionType);
 
@@ -17,5 +20,4 @@ public interface SectionTypeService {
 
     // 修改部门类型状态
     SectionType updateSectionTypeStatus(Integer id, Integer status);
-
 }

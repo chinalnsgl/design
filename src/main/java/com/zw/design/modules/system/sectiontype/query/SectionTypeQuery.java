@@ -10,5 +10,5 @@ public class SectionTypeQuery implements Serializable {
     private Integer draw;
     private Integer start = 0;
     private Integer length = 10;
-    private String name; // 部门类型名称
+    private String nameQuery; // 部门类型名称
 }
