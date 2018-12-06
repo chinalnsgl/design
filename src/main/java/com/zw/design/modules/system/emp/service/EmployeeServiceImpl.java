@@ -29,10 +29,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private LogService logService;
 
+    // 按条件查询员工返回基础表格模型数据
     @Override
     public BaseDataTableModel<Employee> findEmployeeByQuery(EmployeeQuery query) {
+        // 分页排序
         Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(), Sort.by(Sort.Direction.ASC,"id"));
+        // 分页数据
         Page<Employee> empPage = employeeRepository.findAll((Specification<Employee>) (root, criteriaQuery, criteriaBuilder) -> {
+            // 构建查询条件
             List<Predicate> list = new ArrayList<>();
             if (null != query.getNameQuery() && !"".equals(query.getNameQuery())) {
                 list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + query.getNameQuery() + "%"));
@@ -47,6 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
         }, pageable);
+        // 封装基础表格模型数据
         BaseDataTableModel<Employee> baseDataTableModel = new BaseDataTableModel<>();
         baseDataTableModel.setDraw(query.getDraw());
         baseDataTableModel.setData(empPage.getContent());
@@ -55,35 +60,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         return baseDataTableModel;
     }
 
+    // 按ID查询员工
     @Override
     public Employee findEmployeeById(Integer id) {
         return employeeRepository.findById(id).get();
     }
 
-    @Override
-    public Employee saveEmployee(Employee employee) {
-        logService.saveLog("新建员工：", employee.getName());
-        return employeeRepository.save(employee);
-    }
-
-    @Override
-    public Employee updateEmployee(Employee employee) {
-        Employee emp = findEmployeeById(employee.getId());
-        logService.saveLog("修改员工：", emp, employee);
-        emp.setName(employee.getName());
-        emp.setCode(employee.getCode());
-        emp.setDepartment(employee.getDepartment());
-        return employeeRepository.save(emp);
-    }
-
-    @Override
-    public Employee updateEmployeeStatus(Integer id, Integer status) {
-        Employee employee = findEmployeeById(id);
-        logService.saveLog("删除员工：",  employee.getName());
-        employee.setStatus(status);
-        return employeeRepository.save(employee);
-    }
-
+    // 按部门ID查询员工
     @Override
     public List<Department> findDeptByEmpId(Integer id) {
         List<Department> departments = deptRepository.findAllByStatus(1);
@@ -95,4 +78,33 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return departments;
     }
+
+    // 保存员工
+    @Override
+    public Employee saveEmployee(Employee employee) {
+        logService.saveLog("新建员工：", employee.getName());
+        return employeeRepository.save(employee);
+    }
+
+    // 修改员工
+    @Override
+    public Employee updateEmployee(Employee employee) {
+        Employee emp = findEmployeeById(employee.getId());
+        logService.saveLog("修改员工：", emp, employee);
+        emp.setName(employee.getName());
+        emp.setCode(employee.getCode());
+        emp.setDepartment(employee.getDepartment());
+        return employeeRepository.save(emp);
+    }
+
+    // 修改员工状态
+    @Override
+    public Employee updateEmployeeStatus(Integer id, Integer status) {
+        Employee employee = findEmployeeById(id);
+        logService.saveLog("删除员工：",  employee.getName());
+        employee.setStatus(status);
+        return employeeRepository.save(employee);
+    }
+
+
 }
