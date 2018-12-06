@@ -38,7 +38,7 @@ public class PermissionController {
     @PostMapping("/permission/list")
     @RequiresPermissions({"permission:list"})
     public BaseResponse permissionList(PermissionQuery query) {
-        BaseDataTableModel<SysPermission> dto = permissionService.findPermissionByCriteria(query);
+        BaseDataTableModel<SysPermission> dto = permissionService.findPermissionByQuery(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;
@@ -101,7 +101,7 @@ public class PermissionController {
     @GetMapping("/permission/edit/{id}")
     @RequiresPermissions({"permission:edit"})
     public String permissionEdit(@PathVariable Integer id, Model model) {
-        SysPermission permission = permissionService.findbyId(id);
+        SysPermission permission = permissionService.findById(id);
         model.addAttribute("permission", permission);
         return prefix + "/permission/edit";
     }

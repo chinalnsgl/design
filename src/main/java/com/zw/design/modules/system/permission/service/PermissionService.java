@@ -8,17 +8,24 @@ import java.util.List;
 
 public interface PermissionService {
 
-    SysPermission savePermission(SysPermission sysPermission);
+    // 按条件查询权限表格模型数据
+    BaseDataTableModel<SysPermission> findPermissionByQuery(PermissionQuery query);
 
-    BaseDataTableModel<SysPermission> findPermissionByCriteria(PermissionQuery query);
-
-    SysPermission updatePermissionStatus(Integer id, Integer status);
-
-    SysPermission findByPermissionName(String permissionName);
-
+    // 查询所有权限
     List<SysPermission> findPermissionAll();
 
-    SysPermission findbyId(Integer id);
+    // 按ID查询权限
+    SysPermission findById(Integer id);
 
+    // 按权限名称查询
+    SysPermission findByPermissionName(String permissionName);
+
+    // 保存权限
+    SysPermission savePermission(SysPermission sysPermission);
+
+    // 修改权限
     SysPermission updatePermission(SysPermission permission);
+
+    // 修改权限状态
+    SysPermission updatePermissionStatus(Integer id, Integer status);
 }

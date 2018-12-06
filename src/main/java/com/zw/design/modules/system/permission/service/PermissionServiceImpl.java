@@ -24,16 +24,9 @@ public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private SysPermissionRepository permissionRepository;
 
+    // 按条件查询权限表格模型数据
     @Override
-    public SysPermission savePermission(SysPermission sysPermission) {
-        if (sysPermission.getParent() != null && sysPermission.getParent().getId() == null) {
-            sysPermission.setParent(null);
-        }
-        return permissionRepository.save(sysPermission);
-    }
-
-    @Override
-    public BaseDataTableModel<SysPermission> findPermissionByCriteria(PermissionQuery query) {
+    public BaseDataTableModel<SysPermission> findPermissionByQuery(PermissionQuery query) {
         Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(),Sort.by("orderNo"));
         Page<SysPermission> permissionPage = permissionRepository.findAll((Specification<SysPermission>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<>();
@@ -53,18 +46,7 @@ public class PermissionServiceImpl implements PermissionService {
         return baseDataTableModel;
     }
 
-    @Override
-    public SysPermission updatePermissionStatus(Integer id, Integer status) {
-        SysPermission permission = permissionRepository.findById(id).get();
-        permission.setStatus(status);
-        return permissionRepository.save(permission);
-    }
-
-    @Override
-    public SysPermission findByPermissionName(String permissionName) {
-        return permissionRepository.findByPermissionNameAndStatus(permissionName, 1);
-    }
-
+    // 查询所有权限
     @Override
     public List<SysPermission> findPermissionAll() {
         return permissionRepository.findAll((Specification<SysPermission>) (root, query, criteriaBuilder) -> {
@@ -75,18 +57,43 @@ public class PermissionServiceImpl implements PermissionService {
         },Sort.by("orderNo"));
     }
 
+    // 按ID查询权限
     @Override
-    public SysPermission findbyId(Integer id) {
+    public SysPermission findById(Integer id) {
         return permissionRepository.findById(id).get();
     }
 
+    // 按权限名称查询
+    @Override
+    public SysPermission findByPermissionName(String permissionName) {
+        return permissionRepository.findByPermissionNameAndStatus(permissionName, 1);
+    }
+
+    // 保存权限
+    @Override
+    public SysPermission savePermission(SysPermission sysPermission) {
+        if (sysPermission.getParent() != null && sysPermission.getParent().getId() == null) {
+            sysPermission.setParent(null);
+        }
+        return permissionRepository.save(sysPermission);
+    }
+
+    // 修改权限
     @Override
     public SysPermission updatePermission(SysPermission permission) {
-        SysPermission permission1 = permissionRepository.findById(permission.getId()).get();
+        SysPermission permission1 = findById(permission.getId());
         permission1.setDescription(permission.getDescription());
         permission1.setUrl(permission.getUrl());
         permission1.setPermissionName(permission.getPermissionName());
         permission1.setOrderNo(permission.getOrderNo());
         return permissionRepository.saveAndFlush(permission1);
+    }
+
+    // 修改权限状态
+    @Override
+    public SysPermission updatePermissionStatus(Integer id, Integer status) {
+        SysPermission permission = findById(id);
+        permission.setStatus(status);
+        return permissionRepository.save(permission);
     }
 }
