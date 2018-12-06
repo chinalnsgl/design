@@ -29,7 +29,7 @@ public class LogController {
     @PostMapping("/log/list")
     @ResponseBody
     public BaseResponse logList(LogQuery query) {
-        BaseDataTableModel<LogInfo> dto = logService.findLogByCriteria(query);
+        BaseDataTableModel<LogInfo> dto = logService.findLogByQuery(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;

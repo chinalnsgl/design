@@ -30,34 +30,7 @@ public class LogServiceImpl implements LogService {
     private LogInfoRepository logInfoRepository;
 
     @Override
-    public LogInfo saveLog(LogInfo logInfo) {
-        return logInfoRepository.save(logInfo);
-    }
-
-    @Override
-    public LogInfo saveLog(String operationName, String operationContent) {
-        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        if (user == null) {
-            return null;
-        }
-        LogInfo logInfo = new LogInfo();
-        logInfo.setAccount(user.getUserName());
-        logInfo.setName(user.getName());
-        logInfo.setOperationName(operationName);
-        logInfo.setOperationTime(new Date());
-        logInfo.setOperationContent(operationContent);
-        HttpServletRequest request = (HttpServletRequest) RequestContextHolder.getRequestAttributes().resolveReference(RequestAttributes.REFERENCE_REQUEST);
-        logInfo.setAddress(request.getRemoteAddr());
-        return saveLog(logInfo);
-    }
-
-    @Override
-    public LogInfo saveLog(String operationName, Object before, Object after) {
-        return saveLog(operationName, CompareUtil.compare(before, after));
-    }
-
-    @Override
-    public BaseDataTableModel<LogInfo> findLogByCriteria(LogQuery query) {
+    public BaseDataTableModel<LogInfo> findLogByQuery(LogQuery query) {
         Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(), Sort.by(Sort.Direction.DESC,"id"));
         Page<LogInfo> logPage = logInfoRepository.findAll((Specification<LogInfo>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<Predicate>();
@@ -79,5 +52,35 @@ public class LogServiceImpl implements LogService {
         baseDataTableModel.setRecordsTotal((int)logPage.getTotalElements());
         baseDataTableModel.setRecordsFiltered((int)logPage.getTotalElements());
         return baseDataTableModel;
+    }
+
+    // 保存日志
+    @Override
+    public LogInfo saveLog(LogInfo logInfo) {
+        return logInfoRepository.save(logInfo);
+    }
+
+    // 保存日志
+    @Override
+    public LogInfo saveLog(String operationName, String operationContent) {
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        if (user == null) {
+            return null;
+        }
+        LogInfo logInfo = new LogInfo();
+        logInfo.setAccount(user.getUserName());
+        logInfo.setName(user.getName());
+        logInfo.setOperationName(operationName);
+        logInfo.setOperationTime(new Date());
+        logInfo.setOperationContent(operationContent);
+        HttpServletRequest request = (HttpServletRequest) RequestContextHolder.getRequestAttributes().resolveReference(RequestAttributes.REFERENCE_REQUEST);
+        logInfo.setAddress(request.getRemoteAddr());
+        return saveLog(logInfo);
+    }
+
+    // 保存日志
+    @Override
+    public LogInfo saveLog(String operationName, Object before, Object after) {
+        return saveLog(operationName, CompareUtil.compare(before, after));
     }
 }
