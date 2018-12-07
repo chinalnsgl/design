@@ -36,7 +36,7 @@ public class ProjectTypeController {
      * 获取所有项目类型
      */
     @ResponseBody
-    @GetMapping("/type/all")
+    @PostMapping("/type/list")
     @RequiresPermissions(value = {"type:list"})
     public BaseResponse projectTypeList(ProjectTypeQuery query) {
         BaseDataTableModel<ProjectType> dto = projectTypeService.findProjectTypeByQuery(query);
