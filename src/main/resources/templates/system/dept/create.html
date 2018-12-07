@@ -45,9 +45,15 @@
         // 验证
         $.validate.init("deptForm",{
           fields: {
-            roleName: {
+            deptName: {
               validators: {
                 notEmpty: {message: '请输入角色名称'},
+                remote: {
+                  url:"/sys/dept/checkDeptNameUnique",
+                  message: '部门已存在',
+                  delay: 200,
+                  type: 'POST'
+                }
               }
             }
           }

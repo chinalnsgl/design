@@ -9,4 +9,6 @@ import java.util.List;
 public interface DeptRepository extends JpaRepository<Department, Integer>, JpaSpecificationExecutor<Department> {
 
     List<Department> findAllByStatus(Integer status);
+
+    Department findByDeptName(String name);
 }

@@ -51,6 +51,12 @@ public class SectionTypeServiceImpl implements SectionTypeService {
         return sectionTypeRepository.findByName(name);
     }
 
+    // 按部门类型状态查询部门类型集合
+    @Override
+    public List<SectionType> findByStatus(Integer status) {
+        return sectionTypeRepository.findByStatus(status);
+    }
+
     // 保存部门类型
     @Override
     public SectionType saveSectionType(SectionType sectionType) {

@@ -1,6 +1,7 @@
 package com.zw.design.modules.system.dept.controller;
 
 import com.zw.design.base.BaseResponse;
+import com.zw.design.base.BaseValidResponse;
 import com.zw.design.modules.system.dept.entity.Department;
 import com.zw.design.modules.system.dept.service.DeptService;
 import org.apache.shiro.authz.annotation.Logical;
@@ -59,6 +60,22 @@ public class DeptController {
     @RequiresPermissions({"dept:create"})
     public String deptCreate() {
         return  prefix + "/dept/create";
+    }
+    /**
+     * 部门唯一验证
+     */
+    @ResponseBody
+    @PostMapping("/dept/checkDeptNameUnique")
+    @RequiresPermissions({"dept:create"})
+    public BaseValidResponse checkDeptSectionNameUnique(@RequestParam("deptName") String deptName, @RequestParam(value = "id", required = false) Integer id) {
+        Department section = deptService.findByName(deptName);
+        if (id == null) {
+            return BaseValidResponse.toResponse(section);
+        }
+        if (section == null || section.getId() == id) {
+            return BaseValidResponse.SUCCESS;
+        }
+        return BaseValidResponse.FAILE;
     }
     /**
      * 创建部门页面

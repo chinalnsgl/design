@@ -63,10 +63,34 @@
 <script>
   // 编辑权限
   $(function () {
+    // 验证
+    $.validate.init("permissionForm",{
+      fields: {
+        permissionName: {
+          validators: {
+            notEmpty: {message: '请输入权限名'},
+            remote: {
+              url: ctx + "sys/permission/checkPermissionNameUnique",
+              message: '资源已存在',
+              delay: 200,
+              type: 'POST',
+              data: {
+                id : function () {
+                  return $("#id").val();
+                }
+              }
+            }
+          }
+        },
+        description: {validators: {notEmpty: {message: '请输入描述'}}}
+      }
+    });
     $("#btn_create").click(function () {
-      $.operate.post(ctx + "sys/permission/update",$("#permissionForm").serialize(), function () {
-        location.href = ctx + "sys/permissions";
-      });
+      if ($.validate.isValid()) {
+        $.operate.post(ctx + "sys/permission/update", $("#permissionForm").serialize(), function () {
+          location.href = ctx + "sys/permissions";
+        });
+      }
     });
   });
 

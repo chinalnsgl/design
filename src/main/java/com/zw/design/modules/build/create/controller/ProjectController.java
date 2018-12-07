@@ -1,5 +1,6 @@
 package com.zw.design.modules.build.create.controller;
 
+import com.sun.prism.impl.BaseMeshView;
 import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.base.BaseResponse;
 import com.zw.design.base.BaseValidResponse;
@@ -70,9 +71,15 @@ public class ProjectController {
      */
     @ResponseBody
     @PostMapping("/checkCodeUnique")
-    public BaseValidResponse checkCodeUnique(@RequestParam("code") String code) {
+    public BaseValidResponse checkCodeUnique(@RequestParam("code") String code, @RequestParam(value = "id",required = false) Integer id) {
         Project project = projectService.findByCode(code);
-        return BaseValidResponse.toResponse(project);
+        if (id == null) {
+            return BaseValidResponse.toResponse(project);
+        }
+        if (project == null || project.getId() == id) {
+            return BaseValidResponse.SUCCESS;
+        }
+        return BaseValidResponse.FAILE;
     }
 
     /**

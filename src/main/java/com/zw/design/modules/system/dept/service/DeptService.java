@@ -12,6 +12,9 @@ public interface DeptService {
     // 按ID查询部门
     Department findDeptById(Integer id);
 
+    // 按名称查询部门
+    Department findByName(String name);
+
     // 保存部门
     Department saveDept(Department department);
 
@@ -20,5 +23,6 @@ public interface DeptService {
 
     // 修改部门状态
     Department updateDeptStatus(Integer id, Integer status);
+
 
 }

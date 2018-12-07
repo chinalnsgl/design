@@ -73,15 +73,22 @@ public class PermissionController {
         model.addAttribute("id", id);
         return prefix + "/permission/create";
     }
+
     /**
      * 权限名唯一验证
      */
     @ResponseBody
     @PostMapping("/permission/checkPermissionNameUnique")
     @RequiresPermissions({"permission:create"})
-    public BaseValidResponse checkPermissionNameUnique(@RequestParam("permissionName") String permissionName) {
+    public BaseValidResponse checkPermissionNameUnique(@RequestParam("permissionName") String permissionName, @RequestParam(value = "id", required = false) Integer id) {
         SysPermission permission = permissionService.findByPermissionName(permissionName);
-        return BaseValidResponse.toResponse(permission);
+        if (id == null) {
+            return BaseValidResponse.toResponse(permission);
+        }
+        if (permission == null || permission.getId() == id) {
+            return BaseValidResponse.SUCCESS;
+        }
+        return BaseValidResponse.FAILE;
     }
     /**
      * 保存权限

@@ -21,10 +21,6 @@ public class SectionTypeController {
     @Autowired
     private SectionTypeService sectionTypeService;
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
-
     /**
      * 到达部门类型列表页面
      */
@@ -72,9 +68,15 @@ public class SectionTypeController {
     @ResponseBody
     @PostMapping("/sectype/checkSecTypeNameUnique")
     @RequiresPermissions({"sectype:create"})
-    public BaseValidResponse checkSectionTypeNameUnique(@RequestParam("name") String name) {
+    public BaseValidResponse checkSectionTypeNameUnique(@RequestParam(value = "name") String name, @RequestParam(value = "id", required = false) Integer id ) {
         SectionType sectionType = sectionTypeService.findByName(name);
-        return BaseValidResponse.toResponse(sectionType);
+        if (id == null) {
+            return BaseValidResponse.toResponse(sectionType);
+        }
+        if (sectionType == null || sectionType.getId() == id) {
+            return BaseValidResponse.SUCCESS;
+        }
+        return BaseValidResponse.FAILE;
     }
     /**
      * 保存部门类型
@@ -82,7 +84,7 @@ public class SectionTypeController {
     @ResponseBody
     @PostMapping("/sectype/save")
     @RequiresPermissions({"sectype:create"})
-    public BaseResponse userSave(SectionType sectionType) {
+    public BaseResponse sectionTypeSave(SectionType sectionType) {
         SectionType secType = sectionTypeService.saveSectionType(sectionType);
         return BaseResponse.toResponse(secType);
     }

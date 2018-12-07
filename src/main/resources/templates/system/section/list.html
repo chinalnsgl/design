@@ -6,8 +6,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        科室类型列表
-        <small>SectionTypeList</small>
+        科室列表
+        <small>SectionList</small>
       </h1>
     </section>
     <!-- Main content -->
@@ -25,7 +25,7 @@
                     <input type="text" id="nameQuery" name="nameQuery" class="form-control" placeholder="请输入名称">
                   </div>
                   <button class="btn btn-default" id="btn_search">搜索</button>
-                  <a shiro:hasPermission="sectype:create" th:href="@{/sys/sectype/create}" class="btn btn-info pull-right" >添加</a>
+                  <a shiro:hasPermission="sec:create" th:href="@{/sys/sec/create}" class="btn btn-info pull-right" >添加</a>
                 </div>
 
               </div>
@@ -35,17 +35,18 @@
             <div class="box-body">
               <div class="row">
                 <div class="col-md-7">
-                  <table id="secTypeTable" class="table table-bordered table-hover" width="100%">
+                  <table id="sectionTable" class="table table-bordered table-hover" width="100%">
                   <thead>
                   <tr>
                     <th>序号</th>
                     <th>名称</th>
+                    <th>所属科室</th>
                     <th>操作</th>
                   </tr>
                   </thead>
                 </table></div>
                 <div class="col-md-5">
-                  <form id="secTypeForm" class="form-horizontal">
+                  <form id="sectionForm" class="form-horizontal">
                     <input type="hidden" id="id" name="id">
                     <input type="hidden" id="code" name="code">
                     <div class="box-body">
@@ -55,9 +56,17 @@
                           <input type="text" class="form-control" id="name" name="name" placeholder="请输入名称">
                         </div>
                       </div>
+                      <div class="form-group">
+                        <label for="code" class="col-sm-2 control-label">科室类型</label>
+                        <div class="col-sm-6">
+                          <select id="sectionType" class="form-control select2" name="sectionType.id" style="width: 100%;">
+                            <option th:each="secType:${sectionType}" th:value="${secType.id}" th:text="${secType.name}"></option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
                     <div class="box-footer">
-                      <button shiro:hasPermission="sectype:edit" type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
+                      <button shiro:hasPermission="sec:edit" type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
                     </div>
                     <!-- /.box-footer -->
                   </form>
@@ -81,16 +90,16 @@
 
       // 删除部门类型
       function updateStatus(id) {
-        $.modal.confirm("确定删除这个部门类型吗?",function () {
-          $.operate.post(ctx + "sys/sectype/status", {"id": id}, function () {
+        $.modal.confirm("确定删除这个科室吗?",function () {
+          $.operate.post(ctx + "sys/sec/status", {"id": id}, function () {
             $.table.refresh();
-            $.validate.reset();
             if (id == $("#id").val()) {
               $("#id").val('');
               $("#name").val('');
               $("#code").val('');
               $("#btn_edit").attr("disabled",true);
             }
+            $.validate.reset();
           });
           event.stopPropagation();
         });
@@ -99,9 +108,9 @@
       $(function () {
         // 加载表格
         $.table.init({
-          id: "secTypeTable",
+          id: "sectionTable",
           info: true,
-          url: ctx + "sys/sectype/list",
+          url: ctx + "sys/sec/list",
           pageLength: 15,
           columns: [
             {
@@ -111,14 +120,12 @@
               }
             },
             { data: "name"},
+            { data: "sectionType.name"},
             { data: "id",
               render : function(data, type, row, meta) {
-                if (row.sections.length === 0) {
-                  var html = [];
-                  html.push('<a class="btn btn-danger btn-xs sectype-del" href="javascript:void(0);" onclick="updateStatus(' + data + ')">删除</a>');
-                  return html.join('');
-                }
-                return '';
+                var html = [];
+                html.push('<a class="btn btn-danger btn-xs sec-del" href="javascript:void(0);" onclick="updateStatus(' + data + ')">删除</a>');
+                return html.join('');
               }
             }
           ],
@@ -126,8 +133,8 @@
             if ($.inArray('*:*:*', permissions) === 0) {
               return;
             }
-            if ($.inArray('sectype:del', permissions) === -1) {
-              $(".sectype-del").remove();
+            if ($.inArray('sec:del', permissions) === -1) {
+              $(".sec-del").remove();
             }
           }
         });
@@ -136,6 +143,8 @@
           $("#id").val(data.id);
           $("#name").val(data.name);
           $("#code").val(data.code);
+          debugger;
+          $("#sectionType").val(data.sectionType.id);
           $("#btn_edit").removeAttr("disabled");
         });
         // 搜索
@@ -145,18 +154,18 @@
           });
         });
         // 验证
-        $.validate.init("secTypeForm", {
+        $.validate.init("sectionForm",{
           fields: {
             name: {
               validators: {
                 notEmpty: {message: '请输入名称'},
                 remote: {
-                  url: ctx + "sys/sectype/checkSecTypeNameUnique",
+                  url: ctx + "sys/sec/checkSectionNameUnique",
                   message: '名称已存在',
                   delay: 500,
                   type: 'POST',
                   data: {
-                    id: function () {
+                    id : function () {
                       return $("#id").val()
                     }
                   }
@@ -168,7 +177,7 @@
         // 修改
         $("#btn_edit").click(function () {
           if ($.validate.isValid()) {
-            $.operate.post(ctx + "sys/sectype/update",$("#secTypeForm").serialize(),function () {
+            $.operate.post(ctx + "sys/sec/update",$("#sectionForm").serialize(),function () {
               $.table.refresh();
             });
             $.validate.reset();

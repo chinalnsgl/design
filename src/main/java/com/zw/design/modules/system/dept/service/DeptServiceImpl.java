@@ -28,6 +28,11 @@ public class DeptServiceImpl implements DeptService {
         return deptRepository.findById(id).get();
     }
 
+    @Override
+    public Department findByName(String name) {
+        return deptRepository.findByDeptName(name);
+    }
+
     // 保存部门
     @Override
     public Department saveDept(Department department) {

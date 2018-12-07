@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zw.design.modules.system.section.entity.Section;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -37,7 +38,8 @@ public class SectionType implements Serializable {
     private Date createTime = new Date(); // 创建时间
 
     @OneToMany(mappedBy = "sectionType")
+    @Where(clause = "status = 1")
     @JsonIgnoreProperties("sectionType")
-    private List<Section> sections; // 所属部门
+    private List<Section> sections;
 
 }

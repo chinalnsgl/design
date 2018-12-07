@@ -97,6 +97,7 @@
                 $.modal.confirm("确定删除这个角色吗?",function () {
                   $.operate.post(ctx + "sys/role/status", {id: treeNode.id}, function () {
                     $.tree.refresh();
+                    $.validate.reset();
                     if (treeNode.id == $("#id").val()) {
                       $("#btn_edit").attr("disabled", true);
                       $("#id").val('');
@@ -117,7 +118,22 @@
         // 验证
         $.validate.init("roleForm",{
           fields: {
-            roleName: {validators: {notEmpty: {message: '请输入角色名'}}}
+            roleName: {
+              validators: {
+                notEmpty: {message: '请输入角色名'},
+                remote: {
+                  url:"/sys/role/checkRoleNameUnique",
+                  message: '角色已存在',
+                  delay: 200,
+                  type: 'POST',
+                  data: {
+                    id: function () {
+                      return $("#id").val();
+                    }
+                  }
+                }
+              }
+            }
           }
         });
         // 修改角色

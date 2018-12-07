@@ -88,9 +88,15 @@ public class RoleController {
     @ResponseBody
     @PostMapping("/role/checkRoleNameUnique")
     @RequiresPermissions({"role:create"})
-    public BaseValidResponse checkRoleNameUnique(@RequestParam("roleName") String roleName) {
+    public BaseValidResponse checkRoleNameUnique(@RequestParam("roleName") String roleName, @RequestParam(value = "id", required = false) Integer id) {
         SysRole role = roleService.findByRoleNameAndStatus(roleName);
-        return BaseValidResponse.toResponse(role);
+        if (id == null) {
+            return BaseValidResponse.toResponse(role);
+        }
+        if (role == null || role.getId() == id) {
+            return BaseValidResponse.SUCCESS;
+        }
+        return BaseValidResponse.FAILE;
     }
     /**
      * 保存角色
