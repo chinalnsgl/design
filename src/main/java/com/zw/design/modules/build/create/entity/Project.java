@@ -6,6 +6,8 @@ import com.zw.design.modules.build.distribute.entity.DeptTask;
 import com.zw.design.modules.build.distribute.entity.Image;
 import com.zw.design.modules.build.distribute.entity.Message;
 import com.zw.design.modules.build.distribute.entity.ProduceTask;
+import com.zw.design.modules.system.projecttype.entity.ProjectType;
+import com.zw.design.modules.system.sectiontype.entity.SectionType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -63,5 +65,9 @@ public class Project implements Serializable {
     @JsonIgnoreProperties("project")
     List<Message> messages; // 项目互动消息
 
+    @ManyToOne
+    @JoinColumn(name = "projectTypeId")
+    @JsonIgnoreProperties("projects")
+    private ProjectType projectType; // 所属类型
 
 }

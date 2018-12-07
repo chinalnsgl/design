@@ -5,40 +5,26 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        添加科室
+        添加项目类型
       </h1>
     </section>
     <!-- Main content -->
     <section class="content">
-      <form id="sectionForm" class="form-horizontal">
+      <form id="typeForm" class="form-horizontal">
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3>科室基本信息</h3>
+              <h3>项目类型基本信息</h3>
             </div>
 
             <div class="box-body">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group" >
-                    <label for="name" class="col-sm-2 control-label">科室名称</label>
+                    <label for="name" class="col-sm-2 control-label">项目类型名称</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="name" name="name" placeholder="请输入科室名称">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="code" class="col-sm-2 control-label">科室编码</label>
-                    <div class="col-sm-10">
-                      <input type="text" class="form-control" id="code" name="code" disabled placeholder="请输入科室编码">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="code" class="col-sm-2 control-label">科室类型</label>
-                    <div class="col-sm-10">
-                      <select id="sectionType" class="form-control select2" name="sectionType.id" style="width: 100%;">
-                        <option th:each="secType:${sectionType}" th:value="${secType.id}" th:text="${secType.name}"></option>
-                      </select>
+                      <input type="text" class="form-control" id="name" name="name" placeholder="请输入项目类型名称">
                     </div>
                   </div>
                 </div>
@@ -68,13 +54,13 @@
           $("#code").removeAttr("disabled");
         }
         // 验证初始化
-        $.validate.init("sectionForm",{
+        $.validate.init("typeForm",{
           fields: {
             name: {
               validators: {
                 notEmpty: {message: '请输入部门类型名称'},
                 remote: {
-                  url: ctx + "sys/sec/checkSectionNameUnique",
+                  url: ctx + "sys/type/checkTypeNameUnique",
                   message: '名称已存在',
                   delay: 500,
                   type: 'POST'
@@ -86,8 +72,8 @@
         // 创建部门类型
         $("#btn_create").click(function () {
           if ($.validate.isValid()) {
-            $.operate.post(ctx + "sys/sec/save",$("#sectionForm").serialize(), function () {
-              location.href = ctx + "sys/secs";
+            $.operate.post(ctx + "sys/type/save",$("#typeForm").serialize(), function () {
+              location.href = ctx + "sys/types";
             });
           }
         });
