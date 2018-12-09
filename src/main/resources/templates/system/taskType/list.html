@@ -6,7 +6,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        科室类型列表
+        任务类型列表
       </h1>
     </section>
     <!-- Main content -->
@@ -24,7 +24,7 @@
                     <input type="text" id="nameQuery" name="nameQuery" class="form-control" placeholder="请输入名称">
                   </div>
                   <button class="btn btn-default" id="btn_search">搜索</button>
-                  <a shiro:hasPermission="sectype:create" th:href="@{/sys/sectype/create}" class="btn btn-info pull-right" >添加</a>
+                  <a shiro:hasPermission="tasktype:create" th:href="@{/sys/tasktype/create}" class="btn btn-info pull-right" >添加</a>
                 </div>
 
               </div>
@@ -34,7 +34,7 @@
             <div class="box-body">
               <div class="row">
                 <div class="col-md-7">
-                  <table id="secTypeTable" class="table table-bordered table-hover" width="100%">
+                  <table id="taskTypeTable" class="table table-bordered table-hover" width="100%">
                   <thead>
                   <tr>
                     <th>序号</th>
@@ -44,9 +44,8 @@
                   </thead>
                 </table></div>
                 <div class="col-md-5">
-                  <form id="secTypeForm" class="form-horizontal">
+                  <form id="taskTypeForm" class="form-horizontal">
                     <input type="hidden" id="id" name="id">
-                    <input type="hidden" id="code" name="code">
                     <div class="box-body">
                       <div class="form-group">
                         <label for="name" class="col-sm-2 control-label">名称</label>
@@ -56,7 +55,7 @@
                       </div>
                     </div>
                     <div class="box-footer">
-                      <button shiro:hasPermission="sectype:edit" type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
+                      <button shiro:hasPermission="tasktype:edit" type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
                     </div>
                     <!-- /.box-footer -->
                   </form>
@@ -80,14 +79,13 @@
 
       // 删除部门类型
       function updateStatus(id) {
-        $.modal.confirm("确定删除这个科室类型吗?",function () {
-          $.operate.post(ctx + "sys/sectype/status", {"id": id}, function () {
+        $.modal.confirm("确定删除这个任务类型吗?",function () {
+          $.operate.post(ctx + "sys/tasktype/status", {"id": id}, function () {
             $.table.refresh();
             $.validate.reset();
             if (id == $("#id").val()) {
               $("#id").val('');
               $("#name").val('');
-              $("#code").val('');
               $("#btn_edit").attr("disabled",true);
             }
           });
@@ -98,9 +96,9 @@
       $(function () {
         // 加载表格
         $.table.init({
-          id: "secTypeTable",
+          id: "taskTypeTable",
           info: true,
-          url: ctx + "sys/sectype/list",
+          url: ctx + "sys/tasktype/list",
           pageLength: 15,
           columns: [
             {
@@ -112,9 +110,9 @@
             { data: "name"},
             { data: "id",
               render : function(data, type, row, meta) {
-                if (row.sections.length === 0 && row.taskNames.length === 0) {
+                if (row.taskNames.length === 0) {
                   var html = [];
-                  html.push('<a class="btn btn-danger btn-xs sectype-del" href="javascript:void(0);" onclick="updateStatus(' + data + ')">删除</a>');
+                  html.push('<a class="btn btn-danger btn-xs tasktype-del" href="javascript:void(0);" onclick="updateStatus(' + data + ')">删除</a>');
                   return html.join('');
                 }
                 return '';
@@ -125,8 +123,8 @@
             if ($.inArray('*:*:*', permissions) === 0) {
               return;
             }
-            if ($.inArray('sectype:del', permissions) === -1) {
-              $(".sectype-del").remove();
+            if ($.inArray('tasktype:del', permissions) === -1) {
+              $(".tasktype-del").remove();
             }
           }
         });
@@ -134,7 +132,6 @@
         $.table.rowClick(function (data) {
           $("#id").val(data.id);
           $("#name").val(data.name);
-          $("#code").val(data.code);
           $("#btn_edit").removeAttr("disabled");
         });
         // 搜索
@@ -144,13 +141,13 @@
           });
         });
         // 验证
-        $.validate.init("secTypeForm", {
+        $.validate.init("taskTypeForm", {
           fields: {
             name: {
               validators: {
                 notEmpty: {message: '请输入名称'},
                 remote: {
-                  url: ctx + "sys/sectype/checkSecTypeNameUnique",
+                  url: ctx + "sys/tasktype/checkTaskTypeNameUnique",
                   message: '名称已存在',
                   delay: 500,
                   type: 'POST',
@@ -167,7 +164,7 @@
         // 修改
         $("#btn_edit").click(function () {
           if ($.validate.isValid()) {
-            $.operate.post(ctx + "sys/sectype/update",$("#secTypeForm").serialize(),function () {
+            $.operate.post(ctx + "sys/tasktype/update",$("#taskTypeForm").serialize(),function () {
               $.table.refresh();
             });
             $.validate.reset();

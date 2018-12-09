@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SectionTypeRepository extends JpaRepository<SectionType, Integer>, JpaSpecificationExecutor<SectionType> {
 
-    SectionType findByName(String name);
+    SectionType findByNameAndStatus(String name, Integer status);
 
     List<SectionType> findByStatus(Integer status);
 }

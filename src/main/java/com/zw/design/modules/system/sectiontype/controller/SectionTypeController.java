@@ -8,7 +8,6 @@ import com.zw.design.modules.system.sectiontype.query.SectionTypeQuery;
 import com.zw.design.modules.system.sectiontype.service.SectionTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,7 +68,7 @@ public class SectionTypeController {
     @PostMapping("/sectype/checkSecTypeNameUnique")
     @RequiresPermissions({"sectype:create"})
     public BaseValidResponse checkSectionTypeNameUnique(@RequestParam(value = "name") String name, @RequestParam(value = "id", required = false) Integer id ) {
-        SectionType sectionType = sectionTypeService.findByName(name);
+        SectionType sectionType = sectionTypeService.findByNameAndStatus(name, 1);
         if (id == null) {
             return BaseValidResponse.toResponse(sectionType);
         }

@@ -59,8 +59,8 @@ public class ProjectTypeServiceImpl implements ProjectTypeService {
 
     // 按名称查询项目类型
     @Override
-    public ProjectType findByName(String name) {
-        return projectTypeRepository.findByName(name);
+    public ProjectType findByNameAndStatus(String name, Integer status) {
+        return projectTypeRepository.findByNameAndStatus(name, status);
     }
 
     // 保存项目类型

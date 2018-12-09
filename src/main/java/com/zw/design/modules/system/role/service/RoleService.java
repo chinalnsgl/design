@@ -20,7 +20,7 @@ public interface RoleService {
     SysRole findRoleById(Integer id);
 
     // 按角色名和状态查询角色
-    SysRole findByRoleNameAndStatus(String roleName);
+    SysRole findByRoleNameAndStatus(String roleName, Integer status);
 
     // 按角色ID查询权限集合
     List<SysPermission> findRolePermissionById(Integer id);

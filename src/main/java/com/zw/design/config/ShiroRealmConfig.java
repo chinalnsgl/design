@@ -59,7 +59,7 @@ public class ShiroRealmConfig extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String userName = (String) authenticationToken.getPrincipal();
-        SysUser user = userService.findByUserName(userName);
+        SysUser user = userService.findByUserNameAndStatusGreaterThanEqual(userName, 1);
         if (user == null) {
             throw new UnknownAccountException("用户名或密码错误！");
         }

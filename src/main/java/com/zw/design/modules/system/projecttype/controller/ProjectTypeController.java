@@ -9,10 +9,7 @@ import com.zw.design.modules.system.projecttype.service.ProjectTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/sys")
@@ -71,8 +68,8 @@ public class ProjectTypeController {
     @ResponseBody
     @PostMapping("/type/checkTypeNameUnique")
     @RequiresPermissions({"type:create"})
-    public BaseValidResponse checktypeSectionNameUnique(@RequestParam("name") String name, @RequestParam(value = "id", required = false) Integer id) {
-        ProjectType projectType = projectTypeService.findByName(name);
+    public BaseValidResponse checkProjectTypeNameUnique(@RequestParam("name") String name, @RequestParam(value = "id", required = false) Integer id) {
+        ProjectType projectType = projectTypeService.findByNameAndStatus(name, 1);
         if (id == null) {
             return BaseValidResponse.toResponse(projectType);
         }

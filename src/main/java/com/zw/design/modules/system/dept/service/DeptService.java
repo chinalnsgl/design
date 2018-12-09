@@ -13,7 +13,7 @@ public interface DeptService {
     Department findDeptById(Integer id);
 
     // 按名称查询部门
-    Department findByName(String name);
+    Department findByNameAndStatus(String name, Integer status);
 
     // 保存部门
     Department saveDept(Department department);

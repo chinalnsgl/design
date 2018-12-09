@@ -5,8 +5,6 @@ import com.zw.design.modules.system.log.service.LogService;
 import com.zw.design.modules.system.section.entity.Section;
 import com.zw.design.modules.system.section.query.SectionQuery;
 import com.zw.design.modules.system.section.repository.SectionRepository;
-import com.zw.design.modules.system.sectiontype.entity.SectionType;
-import com.zw.design.modules.system.sectiontype.query.SectionTypeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,8 +47,8 @@ public class SectionServiceImpl implements SectionService {
 
     // 按名称查询部门
     @Override
-    public Section findByName(String name) {
-        return sectionRepository.findByName(name);
+    public Section findByNameAndStatus(String name, Integer status) {
+        return sectionRepository.findByNameAndStatus(name, status);
     }
 
     // 保存部门

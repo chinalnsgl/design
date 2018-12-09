@@ -1,4 +1,4 @@
-package com.zw.design.modules.system.sectiontype.entity;
+package com.zw.design.modules.system.tasktype.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class SectionType implements Serializable {
+public class TaskType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +27,6 @@ public class SectionType implements Serializable {
 
     @Column(nullable = false)
     private String name; // 名称
-
-    private String code; // 编号
 
     private int status = 1; // 基础状态 0：删除  1：正常
 
@@ -38,14 +36,9 @@ public class SectionType implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime = new Date(); // 创建时间
 
-    @OneToMany(mappedBy = "sectionType")
+    @OneToMany(mappedBy = "taskType")
     @Where(clause = "status = 1")
-    @JsonIgnoreProperties("sectionType")
-    private List<Section> sections;
-
-    @OneToMany(mappedBy = "sectionType")
-    @Where(clause = "status = 1")
-    @JsonIgnoreProperties("sectionType")
+    @JsonIgnoreProperties("taskType")
     private List<TaskName> taskNames;
 
 }

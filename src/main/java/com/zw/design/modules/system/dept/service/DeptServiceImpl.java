@@ -29,8 +29,8 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public Department findByName(String name) {
-        return deptRepository.findByDeptName(name);
+    public Department findByNameAndStatus(String name, Integer status) {
+        return deptRepository.findByDeptNameAndStatus(name, status);
     }
 
     // 保存部门

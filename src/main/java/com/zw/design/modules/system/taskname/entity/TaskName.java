@@ -1,9 +1,9 @@
-package com.zw.design.modules.system.sectiontype.entity;
+package com.zw.design.modules.system.taskname.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zw.design.modules.system.section.entity.Section;
-import com.zw.design.modules.system.taskname.entity.TaskName;
+import com.zw.design.modules.system.sectiontype.entity.SectionType;
+import com.zw.design.modules.system.tasktype.entity.TaskType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class SectionType implements Serializable {
+public class TaskName implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +27,6 @@ public class SectionType implements Serializable {
 
     @Column(nullable = false)
     private String name; // 名称
-
-    private String code; // 编号
 
     private int status = 1; // 基础状态 0：删除  1：正常
 
@@ -38,14 +36,14 @@ public class SectionType implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime = new Date(); // 创建时间
 
-    @OneToMany(mappedBy = "sectionType")
-    @Where(clause = "status = 1")
-    @JsonIgnoreProperties("sectionType")
-    private List<Section> sections;
+    @ManyToOne
+    @JoinColumn(name = "taskTypeId")
+    @JsonIgnoreProperties("taskNames")
+    private TaskType taskType; // 所属任务类型
 
-    @OneToMany(mappedBy = "sectionType")
-    @Where(clause = "status = 1")
-    @JsonIgnoreProperties("sectionType")
-    private List<TaskName> taskNames;
+    @ManyToOne
+    @JoinColumn(name = "sectionTypeId")
+    @JsonIgnoreProperties("taskNames")
+    private SectionType sectionType; // 所属任务类型
 
 }

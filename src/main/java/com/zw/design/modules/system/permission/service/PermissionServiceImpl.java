@@ -65,8 +65,8 @@ public class PermissionServiceImpl implements PermissionService {
 
     // 按权限名称查询
     @Override
-    public SysPermission findByPermissionName(String permissionName) {
-        return permissionRepository.findByPermissionNameAndStatus(permissionName, 1);
+    public SysPermission findByPermissionNameAndStatus(String permissionName, Integer status) {
+        return permissionRepository.findByPermissionNameAndStatus(permissionName, status);
     }
 
     // 保存权限

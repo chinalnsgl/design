@@ -15,7 +15,7 @@ public interface ProjectTypeService {
     ProjectType findById(Integer id);
 
     // 按名称查询项目类型
-    ProjectType findByName(String name);
+    ProjectType findByNameAndStatus(String name, Integer status);
 
     // 保存项目类型
     ProjectType saveProjectType(ProjectType projectType);

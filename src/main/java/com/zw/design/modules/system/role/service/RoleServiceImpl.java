@@ -79,8 +79,8 @@ public class RoleServiceImpl implements RoleService {
 
     // 按角色名和状态查询角色
     @Override
-    public SysRole findByRoleNameAndStatus(String roleName) {
-        return sysRoleRepository.findByRoleNameAndStatus(roleName,1);
+    public SysRole findByRoleNameAndStatus(String roleName, Integer status) {
+        return sysRoleRepository.findByRoleNameAndStatus(roleName,status);
     }
 
     // 按角色ID查询权限集合

@@ -12,7 +12,7 @@ public interface SectionTypeService {
     BaseDataTableModel<SectionType> findByQuery(SectionTypeQuery query);
 
     // 按名称查询部门类型
-    SectionType findByName(String name);
+    SectionType findByNameAndStatus(String name, Integer status);
 
     // 按部门类型状态查询部门类型集合
     List<SectionType> findByStatus(Integer status);

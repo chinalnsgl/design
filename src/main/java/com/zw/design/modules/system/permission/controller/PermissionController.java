@@ -81,7 +81,7 @@ public class PermissionController {
     @PostMapping("/permission/checkPermissionNameUnique")
     @RequiresPermissions({"permission:create"})
     public BaseValidResponse checkPermissionNameUnique(@RequestParam("permissionName") String permissionName, @RequestParam(value = "id", required = false) Integer id) {
-        SysPermission permission = permissionService.findByPermissionName(permissionName);
+        SysPermission permission = permissionService.findByPermissionNameAndStatus(permissionName, 1);
         if (id == null) {
             return BaseValidResponse.toResponse(permission);
         }

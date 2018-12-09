@@ -18,7 +18,7 @@ public interface PermissionService {
     SysPermission findById(Integer id);
 
     // 按权限名称查询
-    SysPermission findByPermissionName(String permissionName);
+    SysPermission findByPermissionNameAndStatus(String permissionName, Integer status);
 
     // 保存权限
     SysPermission savePermission(SysPermission sysPermission);

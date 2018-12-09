@@ -68,7 +68,7 @@ public class DeptController {
     @PostMapping("/dept/checkDeptNameUnique")
     @RequiresPermissions({"dept:create"})
     public BaseValidResponse checkDeptSectionNameUnique(@RequestParam("deptName") String deptName, @RequestParam(value = "id", required = false) Integer id) {
-        Department section = deptService.findByName(deptName);
+        Department section = deptService.findByNameAndStatus(deptName, 1);
         if (id == null) {
             return BaseValidResponse.toResponse(section);
         }

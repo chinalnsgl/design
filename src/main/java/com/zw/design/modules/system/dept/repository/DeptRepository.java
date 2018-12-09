@@ -10,5 +10,5 @@ public interface DeptRepository extends JpaRepository<Department, Integer>, JpaS
 
     List<Department> findAllByStatus(Integer status);
 
-    Department findByDeptName(String name);
+    Department findByDeptNameAndStatus(String name, Integer status);
 }

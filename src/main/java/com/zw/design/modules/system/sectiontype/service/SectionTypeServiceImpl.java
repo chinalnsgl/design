@@ -47,8 +47,8 @@ public class SectionTypeServiceImpl implements SectionTypeService {
 
     // 按名称查询部门类型
     @Override
-    public SectionType findByName(String name) {
-        return sectionTypeRepository.findByName(name);
+    public SectionType findByNameAndStatus(String name, Integer status) {
+        return sectionTypeRepository.findByNameAndStatus(name, status);
     }
 
     // 按部门类型状态查询部门类型集合

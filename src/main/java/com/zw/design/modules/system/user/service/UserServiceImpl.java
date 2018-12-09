@@ -71,8 +71,8 @@ public class UserServiceImpl implements UserService {
 
     // 按用户名查询用户
     @Override
-    public SysUser findByUserName(String userName) {
-        return sysUserRepository.findByUserNameAndStatusGreaterThanEqual(userName,1);
+    public SysUser findByUserNameAndStatusGreaterThanEqual(String userName, Integer status) {
+        return sysUserRepository.findByUserNameAndStatusGreaterThanEqual(userName, status);
     }
 
     // 根据状态查询用户

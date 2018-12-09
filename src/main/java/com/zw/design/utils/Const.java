@@ -19,7 +19,7 @@ public interface Const {
         put("code", "编号");
         put("date", "时间");
         put("roleName", "角色名称");
-        put("roleCode", "角色编码");
+//        put("roleCode", "角色编码");
         put("deptName", "部门名称");
         put("title", "标题");
         put("content", "内容");

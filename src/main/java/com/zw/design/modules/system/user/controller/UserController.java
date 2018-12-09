@@ -90,7 +90,7 @@ public class UserController {
     @PostMapping("/user/checkUserNameUnique")
     @RequiresPermissions({"user:create"})
     public BaseValidResponse checkUserNameUnique(@RequestParam("userName") String userName) {
-        SysUser user = userService.findByUserName(userName);
+        SysUser user = userService.findByUserNameAndStatusGreaterThanEqual(userName, 1);
         return BaseValidResponse.toResponse(user);
     }
     /**

@@ -89,7 +89,7 @@ public class RoleController {
     @PostMapping("/role/checkRoleNameUnique")
     @RequiresPermissions({"role:create"})
     public BaseValidResponse checkRoleNameUnique(@RequestParam("roleName") String roleName, @RequestParam(value = "id", required = false) Integer id) {
-        SysRole role = roleService.findByRoleNameAndStatus(roleName);
+        SysRole role = roleService.findByRoleNameAndStatus(roleName, 1);
         if (id == null) {
             return BaseValidResponse.toResponse(role);
         }

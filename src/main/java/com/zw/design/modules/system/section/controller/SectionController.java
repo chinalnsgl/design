@@ -75,7 +75,7 @@ public class SectionController {
     @PostMapping("/sec/checkSectionNameUnique")
     @RequiresPermissions({"sec:create"})
     public BaseValidResponse checkSectionNameUnique(@RequestParam("name") String name, @RequestParam(value = "id", required = false) Integer id) {
-        Section section = sectionService.findByName(name);
+        Section section = sectionService.findByNameAndStatus(name, 1);
         if (id == null) {
             return BaseValidResponse.toResponse(section);
         }

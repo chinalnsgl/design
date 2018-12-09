@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface SectionRepository extends JpaRepository<Section, Integer>, JpaSpecificationExecutor<Section> {
 
-    Section findByName(String name);
+    Section findByNameAndStatus(String name, Integer Status);
 
 }

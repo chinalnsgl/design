@@ -10,5 +10,5 @@ public interface ProjectTypeRepository extends JpaRepository<ProjectType, Intege
 
     List<ProjectType> findByStatus(Integer status);
 
-    ProjectType findByName(String name);
+    ProjectType findByNameAndStatus(String name, Integer status);
 }

@@ -10,7 +10,7 @@ public interface SectionService {
     BaseDataTableModel<Section> findByQuery(SectionQuery query);
 
     // 按名称查询部门
-    Section findByName(String name);
+    Section findByNameAndStatus(String name, Integer status);
 
     // 保存部门
     Section saveSection(Section sectionType);

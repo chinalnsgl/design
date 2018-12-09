@@ -13,7 +13,7 @@ public interface UserService {
     BaseDataTableModel<SysUser> findUserByQuery(UserQuery query);
 
     // 按用户名查询用户
-    SysUser findByUserName(String userName);
+    SysUser findByUserNameAndStatusGreaterThanEqual(String userName, Integer status);
 
     // 根据状态查询用户
     List<SysUser> findAllByStatus();
