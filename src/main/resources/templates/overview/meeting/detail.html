@@ -36,7 +36,6 @@
 <section class="content-header">
   <h1>
     [[${meeting.title}]]
-    <small th:text="${#dates.format(meeting.date,'yyyy-MM-dd')}">公司战略纲领</small>
   </h1>
 </section>
 <!-- Main content -->
@@ -57,7 +56,7 @@
         </div>
         <div class="box-footer">
 
-          <div class="row">
+          <div class="row" id="commentList">
             <div class="col-md-12"><h3>评价</h3></div>
             <div style="margin-top: 5px;margin-bottom: 5px;font-size: medium" class="col-md-12" th:each="comment:${meeting.comments}">
               <div class="col-md-1" th:text="${comment.user.name}"></div>
@@ -84,28 +83,8 @@
 <!-- page script -->
 <script th:inline="javascript">
 
-  /** 提交评价 */
-  function commentCommit() {
-    $.ajax({
-      url: /*[[@{/meeting/comment}]]*/,
-      type: "POST",
-      data: $("#commentForm").serialize(),
-      success: function (result) {
-        if (result.status === 200) {
-          //重新加载数据
-          $('#modal-comment').modal('hide');
-          location.reload();
-        } else {
-          toastr.error("评价失败！");
-        }
-      },
-      error: function () {
-        toastr.success("评价失败！");
-      }
-    });
-  }
 
-  /** 打印 */
+  // 打印
   function do_print(id_str)
   {
     var el = document.getElementById(id_str);
@@ -126,63 +105,31 @@
 
   /** 删除评价 */
   function delComment(id) {
-    bootbox.setLocale("zh_CN");
-    bootbox.confirm("确定撤消这条评价吗?", function (result) {
-      if (result) {
-        $.ajax({
-          url: "/meeting/comment/del/" + id,
-          type: "get",
-          success: function (result) {
-            if (result.status === 200) {
-              toastr.success("操作成功！");
-              //重新加载数据
-              location.reload();
-            } else {
-              toastr.error("操作失败！");
-            }
-          },
-          error: function () {
-            toastr.error("系统错误，操作失败！");
-          }
-        });
-      }
+    $.modal.confirm("确定删除这条评价吗?",function () {
+      $.operate.get(ctx + "meeting/comment/del/" + id, null, function () {
+        location.reload();
+      })
     });
     event.stopPropagation();
   }
 
   $(function () {
-
-    /** 显示评价模态框 */
+    // 打开评价模态框
     $("#btn-comment").click(function () {
-      $("#modal-comment").modal("show");
+      $.modal.open("modal-comment");
     });
 
-    /** 提交评价按钮 */
+    // 提交评价
     $("#btn-commit").click(function () {
-      commentCommit();
+      $.operate.post(ctx + "meeting/comment", $("#commentForm").serialize(), function () {
+        location.reload();
+      });
     });
 
     /** 打印按钮 */
     $("#btn-print").click(function () {
       do_print("printDiv");
     });
-
-    var topDistance = 500;
-    var showDistance = 1;
-    var thisTop = $(window).scrollTop() + topDistance;
-    // $('#goToTop').css('top' ,thisTop);
-    if ($(window).scrollTop() < showDistance) {
-      $('#goToTop').hide();
-    }
-    $(window).scroll(function () {
-      thisTop = $(this).scrollTop() + topDistance;        //获取当前window向上滚动的距离
-      if ($(this).scrollTop() > showDistance) {
-        $('#goToTop').fadeIn();
-      } else {
-        $('#goToTop').fadeOut();
-      }
-    });
-
   });
 
 </script>

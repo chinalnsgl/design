@@ -99,7 +99,7 @@
               <span class="label label-success" id="messageCount"></span>
             </a>
             <ul class="dropdown-menu" id="unread-message">
-              <!--<li class="header" id="topic-message">未读消息</li>-->
+              <!--<li class="header" id="titleQuery-message">未读消息</li>-->
             </ul>
           </li>
 
@@ -127,14 +127,15 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
 
-        <li shiro:hasPermission="overview:menu" class="treeview menu-open">
+        <!--<li shiro:hasPermission="overview:menu" class="treeview menu-open">-->
+        <li class="treeview menu-open">
           <a href="#">
             <i class="fa fa-folder-open text-danger"></i>
             <span>总览</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu" style="display: block;">
             <li class="active"><a th:href="@{/sys/users}" shiro:hasPermission="overview:statistics" target="content"><i class="fa fa-circle-o text-red"></i> 项目统计</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-success"></i> 公司战略纲领</a></li>
+            <li><a th:href="@{/meeting/meetings}" shiro:hasPermission="meeting:list" target="content"><i class="fa fa-circle-o text-success"></i> 公司战略纲领</a></li>
           </ul>
         </li>
 

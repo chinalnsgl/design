@@ -154,6 +154,7 @@
           $("#taskType").val(data.taskType.id);
           $("#sectionType").val(data.sectionType ? data.sectionType.id : '');
           $("#btn_edit").removeAttr("disabled");
+          $.validate.validing();
         });
         // 搜索
         $("#btn_search").click(function () {

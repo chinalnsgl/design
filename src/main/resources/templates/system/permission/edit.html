@@ -17,7 +17,7 @@
           <h3>权限基本信息</h3>
         </div>
         <form id="permissionForm" class="form-horizontal">
-          <input type="hidden" name="id" th:value="${permission.id}">
+          <input type="hidden" id="id" name="id" th:value="${permission.id}">
           <div class="box-body">
             <div class="form-group">
               <label for="description" class="col-sm-2 control-label">描述</label>
@@ -84,6 +84,7 @@
         description: {validators: {notEmpty: {message: '请输入描述'}}}
       }
     });
+    $.validate.validing();
     $("#btn_create").click(function () {
       if ($.validate.isValid()) {
         $.operate.post(ctx + "sys/permission/update", $("#permissionForm").serialize(), function () {

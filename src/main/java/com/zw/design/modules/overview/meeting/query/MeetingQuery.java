@@ -11,7 +11,7 @@ public class MeetingQuery implements Serializable {
     private Integer draw;
     private Integer start = 0;
     private Integer length = 10;
-    private String topic; // 主题
-    private Date startTime;
-    private Date endTime;
+    private String titleQuery; // 主题
+    private Date startTimeQuery;
+    private Date endTimeQuery;
 }

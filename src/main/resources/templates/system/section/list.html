@@ -144,6 +144,7 @@
           $("#code").val(data.code);
           $("#sectionType").val(data.sectionType.id);
           $("#btn_edit").removeAttr("disabled");
+          $.validate.validing();
         });
         // 搜索
         $("#btn_search").click(function () {

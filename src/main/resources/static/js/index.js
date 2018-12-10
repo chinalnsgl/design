@@ -13,7 +13,7 @@ function getReceiver() {
   $.operate.get(ctx + "message/user/receiver", $("#userForm").serialize(), function (result) {
     if (result.content.length > 0) {
       $("#messageCount").html(result.content.length);
-      // $("#topic-message").html('未读消息');
+      // $("#titleQuery-message").html('未读消息');
       var data = result.content;
       for (var i=0;i<data.length;i++){
         var img = data[i].message.user.img;

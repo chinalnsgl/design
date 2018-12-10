@@ -289,6 +289,10 @@
         $.validate._form.bootstrapValidator($.extend({},_option,option));
       },
       // 表单验证
+      validing: function () {
+        $.validate._form.bootstrapValidator('validate');
+      },
+      // 是否验证成功
       isValid: function(){
         $.validate._form.bootstrapValidator('validate');
         return $.validate._form.data('bootstrapValidator').isValid();
@@ -527,3 +531,18 @@ $('.datepicker').datepicker({
 
 /** 设置bootbox中文 */
 bootbox.setLocale("zh_CN");
+
+var topDistance = 500;
+var showDistance = 1;
+var thisTop = $(window).scrollTop() + topDistance;
+if ($(window).scrollTop() < showDistance) {
+  $('#goToTop').hide();
+}
+$(window).scroll(function () {
+  thisTop = $(this).scrollTop() + topDistance;        //获取当前window向上滚动的距离
+  if ($(this).scrollTop() > showDistance) {
+    $('#goToTop').fadeIn();
+  } else {
+    $('#goToTop').fadeOut();
+  }
+});

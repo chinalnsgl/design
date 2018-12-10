@@ -8,6 +8,7 @@ import com.zw.design.modules.overview.meeting.query.MeetingQuery;
 import com.zw.design.modules.overview.meeting.service.CommentService;
 import com.zw.design.modules.overview.meeting.service.MeetingService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/meeting")
 public class MeetingController {
 
-    private String prefix = "meeting";
+    private String prefix = "overview/meeting";
 
     @Autowired
     private MeetingService meetingService;
@@ -31,16 +32,18 @@ public class MeetingController {
     /**
      * 会议列表
      */
-    @GetMapping("/list")
-    public String meetingList() {
+    @GetMapping("/meetings")
+    @RequiresPermissions({"meeting:list"})
+    public String meetings() {
         return prefix + "/list";
     }
 
     /**
      * 会议列表数据
      */
-    @PostMapping("/list")
     @ResponseBody
+    @PostMapping("/list")
+    @RequiresPermissions({"meeting:list"})
     public BaseResponse meetingList(MeetingQuery query) {
         BaseDataTableModel<Meeting> dto = meetingService.findListByQuery(query);
         BaseResponse baseResponse = new BaseResponse();
@@ -52,7 +55,8 @@ public class MeetingController {
      * 会议详细页面
      */
     @GetMapping("/{id}")
-    public String meetingList(@PathVariable("id")Integer id, Model model) {
+    @RequiresPermissions({"meeting:list"})
+    public String meetingDetail(@PathVariable("id")Integer id, Model model) {
         Meeting meeting = meetingService.findMeetingById(id);
         model.addAttribute("meeting", meeting);
         return prefix + "/detail";
@@ -61,8 +65,9 @@ public class MeetingController {
     /**
      * 创建会议
      */
-    @PostMapping("/create")
     @ResponseBody
+    @PostMapping("/create")
+    @RequiresPermissions({"meeting:create"})
     public BaseResponse saveMeeting(Meeting meeting) {
         Meeting m = meetingService.saveMeeting(meeting);
         return BaseResponse.toResponse(m.getId());
@@ -73,8 +78,20 @@ public class MeetingController {
      */
     @ResponseBody
     @PostMapping("/del")
+    @RequiresPermissions({"meeting:del"})
     public BaseResponse delMeeting(@RequestParam("id")Integer id) {
-        Meeting meeting = meetingService.delMeeting(id, 0);
+        Meeting meeting = meetingService.updateMeetingStatus(id, 0);
+        return BaseResponse.toResponse(meeting);
+    }
+
+    /**
+     * 提交会议
+     */
+    @ResponseBody
+    @PostMapping("/commit")
+    @RequiresPermissions({"meeting:commit"})
+    public BaseResponse commitMeeting(@RequestParam("id")Integer id) {
+        Meeting meeting = meetingService.updateMeetingStatus(id, 2);
         return BaseResponse.toResponse(meeting);
     }
 
@@ -83,11 +100,10 @@ public class MeetingController {
      */
     @ResponseBody
     @PostMapping("/return")
-    public BaseResponse returnMeeting(@RequestParam("id")Integer id, HttpServletRequest request) {
-        Meeting meeting = meetingService.findMeetingById(id);
-        meeting.setStatus(2);
-        meetingService.saveMeeting(meeting);
-        return BaseResponse.STATUS_200;
+    @RequiresPermissions({"meeting:return"})
+    public BaseResponse returnMeeting(@RequestParam("id")Integer id) {
+        Meeting meeting = meetingService.updateMeetingStatus(id, 1);
+        return BaseResponse.toResponse(meeting);
     }
 
     /**
@@ -95,39 +111,30 @@ public class MeetingController {
      */
     @ResponseBody
     @PostMapping("/update")
+    @RequiresPermissions({"meeting:update"})
     public BaseResponse updateMeeting(Meeting meeting) {
         Meeting m = meetingService.updateMeeting(meeting);
-        return BaseResponse.STATUS_200;
+        return BaseResponse.toResponse(m);
     }
 
     /**
      * 评价会议
      */
-    @PostMapping("/comment")
     @ResponseBody
-    public BaseResponse commentMeeting(Integer id, String content, HttpServletRequest request) {
-        Meeting meeting = meetingService.findMeetingById(id);
+    @PostMapping("/comment")
+    @RequiresPermissions({"meeting:comment"})
+    public BaseResponse commentMeeting(Integer id, String content) {
         Comment comment = commentService.saveComment(id, content);
         return BaseResponse.toResponse(comment);
     }
 
     /**
-     * 获取用户评价
-     */
-    @PostMapping("/user/comment")
-    @ResponseBody
-    public BaseResponse userComment(Integer id) {
-        Comment comment = commentService.findCommentByMeetingIdAndUserId(id);
-        return new BaseResponse(200, comment);
-    }
-
-    /**
      * 删除用户评价
      */
-    @GetMapping("/comment/del/{id}")
     @ResponseBody
-    public BaseResponse delComment(@PathVariable("id") Integer id, HttpServletRequest request) {
-        Comment comment = commentService.findCommentById(id);
+    @GetMapping("/comment/del/{id}")
+    @RequiresPermissions({"comment:del"})
+    public BaseResponse delComment(@PathVariable("id") Integer id) {
         commentService.delComment(id);
         return BaseResponse.STATUS_200;
     }

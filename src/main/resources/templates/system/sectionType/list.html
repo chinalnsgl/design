@@ -136,6 +136,7 @@
           $("#name").val(data.name);
           $("#code").val(data.code);
           $("#btn_edit").removeAttr("disabled");
+          $.validate.validing();
         });
         // 搜索
         $("#btn_search").click(function () {
