@@ -6,8 +6,7 @@ import com.zw.design.modules.build.distribute.entity.DeptTask;
 import com.zw.design.modules.build.distribute.entity.Image;
 import com.zw.design.modules.build.distribute.entity.Message;
 import com.zw.design.modules.build.distribute.entity.ProduceTask;
-import com.zw.design.modules.system.projecttype.entity.ProjectType;
-import com.zw.design.modules.system.sectiontype.entity.SectionType;
+import com.zw.design.modules.baseinfosetting.projecttype.entity.ProjectType;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -190,14 +190,23 @@
             <li><a th:href="@{/sys/users}" shiro:hasPermission="user:list" target="content"><i class="fa fa-circle-o text-red"></i> 帐号管理</a></li>
             <li><a th:href="@{/sys/roles}" shiro:hasPermission="role:list" target="content"><i class="fa fa-circle-o text-success"></i> 角色管理</a></li>
             <li><a th:href="@{/sys/permissions}" shiro:hasPermission="permission:list" target="content"><i class="fa fa-circle-o text-warning"></i> 权限管理</a></li>
-            <li><a th:href="@{/sys/depts}" shiro:hasPermission="dept:list" target="content"><i class="fa fa-circle-o text-info"></i> 部门管理</a></li>
-            <li><a th:href="@{/sys/emps}" shiro:hasPermission="emp:list" target="content"><i class="fa fa-circle-o text-success"></i> 员工管理</a></li>
-            <li><a th:href="@{/sys/sectypes}" shiro:hasPermission="sectype:list" target="content"><i class="fa fa-circle-o text-success"></i> 科室类型管理</a></li>
-            <li><a th:href="@{/sys/secs}" shiro:hasPermission="sec:list" target="content"><i class="fa fa-circle-o text-success"></i> 科室管理</a></li>
-            <li><a th:href="@{/sys/types}" shiro:hasPermission="type:list" target="content"><i class="fa fa-circle-o text-success"></i> 项目类型管理</a></li>
-            <li><a th:href="@{/sys/tasktypes}" shiro:hasPermission="tasktype:list" target="content"><i class="fa fa-circle-o text-success"></i> 项目任务类型</a></li>
-            <li><a th:href="@{/sys/tasknames}" shiro:hasPermission="taskname:list" target="content"><i class="fa fa-circle-o text-success"></i> 项目任务名称</a></li>
             <li><a th:href="@{/sys/logs}" shiro:hasPermission="log:list" target="content"><i class="fa fa-circle-o text-success"></i> 操作日志</a></li>
+          </ul>
+        </li>
+
+        <li class="treeview" shiro:hasRole="admin">
+          <a href="#">
+            <i class="fa fa-folder-open text-success"></i>
+            <span>系统基本信息管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a th:href="@{/sys/types}" target="content"><i class="fa fa-circle-o text-success"></i> 项目类型管理</a></li>
+            <li><a th:href="@{/sys/depts}" target="content"><i class="fa fa-circle-o text-info"></i> 部门管理</a></li>
+            <li><a th:href="@{/sys/emps}" target="content"><i class="fa fa-circle-o text-success"></i> 员工管理</a></li>
+            <li><a th:href="@{/sys/sectypes}" target="content"><i class="fa fa-circle-o text-success"></i> 科室类型管理</a></li>
+            <li><a th:href="@{/sys/secs}" target="content"><i class="fa fa-circle-o text-success"></i> 科室管理</a></li>
+            <li><a th:href="@{/sys/tasktypes}" target="content"><i class="fa fa-circle-o text-success"></i> 项目任务类型</a></li>
+            <li><a th:href="@{/sys/tasknames}" target="content"><i class="fa fa-circle-o text-success"></i> 项目任务名称</a></li>
           </ul>
         </li>
 

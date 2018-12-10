@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        部门列表
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body" style="margin-top: 50px">
+              <div class="col-md-offset-1 col-md-4">
+                <div id="deptTree" class="ztree"></div>
+                <a th:href="@{/baseinfo/dept/create}" class="btn btn-info pull-right" >添加</a>
+              </div>
+              <div class="col-md-offset-1 col-md-4">
+                <form id="deptForm" class="form-horizontal">
+                  <input type="hidden" name="id" id="id">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="deptName" class="col-sm-2 control-label">部门</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="deptName" name="deptName" placeholder="用户名">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="box-footer">
+                    <button type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
+                  </div>
+                  <!-- /.box-footer -->
+                </form>
+              </div>
+            </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+      var ctx = ctx + "baseinfo";
+      $(function () {
+        // 初始化tree
+        $.tree.init({
+          id: "deptTree",
+          url: ctx + "/dept/all",
+          name: "deptName",
+          addHoverDom: function (treeId, treeNode) {
+            var sObj = $("#" + treeNode.tId + "_a");
+            if ($("#addBtn_" + treeNode.id).length > 0) { return; }
+            if ($("#updBtn_" + treeNode.id).length > 0) { return; }
+            if ($("#delBtn_" + treeNode.id).length > 0) { return; }
+            //添加
+            var addStr = "<button class='btn btn-info btn-xs' style='margin-left: 10px' id='addBtn_" + treeNode.id + "' onclick='location=\"" + ctx + "/dept/create/"+ treeNode.id + "\"'>添加</button>";
+            sObj.append(addStr);
+            //修改
+            var updStr = "<button class='btn btn-warning btn-xs' style='margin-left: 10px' id='updBtn_" + treeNode.id + "'>修改</button>";
+            sObj.append(updStr);
+            $("#updBtn_" + treeNode.id).bind("click", function () {
+              $("#btn_edit").removeAttr("disabled");
+              $("#id").val(treeNode.id);
+              $("#deptName").val(treeNode.deptName);
+              $.validate.validing();
+            });
+            //删除
+            if (!treeNode.children.length > 0) {
+              var delStr = "<button class='btn btn-danger btn-xs' style='margin-left: 10px' id='delBtn_" + treeNode.id + "'>删除</button>";
+              sObj.append(delStr);
+              $("#delBtn_" + treeNode.id).bind("click", function () {
+                $.modal.confirm("确定删除这个部门吗?",function () {
+                  $.operate.post(ctx + "/dept/status", {id: treeNode.id}, function () {
+                    $.tree.refresh();
+                    $.validate.reset();
+                    if (treeNode.id == $("#id").val()) {
+                      $("#btn_edit").attr("disabled",true);
+                      $("#id").val('');
+                      $("#deptName").val('');
+                    }
+                  })
+                });
+              });
+            }
+          },
+          removeHoverDom: function (treeId, treeNode) {
+            $("#addBtn_"+treeNode.id).unbind().remove();
+            $("#updBtn_"+treeNode.id).unbind().remove();
+            $("#delBtn_"+treeNode.id).unbind().remove();
+          }
+        });
+        // 验证
+        $.validate.init("deptForm",{
+          fields: {
+            deptName: {
+              validators: {
+                notEmpty: {message: '请输入部门名称'},
+                remote: {
+                  url: ctx + "/dept/checkDeptNameUnique",
+                  message: '部门已存在',
+                  delay: 200,
+                  type: 'POST',
+                  data: {
+                    id: function () {
+                      return $("#id").val();
+                    }
+                  }
+                }
+              }
+            }
+          }
+        });
+        // 修改部门名称
+        $("#btn_edit").click(function () {
+          if ($.validate.isValid()) {
+            $.operate.post(ctx + "/dept/update",$("#deptForm").serialize(),function () {
+              $.tree.refresh();
+            });
+            $.validate.reset();
+          }
+        });
+      });
+    </script>
+</body>
+</html>

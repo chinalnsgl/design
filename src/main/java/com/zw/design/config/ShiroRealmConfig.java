@@ -42,7 +42,7 @@ public class ShiroRealmConfig extends AuthorizingRealm {
             //添加角色和权限
             for (SysRole role:user.getRoles()) {
                 //添加角色
-                simpleAuthorizationInfo.addRole(role.getRoleName());
+                simpleAuthorizationInfo.addRole(role.getRoleCode());
                 for (SysPermission permission:role.getPermissions()) {
                     //添加权限
                     simpleAuthorizationInfo.addStringPermission(permission.getPermissionName());
