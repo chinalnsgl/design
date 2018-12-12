@@ -86,7 +86,7 @@ public class TaskServiceImpl implements TaskService {
                 task.setAlias(taskName.getName());
                 task.setTaskName(taskName);
                 task.setProject(project);
-                if ("任务单".equals(taskName.getName())) {
+                if (taskName.getId() == 1) {
                     task.setStartTime(new Date());
                     task.setEndTime(new Date());
                     task.setStatus(2);
