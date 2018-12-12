@@ -1,23 +1,23 @@
 package com.zw.design.modules.build.create.controller;
 
-import com.sun.prism.impl.BaseMeshView;
 import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.base.BaseResponse;
 import com.zw.design.base.BaseValidResponse;
 import com.zw.design.modules.build.create.entity.Project;
 import com.zw.design.modules.build.create.service.ProjectService;
-import com.zw.design.modules.build.distribute.entity.DeptTask;
-import com.zw.design.modules.build.distribute.entity.ProduceTask;
-import com.zw.design.modules.build.distribute.form.*;
-import com.zw.design.modules.build.distribute.model.CollectDto;
-import com.zw.design.modules.build.distribute.model.DeptTaskDto;
-import com.zw.design.modules.build.distribute.model.TaskDto;
-import com.zw.design.modules.build.distribute.query.ProjectQuery;
-import com.zw.design.modules.build.distribute.query.TaskQuery;
-import com.zw.design.modules.build.distribute.service.ProcessService;
-import com.zw.design.modules.build.distribute.service.TaskService;
+import com.zw.design.modules.build.distributedesigntask.entity.DeptTask;
+import com.zw.design.modules.build.distributedesigntask.entity.ProduceTask;
+import com.zw.design.modules.build.distributedesigntask.form.*;
+import com.zw.design.modules.build.distributedesigntask.model.CollectDto;
+import com.zw.design.modules.build.distributedesigntask.model.DeptTaskDto;
+import com.zw.design.modules.build.distributedesigntask.model.TaskDto;
+import com.zw.design.modules.build.distributedesigntask.query.ProjectQuery;
+import com.zw.design.modules.build.distributedesigntask.query.TaskQuery;
+import com.zw.design.modules.build.distributedesigntask.service.ProcessService;
+import com.zw.design.modules.build.distributedesigntask.service.TaskService;
 import com.zw.design.modules.system.log.service.LogService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -33,10 +33,10 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/project")
+@RequestMapping("/build")
 public class ProjectController {
 
-    private String prefix = "project";
+    private String prefix = "build";
     @Autowired
     private ProjectService projectService;
     @Autowired
@@ -51,26 +51,18 @@ public class ProjectController {
     /**
      * 创建项目页面
      */
-    @GetMapping("/create")
+    @GetMapping("/creates")
+    @RequiresPermissions({"create:create"})
     public String create() {
-        return prefix + "/create";
-    }
-
-    /**
-     * 修改项目页面
-     */
-    @GetMapping("/update/{id}")
-    public String update(@PathVariable("id") Integer id, Model model) {
-        Project p = projectService.findProjectById(id);
-        model.addAttribute("project", p);
-        return prefix + "/update";
+        return prefix + "/create/create";
     }
 
     /**
      * 项目编号唯一验证
      */
     @ResponseBody
-    @PostMapping("/checkCodeUnique")
+    @PostMapping("create/checkCodeUnique")
+    @RequiresPermissions({"create:create"})
     public BaseValidResponse checkCodeUnique(@RequestParam("code") String code, @RequestParam(value = "id",required = false) Integer id) {
         Project project = projectService.findByCode(code);
         if (id == null) {
@@ -83,27 +75,25 @@ public class ProjectController {
     }
 
     /**
-     * 删除项目
+     * 创建项目
      */
-    @ResponseBody
-    @PostMapping("/del")
-    public BaseResponse create(@RequestParam("id")Integer id, HttpServletRequest request) {
-        Project project = projectService.findProjectById(id);
-        projectService.delProject(id);
-//        logService.saveLog("删除项目：" + project.getName() + " 项目号：" + project.getCode(), request);
-        return BaseResponse.STATUS_200;
+    @PostMapping("/create/create")
+    @RequiresPermissions({"create:create"})
+    public String create(Project project) {
+        project.setCode(project.getCode().trim());
+        projectService.saveProject(project);
+        return "redirect:/build/ddts";
     }
 
     /**
-     * 创建项目
+     * 删除项目
      */
-//    @ResponseBody
-    @PostMapping("/create")
-    public String create(Project project, HttpServletRequest request) {
-        project.setCode(project.getCode().trim());
-        Project p = projectService.saveProject(project);
-//        logService.saveLog("创建项目：" + p.getName() + " 项目号：" + p.getCode(), request);
-        return prefix + "/create";
+    @ResponseBody
+    @PostMapping("/create/del")
+    @RequiresPermissions({"create:del"})
+    public BaseResponse create(@RequestParam("id")Integer id) {
+        projectService.delProject(id);
+        return BaseResponse.STATUS_200;
     }
 
     /**
@@ -117,32 +107,8 @@ public class ProjectController {
         return BaseResponse.toResponse(p.getId());
     }
 
-    /**
-     * 下达任务单
-     */
-    @ResponseBody
-    @PostMapping("/send")
-    public BaseResponse send(ProjectSendForm form, HttpServletRequest request) {
-        Project p = projectService.findProjectById(form.getProjectId());
-//        logService.saveLog("下达任务单：" + p.getName() + " 项目号：" + p.getCode(), request);
-        if (projectService.sendTask(form)) {
-            return new BaseResponse();
-        } else {
-            return BaseResponse.STATUS_400;
-        }
-    }
 
-    /**
-     * 未下达任务单的项目列表
-     */
-    @ResponseBody
-    @PostMapping("/list/notSend")
-    public BaseResponse projectListForNotSend(ProjectQuery query) {
-        BaseDataTableModel<Project> dto = projectService.findProjectsForNotSendByCriteria(query);
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setContent(dto);
-        return baseResponse;
-    }
+
 
     /**
      * 已下达任务单的项目列表
@@ -179,6 +145,16 @@ public class ProjectController {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;
+    }
+
+    /**
+     * 修改项目页面
+     */
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable("id") Integer id, Model model) {
+        Project p = projectService.findProjectById(id);
+        model.addAttribute("project", p);
+        return prefix + "/update";
     }
 
     /**

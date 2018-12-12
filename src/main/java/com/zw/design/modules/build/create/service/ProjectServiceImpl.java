@@ -1,18 +1,16 @@
 package com.zw.design.modules.build.create.service;
 
 import com.zw.design.base.BaseDataTableModel;
-import com.zw.design.modules.build.distribute.form.*;
+import com.zw.design.modules.build.distributedesigntask.entity.*;
+import com.zw.design.modules.build.distributedesigntask.form.*;
 import com.zw.design.modules.build.create.entity.Project;
 import com.zw.design.modules.build.create.repository.ProjectRepository;
-import com.zw.design.modules.build.distribute.entity.DeptTask;
-import com.zw.design.modules.build.distribute.entity.Image;
-import com.zw.design.modules.build.distribute.entity.ProduceTask;
-import com.zw.design.modules.build.distribute.entity.Receiver;
-import com.zw.design.modules.build.distribute.query.ProjectQuery;
-import com.zw.design.modules.build.distribute.repository.DeptTaskRepository;
-import com.zw.design.modules.build.distribute.repository.ImageRepository;
-import com.zw.design.modules.build.distribute.repository.ProduceTaskRepository;
-import com.zw.design.modules.build.distribute.repository.ReceiverRepository;
+import com.zw.design.modules.build.distributedesigntask.query.ProjectQuery;
+import com.zw.design.modules.build.distributedesigntask.repository.DeptTaskRepository;
+import com.zw.design.modules.build.distributedesigntask.repository.ImageRepository;
+import com.zw.design.modules.build.distributedesigntask.repository.ProduceTaskRepository;
+import com.zw.design.modules.build.distributedesigntask.repository.ReceiverRepository;
+import com.zw.design.modules.system.log.service.LogService;
 import com.zw.design.utils.Const;
 import com.zw.design.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
-
+    @Autowired
+    private LogService logService;
     @Autowired
     private DeptTaskRepository deptTaskRepository;
     @Autowired
@@ -54,10 +53,52 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ReceiverRepository receiverRepository;
 
+    // 按条件查询项目表格模型数据
+    @Override
+    public BaseDataTableModel<Project> findProjectsByQuery(ProjectQuery query) {
+        Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(), Sort.by(Sort.Direction.DESC, "id"));
+        Page<Project> projectPage = projectRepository.findAll((Specification<Project>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> list = new ArrayList<Predicate>();
+            if (null != query.getNameQuery() && !"".equals(query.getNameQuery())) {
+                list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + query.getNameQuery() + "%"));
+            }
+            if (null != query.getCodeQuery() && !"".equals(query.getCodeQuery())) {
+                list.add(criteriaBuilder.like(root.get("code").as(String.class), "%" + query.getCodeQuery() + "%"));
+            }
+            if (null != query.getStatusQuery()) {
+                list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), query.getStatusQuery()));
+            }
+            Predicate[] p = new Predicate[list.size()];
+            return criteriaBuilder.and(list.toArray(p));
+        }, pageable);
+        BaseDataTableModel<Project> baseDataTableModel = new BaseDataTableModel<>();
+        baseDataTableModel.setDraw(query.getDraw());
+        baseDataTableModel.setData(projectPage.getContent());
+        baseDataTableModel.setRecordsTotal((int)projectPage.getTotalElements());
+        baseDataTableModel.setRecordsFiltered((int)projectPage.getTotalElements());
+        return baseDataTableModel;
+    }
 
+    // 按code查询项目
+    @Override
+    public Project findByCode(String code) {
+        return projectRepository.findByCode(code);
+    }
+
+    // 保存项目
+    @Override
+    @CacheEvict(value = "projects",allEntries = true)
+    public Project saveProject(Project project) {
+        logService.saveLog("创建项目：" ,project.getName() + " 项目号：" + project.getCode());
+        return projectRepository.save(project);
+    }
+
+    // 删除项目
     @Override
     @CacheEvict(value = "projects",allEntries = true)
     public void delProject(Integer id) {
+        Project project = findProjectById(id);
+        logService.saveLog("删除项目：" , project.getName() + " 项目号：" + project.getCode());
         projectRepository.deleteById(id);
     }
 
@@ -110,21 +151,18 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.findById(id).get();
     }
 
-    @Override
-    public Project findByCode(String code) {
-        return projectRepository.findByCode(code);
-    }
+
 
     @Override
     public Project findProjectByQuery(ProjectQuery query) {
 
         Optional<Project> one = projectRepository.findOne((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<Predicate>();
-            if (null != query.getName() && !"".equals(query.getName())) {
-                list.add(criteriaBuilder.equal(root.get("name").as(String.class), query.getName()));
+            if (null != query.getNameQuery() && !"".equals(query.getNameQuery())) {
+                list.add(criteriaBuilder.equal(root.get("name").as(String.class), query.getNameQuery()));
             }
-            if (null != query.getCode() && !"".equals(query.getCode())) {
-                list.add(criteriaBuilder.equal(root.get("code").as(String.class), query.getCode()));
+            if (null != query.getCodeQuery() && !"".equals(query.getCodeQuery())) {
+                list.add(criteriaBuilder.equal(root.get("code").as(String.class), query.getCodeQuery()));
             }
             list.add(criteriaBuilder.greaterThan(root.get("status").as(Integer.class), 1));
             Predicate[] p = new Predicate[list.size()];
@@ -153,11 +191,11 @@ public class ProjectServiceImpl implements ProjectService {
         Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(), Sort.by(Sort.Direction.DESC, "id"));
         Page<Project> projectPage = projectRepository.findAll((Specification<Project>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<Predicate>();
-            if (null != query.getName() && !"".equals(query.getName())) {
-                list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + query.getName() + "%"));
+            if (null != query.getNameQuery() && !"".equals(query.getNameQuery())) {
+                list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + query.getNameQuery() + "%"));
             }
-            if( null!=query.getCode()&&!"".equals(query.getCode())){
-                list.add(criteriaBuilder.like(root.get("code").as(String.class), "%" + query.getCode() + "%"));
+            if( null!=query.getCodeQuery()&&!"".equals(query.getCodeQuery())){
+                list.add(criteriaBuilder.like(root.get("code").as(String.class), "%" + query.getCodeQuery() + "%"));
             }
             list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), 2));
             Predicate[] p = new Predicate[list.size()];
@@ -172,34 +210,9 @@ public class ProjectServiceImpl implements ProjectService {
         return baseDataTableModel;
     }
 
-    @Override
-    public BaseDataTableModel<Project> findProjectsForNotSendByCriteria(ProjectQuery query) {
-        Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(), Sort.by(Sort.Direction.DESC, "id"));
-        Page<Project> projectPage = projectRepository.findAll((Specification<Project>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> list = new ArrayList<Predicate>();
-            if (null != query.getName() && !"".equals(query.getName())) {
-                list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + query.getName() + "%"));
-            }
-            if( null!=query.getCode()&&!"".equals(query.getCode())){
-                list.add(criteriaBuilder.like(root.get("code").as(String.class), "%" + query.getCode() + "%"));
-            }
-            list.add(criteriaBuilder.equal(root.get("status").as(Integer.class), 1));
-            Predicate[] p = new Predicate[list.size()];
-            return criteriaBuilder.and(list.toArray(p));
-        }, pageable);
-        BaseDataTableModel<Project> baseDataTableModel = new BaseDataTableModel<>();
-        baseDataTableModel.setDraw(query.getDraw());
-        baseDataTableModel.setData(projectPage.getContent());
-        baseDataTableModel.setRecordsTotal((int)projectPage.getTotalElements());
-        baseDataTableModel.setRecordsFiltered((int)projectPage.getTotalElements());
-        return baseDataTableModel;
-    }
 
-    @Override
-    @CacheEvict(value = "projects",allEntries = true)
-    public Project saveProject(Project project) {
-        return projectRepository.save(project);
-    }
+
+
 
     @Override
     @CacheEvict(value = "projects",allEntries = true)
@@ -223,7 +236,7 @@ public class ProjectServiceImpl implements ProjectService {
         List<DeptTask> hypreList = new ArrayList<>();
         List<DeptTask> electricList = new ArrayList<>();
         List<DeptTask> softwareList = new ArrayList<>();
-        for (DeptTask deptTask : p.getDeptTasks()) {
+        /*for (Task deptTask : p.getTasks()) {
             switch (deptTask.getDepartmentType()) {
                 case 1:
                     mechineList.add(deptTask);
@@ -238,7 +251,7 @@ public class ProjectServiceImpl implements ProjectService {
                     softwareList.add(deptTask);
                     break;
             }
-        }
+        }*/
 
         if (project.getMachineNo() != null) {
             if (mechineList.size() > 0) {
@@ -380,11 +393,11 @@ public class ProjectServiceImpl implements ProjectService {
                 }
             }
         }
-        p.getDeptTasks().removeAll(p.getDeptTasks());
+        /*p.getDeptTasks().removeAll(p.getDeptTasks());
         p.getDeptTasks().addAll(mechineList);
         p.getDeptTasks().addAll(hypreList);
         p.getDeptTasks().addAll(electricList);
-        p.getDeptTasks().addAll(softwareList);
+        p.getDeptTasks().addAll(softwareList);*/
         return projectRepository.save(p);
     }
 

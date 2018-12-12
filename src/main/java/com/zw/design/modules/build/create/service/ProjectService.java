@@ -1,19 +1,27 @@
 package com.zw.design.modules.build.create.service;
 
 import com.zw.design.base.BaseDataTableModel;
-import com.zw.design.modules.build.distribute.entity.DeptTask;
-import com.zw.design.modules.build.distribute.entity.ProduceTask;
+import com.zw.design.modules.build.distributedesigntask.entity.DeptTask;
+import com.zw.design.modules.build.distributedesigntask.entity.ProduceTask;
 import com.zw.design.modules.build.create.entity.Project;
-import com.zw.design.modules.build.distribute.form.*;
-import com.zw.design.modules.build.distribute.query.ProjectQuery;
+import com.zw.design.modules.build.distributedesigntask.form.*;
+import com.zw.design.modules.build.distributedesigntask.query.ProjectQuery;
 
 import javax.servlet.http.HttpServletResponse;
 
 public interface ProjectService {
 
-    BaseDataTableModel<Project> findProjectsForNotSendByCriteria(ProjectQuery query);
+    // 按条件查询项目表格模型数据
+    BaseDataTableModel<Project> findProjectsByQuery(ProjectQuery query);
 
+    // 按code查询项目
+    Project findByCode(String code);
+
+    // 保存项目
     Project saveProject(Project project);
+
+    // 删除项目
+    void delProject(Integer id);
 
     Boolean sendTask(ProjectSendForm form);
 
@@ -23,11 +31,9 @@ public interface ProjectService {
 
     Project findProjectByQuery(ProjectQuery query);
 
-    Project findByCode(String code);
+
 
     Project findProjectById(Integer id);
-
-    void delProject(Integer id);
 
     DeptTask cancelDept(Integer id);
 

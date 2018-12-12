@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 员工表
+ * 科室类型表
  */
 @Entity
 @Getter

@@ -1,0 +1,9 @@
+package com.zw.design.modules.build.distributedesigntask.repository;
+
+import com.zw.design.modules.build.distributedesigntask.entity.DeptTask;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+public interface DeptTaskRepository extends JpaRepository<DeptTask, Integer>, JpaSpecificationExecutor<DeptTask> {
+
+}

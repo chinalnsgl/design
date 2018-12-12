@@ -135,7 +135,7 @@
           </a>
           <ul class="treeview-menu" style="display: block;">
             <li class="active"><a th:href="@{/sys/users}" shiro:hasPermission="overview:statistics" target="content"><i class="fa fa-circle-o text-red"></i> 项目统计</a></li>
-            <li class="active"><a href="#" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 工作日历</a></li>
+            <li><a href="#" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 工作日历</a></li>
             <li><a th:href="@{/meeting/meetings}" shiro:hasPermission="meeting:list" target="content"><i class="fa fa-circle-o text-blue"></i> 公司战略纲领</a></li>
           </ul>
         </li>
@@ -149,7 +149,7 @@
             <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-red"></i> 项目意向</a></li>
             <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 意向审核</a></li>
             <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 创建项目</a></li>
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-green"></i> 下达设计任务</a></li>
+            <li><a th:href="@{/build/ddts}" shiro:hasPermission="ddt:list" target="content"><i class="fa fa-circle-o text-green"></i> 下达设计任务</a></li>
             <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-orange"></i> 下达生产任务</a></li>
             <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-aqua"></i> 项目任务状态</a></li>
           </ul>

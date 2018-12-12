@@ -158,18 +158,7 @@
           fields: {
             name: {
               validators: {
-                notEmpty: {message: '请输入名称'},
-                remote: {
-                  url: ctx + "/taskname/checkTaskNameUnique",
-                  message: '名称已存在',
-                  delay: 500,
-                  type: 'POST',
-                  data: {
-                    id : function () {
-                      return $("#id").val()
-                    }
-                  }
-                }
+                notEmpty: {message: '请输入任务名称'}
               }
             }
           }

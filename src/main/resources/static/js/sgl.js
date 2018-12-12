@@ -98,9 +98,12 @@
     // 表单封装处理
     form: {
       // 表单重置
-      reset: function(formId) {
-        var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
-        $("#" + currentId)[0].reset();
+      reset: function(formId, lock) {
+        $("#" + formId)[0].reset();
+        if (lock) {
+          $("#" + formId).css("pointer-events", 'none');
+          $("#" + formId).find("input[type='hidden']").val('');
+        }
       },
       // 获取选中复选框项
       selectCheckeds: function(name) {
@@ -113,6 +116,20 @@
           }
         });
         return checkeds;
+      },
+      // 判断页面select标签被选中数量
+      selectedCount: function(){
+        var i = 0;
+        $(".select2").each(function () {
+          if ($(this).val()) {
+            i++;
+          }
+        });
+        return i;
+      },
+      // 解除FROM锁定
+      unlock: function (formId) {
+        $("#" + formId).css("pointer-events", '');
       }
     },
     // 弹出层封装处理
@@ -186,8 +203,8 @@
           success: function(result) {
             if (callBack) {
               $.modal.closeLoading();
-              $.modal.success("操作成功！O(∩_∩)O~ ！");
               if (result.status === web_status.SUCCESS) {
+                $.modal.success("操作成功！O(∩_∩)O~ ！");
                 callBack(result);
               } else {
                 $.modal.fail("操作失败 (┬＿┬) ！！");

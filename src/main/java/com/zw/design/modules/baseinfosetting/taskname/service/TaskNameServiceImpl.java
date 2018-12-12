@@ -68,7 +68,7 @@ public class TaskNameServiceImpl implements TaskNameService {
         logService.saveLog("修改任务名称", taskName, tn);
         taskName.setName(tn.getName());
         taskName.setTaskType(tn.getTaskType());
-        if (taskName.getSectionType().getId() == null) {
+        if (tn.getSectionType().getId() == null) {
             taskName.setSectionType(null);
         } else {
             taskName.setSectionType(tn.getSectionType());

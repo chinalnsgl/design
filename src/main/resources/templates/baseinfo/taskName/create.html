@@ -73,13 +73,7 @@
           fields: {
             name: {
               validators: {
-                notEmpty: {message: '请输入部门类型名称'},
-                remote: {
-                  url: ctx + "/taskname/checkTaskNameUnique",
-                  message: '名称已存在',
-                  delay: 500,
-                  type: 'POST'
-                }
+                notEmpty: {message: '请输入任务名称'}
               }
             }
           }

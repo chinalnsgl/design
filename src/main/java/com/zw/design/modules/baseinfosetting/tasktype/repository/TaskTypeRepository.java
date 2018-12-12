@@ -11,4 +11,6 @@ public interface TaskTypeRepository extends JpaRepository<TaskType, Integer>, Jp
     TaskType findByNameAndStatus(String name, Integer status);
 
     List<TaskType> findByStatus(Integer status);
+
+    List<TaskType> findByIdNotAndStatus(Integer id, Integer status);
 }
