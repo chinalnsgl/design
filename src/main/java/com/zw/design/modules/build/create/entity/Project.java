@@ -95,6 +95,7 @@ public class Project implements Serializable {
     private Date processCompleteTime; // 工艺任务完成时间
 
     @OneToMany(mappedBy = "project")
+    @OrderBy("orderNo")
     @JsonIgnoreProperties("project")
     List<Task> tasks; // 任务
 
