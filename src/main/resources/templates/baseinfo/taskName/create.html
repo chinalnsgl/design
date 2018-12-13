@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         添加任务名称
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <form id="taskNameForm" class="form-horizontal">
       <div class="row">
@@ -17,7 +15,6 @@
             <div class="box-header">
               <h3>任务名称基本信息</h3>
             </div>
-
             <div class="box-body">
               <div class="row">
                 <div class="col-md-6">
@@ -44,27 +41,24 @@
                       </select>
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label for="sectionType" class="col-sm-2 control-label">排序编号</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="orderNo" name="orderNo" placeholder="请输入任务编号">
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-
             <div class="box-footer">
               <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
             </div>
-              <!-- /.box-footer -->
-
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
       </form>
     </section>
-    <!-- /.content -->
-    <!-- jQuery 3 -->
     <div th:include="include :: footer"></div>
-    <!-- page script -->
     <script>
       var ctx = ctx + "baseinfo";
       $(function () {
@@ -82,13 +76,11 @@
         $("#btn_create").click(function () {
           if ($.validate.isValid()) {
             $.operate.post(ctx + "/taskname/save",$("#taskNameForm").serialize(), function () {
-              location.href = ctx + "/tasknames";
+              location.href = ctx + "/taskname/page";
             });
           }
         });
-
       });
-
     </script>
 </body>
 </html>

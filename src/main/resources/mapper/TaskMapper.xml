@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zw.design.modules.build.distributedesigntask.mapper.DeptTaskDao">
 
-  <select id="findTasks" resultType="com.zw.design.modules.build.distributedesigntask.model.TaskDto" parameterType="com.zw.design.modules.build.distributedesigntask.query.ProjectQuery">
+  <select id="findTasks" resultType="com.zw.design.modules.build.distributedesigntask.model.TaskDto" parameterType="com.zw.design.modules.build.distributedesigntask.query.DistributeDesignTaskQuery">
     select * from (
     select
     ROW_NUMBER() OVER(Order by t.order_no desc, t.code, t.deptType) as rowId,* from (
@@ -140,7 +140,7 @@
     ) as t ) p
     where p.rowId BETWEEN #{start} and #{length}
 	</select>
-  <select id="findTasksCount" resultType="java.lang.Integer" parameterType="com.zw.design.modules.build.distributedesigntask.query.ProjectQuery">
+  <select id="findTasksCount" resultType="java.lang.Integer" parameterType="com.zw.design.modules.build.distributedesigntask.query.DistributeDesignTaskQuery">
     select count(b.id) from (
     select department_type,project_id,min(department_num) as department_num,sum ( status ) AS status
     from dept_Task

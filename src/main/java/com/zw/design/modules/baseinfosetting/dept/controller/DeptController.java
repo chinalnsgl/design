@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/baseinfo")
+@RequestMapping("/baseinfo/dept")
 public class DeptController {
 
-    private String prefix = "baseinfo";
+    private String prefix = "baseinfo/dept";
 
     @Autowired
     private DeptService deptService;
@@ -27,16 +27,16 @@ public class DeptController {
     /**
      * 部门页面
      */
-    @GetMapping("/depts")
+    @GetMapping("/page")
     @RequiresRoles({"admin"})
     public String depts() {
-        return prefix + "/dept/list";
+        return prefix + "/list";
     }
     /**
      * 获取所有部门
      */
     @ResponseBody
-    @GetMapping("/dept/all")
+    @GetMapping("/all")
     @RequiresRoles({"admin"})
     public List<Department> findAllDept() {
         return deptService.findAllByStatus();
@@ -47,7 +47,7 @@ public class DeptController {
      * 删除部门， 修改状态为0
      */
     @ResponseBody
-    @PostMapping("/dept/status")
+    @PostMapping("/status")
     @RequiresRoles({"admin"})
     public BaseResponse updateDeptStatus(@RequestParam("id")Integer id) {
         Department department = deptService.updateDeptStatus(id, 0);
@@ -57,16 +57,16 @@ public class DeptController {
     /**
      * 创建部门页面
      */
-    @GetMapping("/dept/create")
+    @GetMapping("/create")
     @RequiresRoles({"admin"})
     public String deptCreate() {
-        return  prefix + "/dept/create";
+        return  prefix + "/create";
     }
     /**
      * 部门唯一验证
      */
     @ResponseBody
-    @PostMapping("/dept/checkDeptNameUnique")
+    @PostMapping("/checkDeptNameUnique")
     @RequiresRoles({"admin"})
     public BaseValidResponse checkDeptSectionNameUnique(@RequestParam("deptName") String deptName, @RequestParam(value = "id", required = false) Integer id) {
         Department section = deptService.findByNameAndStatus(deptName, 1);
@@ -81,17 +81,17 @@ public class DeptController {
     /**
      * 创建部门页面
      */
-    @GetMapping("/dept/create/{id}")
+    @GetMapping("/create/{id}")
     @RequiresRoles({"admin"})
     public String deptCreate(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("id", id);
-        return prefix + "/dept/create";
+        return prefix + "/create";
     }
     /**
      * 保存部门
      */
     @ResponseBody
-    @PostMapping("/dept/save")
+    @PostMapping("/save")
     @RequiresRoles({"admin"})
     public BaseResponse deptSave(Department department) {
         Department dept = deptService.saveDept(department);
@@ -102,7 +102,7 @@ public class DeptController {
      * 修改部门
      */
     @ResponseBody
-    @PostMapping("/dept/update")
+    @PostMapping("/update")
     @RequiresRoles({"admin"})
     public BaseResponse deptUpdate(Department department) {
         Department dept = deptService.updateDept(department);

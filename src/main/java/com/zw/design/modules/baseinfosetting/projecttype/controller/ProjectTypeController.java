@@ -13,10 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/baseinfo")
+@RequestMapping("/baseinfo/type")
 public class ProjectTypeController {
 
-    private String prefix = "baseinfo";
+    private String prefix = "baseinfo/type";
 
     @Autowired
     private ProjectTypeService projectTypeService;
@@ -25,16 +25,16 @@ public class ProjectTypeController {
     /**
      * 项目类型页面
      */
-    @GetMapping("/types")
+    @GetMapping("/page")
     @RequiresRoles({"admin"})
     public String types() {
-        return prefix + "/type/list";
+        return prefix + "/list";
     }
     /**
      * 获取所有项目类型
      */
     @ResponseBody
-    @PostMapping("/type/list")
+    @PostMapping("/list")
     @RequiresRoles({"admin"})
     public BaseResponse projectTypeList(ProjectTypeQuery query) {
         BaseDataTableModel<ProjectType> dto = projectTypeService.findProjectTypeByQuery(query);
@@ -48,7 +48,7 @@ public class ProjectTypeController {
      * 删除项目类型， 修改状态为0
      */
     @ResponseBody
-    @PostMapping("/type/status")
+    @PostMapping("/status")
     @RequiresRoles({"admin"})
     public BaseResponse updateProjectTypeStatus(@RequestParam("id")Integer id) {
         ProjectType department = projectTypeService.updateProjectTypeStatus(id, 0);
@@ -58,16 +58,16 @@ public class ProjectTypeController {
     /**
      * 创建项目类型页面
      */
-    @GetMapping("/type/create")
+    @GetMapping("/create")
     @RequiresRoles({"admin"})
     public String typeCreate() {
-        return  prefix + "/type/create";
+        return  prefix + "/create";
     }
     /**
      * 项目类型唯一验证
      */
     @ResponseBody
-    @PostMapping("/type/checkTypeNameUnique")
+    @PostMapping("/checkTypeNameUnique")
     @RequiresRoles({"admin"})
     public BaseValidResponse checkProjectTypeNameUnique(@RequestParam("name") String name, @RequestParam(value = "id", required = false) Integer id) {
         ProjectType projectType = projectTypeService.findByNameAndStatus(name, 1);
@@ -83,7 +83,7 @@ public class ProjectTypeController {
      * 保存项目类型
      */
     @ResponseBody
-    @PostMapping("/type/save")
+    @PostMapping("/save")
     @RequiresRoles({"admin"})
     public BaseResponse typeSave(ProjectType projectType) {
         ProjectType type = projectTypeService.saveProjectType(projectType);
@@ -94,7 +94,7 @@ public class ProjectTypeController {
      * 修改项目类型
      */
     @ResponseBody
-    @PostMapping("/type/update")
+    @PostMapping("/update")
     @RequiresRoles({"admin"})
     public BaseResponse typeUpdate(ProjectType projectType) {
         ProjectType type = projectTypeService.updateProjectType(projectType);

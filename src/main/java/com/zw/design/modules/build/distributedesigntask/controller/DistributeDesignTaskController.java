@@ -4,10 +4,8 @@ import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.base.BaseResponse;
 import com.zw.design.modules.baseinfosetting.sectiontype.service.SectionTypeService;
 import com.zw.design.modules.build.create.entity.Project;
-import com.zw.design.modules.build.create.service.ProjectService;
-import com.zw.design.modules.build.distributedesigntask.query.ProjectQuery;
-import com.zw.design.modules.build.distributedesigntask.service.ProcessService;
-import com.zw.design.modules.build.distributedesigntask.service.TaskService;
+import com.zw.design.modules.build.distributedesigntask.query.DistributeDesignTaskQuery;
+import com.zw.design.modules.build.distributedesigntask.service.DistributeDesignTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +22,10 @@ public class DistributeDesignTaskController {
     private String prefix = "build/ddt";
 
     @Autowired
-    private ProjectService projectService;
+    private DistributeDesignTaskService distributeDesignTaskService;
 
     @Autowired
     private SectionTypeService sectionTypeService;
-
-    @Autowired
-    private TaskService taskService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -51,9 +46,9 @@ public class DistributeDesignTaskController {
     @ResponseBody
     @PostMapping("/ddt/list")
     @RequiresPermissions({"ddt:list"})
-    public BaseResponse ddtList(ProjectQuery query) {
+    public BaseResponse ddtList(DistributeDesignTaskQuery query) {
         query.setStatusQuery(1);
-        BaseDataTableModel<Project> dto = projectService.findProjectsByQuery(query);
+        BaseDataTableModel<Project> dto = distributeDesignTaskService.findProjectsByQuery(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;
@@ -65,7 +60,7 @@ public class DistributeDesignTaskController {
     @ResponseBody
     @PostMapping("/ddt/distribute")
     public BaseResponse send(@RequestParam("projectId") Integer projectId, @RequestParam("sectionId") Integer[] sectionId) {
-        if (taskService.distributeDesignTAsk(projectId, sectionId)) {
+        if (distributeDesignTaskService.distributeDesignTAsk(projectId, sectionId)) {
             return BaseResponse.STATUS_200;
         } else {
             return BaseResponse.STATUS_400;

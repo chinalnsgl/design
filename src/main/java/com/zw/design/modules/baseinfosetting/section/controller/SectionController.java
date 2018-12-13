@@ -15,10 +15,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/baseinfo")
+@RequestMapping("/baseinfo/sec")
 public class SectionController {
 
-    private String prefix = "baseinfo";
+    private String prefix = "baseinfo/section";
 
     @Autowired
     private SectionService sectionService;
@@ -28,17 +28,17 @@ public class SectionController {
     /**
      * 到达部门列表页面
      */
-    @GetMapping("/secs")
+    @GetMapping("/page")
     @RequiresRoles({"admin"})
     public String users(Model model) {
         model.addAttribute("sectionType", sectionTypeService.findByStatus(1));
-        return prefix + "/section/list";
+        return prefix + "/list";
     }
     /**
      * 部门列表数据
      */
     @ResponseBody
-    @PostMapping("/sec/list")
+    @PostMapping("/list")
     @RequiresRoles({"admin"})
     public BaseResponse SectionList(SectionQuery query) {
         BaseDataTableModel<Section> dto = sectionService.findByQuery(query);
@@ -51,7 +51,7 @@ public class SectionController {
      * 删除部门
      */
     @ResponseBody
-    @PostMapping("/sec/status")
+    @PostMapping("/status")
     @RequiresRoles({"admin"})
     public BaseResponse updateSectionStatus(@RequestParam("id")Integer id) {
         Section section = sectionService.updateSectionStatus(id,0);
@@ -62,18 +62,18 @@ public class SectionController {
     /**
      * 添加页面
      */
-    @GetMapping("/sec/create")
+    @GetMapping("/create")
     @RequiresRoles({"admin"})
     public String SectionCreate(Model model) {
         model.addAttribute("sectionType", sectionTypeService.findByStatus(1));
-        return  prefix + "/section/create";
+        return  prefix + "/create";
     }
 
     /**
      * 部门唯一验证
      */
     @ResponseBody
-    @PostMapping("/sec/checkSectionNameUnique")
+    @PostMapping("/checkSectionNameUnique")
     @RequiresRoles({"admin"})
     public BaseValidResponse checkSectionNameUnique(@RequestParam("name") String name, @RequestParam(value = "id", required = false) Integer id) {
         Section section = sectionService.findByNameAndStatus(name, 1);
@@ -89,7 +89,7 @@ public class SectionController {
      * 保存部门
      */
     @ResponseBody
-    @PostMapping("/sec/save")
+    @PostMapping("/save")
     @RequiresRoles({"admin"})
     public BaseResponse sectionSave(Section section) {
         Section sec = sectionService.saveSection(section);
@@ -101,7 +101,7 @@ public class SectionController {
      * 修改部门
      */
     @ResponseBody
-    @PostMapping("/sec/update")
+    @PostMapping("/update")
     @RequiresRoles({"admin"})
     public BaseResponse sectionUpdate(Section Section) {
         Section sec = sectionService.updateSection(Section);

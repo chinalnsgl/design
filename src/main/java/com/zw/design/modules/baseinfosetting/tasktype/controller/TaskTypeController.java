@@ -13,10 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/baseinfo")
+@RequestMapping("/baseinfo/tasktype")
 public class TaskTypeController {
 
-    private String prefix = "baseinfo";
+    private String prefix = "baseinfo/taskType";
 
     @Autowired
     private TaskTypeService taskTypeService;
@@ -24,16 +24,16 @@ public class TaskTypeController {
     /**
      * 到达任务类型列表页面
      */
-    @GetMapping("/tasktypes")
+    @GetMapping("/page")
     @RequiresRoles({"admin"})
     public String users() {
-        return prefix + "/taskType/list";
+        return prefix + "/list";
     }
     /**
      * 任务类型列表数据
      */
     @ResponseBody
-    @PostMapping("/tasktype/list")
+    @PostMapping("/list")
     @RequiresRoles({"admin"})
     public BaseResponse taskTypeList(TaskTypeQuery query) {
         BaseDataTableModel<TaskType> dto = taskTypeService.findByQuery(query);
@@ -46,7 +46,7 @@ public class TaskTypeController {
      * 删除任务类型
      */
     @ResponseBody
-    @PostMapping("/tasktype/status")
+    @PostMapping("/status")
     @RequiresRoles({"admin"})
     public BaseResponse updateTaskTypeStatus(@RequestParam("id")Integer id) {
         TaskType taskType = taskTypeService.updateTaskTypeStatus(id,0);
@@ -57,16 +57,16 @@ public class TaskTypeController {
     /**
      * 添加页面
      */
-    @GetMapping("/tasktype/create")
+    @GetMapping("/create")
     @RequiresRoles({"admin"})
     public String taskTypeCreate() {
-        return  prefix + "/taskType/create";
+        return  prefix + "/create";
     }
     /**
      * 任务类型唯一验证
      */
     @ResponseBody
-    @PostMapping("/tasktype/checkTaskTypeNameUnique")
+    @PostMapping("/checkTaskTypeNameUnique")
     @RequiresRoles({"admin"})
     public BaseValidResponse checkTaskTypeNameUnique(@RequestParam(value = "name") String name, @RequestParam(value = "id", required = false) Integer id ) {
         TaskType taskType = taskTypeService.findByNameAndStatus(name, 1);
@@ -82,7 +82,7 @@ public class TaskTypeController {
      * 保存任务类型
      */
     @ResponseBody
-    @PostMapping("/tasktype/save")
+    @PostMapping("/save")
     @RequiresRoles({"admin"})
     public BaseResponse taskTypeSave(TaskType taskType) {
         TaskType tType = taskTypeService.saveTaskType(taskType);
@@ -94,7 +94,7 @@ public class TaskTypeController {
      * 修改任务类型
      */
     @ResponseBody
-    @PostMapping("/tasktype/update")
+    @PostMapping("/update")
     @RequiresRoles({"admin"})
     public BaseResponse taskTypeUpdate(TaskType taskType) {
         TaskType tType = taskTypeService.updateTaskType(taskType);

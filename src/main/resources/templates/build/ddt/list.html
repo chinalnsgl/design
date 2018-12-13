@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-
 <div class="modal fade" id="modal-create">
   <form id="projectForm" class="form-horizontal" th:action="@{/build/create/create}" method="post">
     <div class="modal-dialog">
@@ -76,13 +75,11 @@
     </div>
   </form>
 </div>
-
 <section class="content-header">
   <h1>
     下达设计任务
   </h1>
 </section>
-
 <section class="content">
   <div class="row">
     <div class="col-xs-12">
@@ -149,9 +146,7 @@
     <input id="projectId" type="hidden" name="projectId">
     <button shiro:hasPermission="ddt:config" type="button" id="btn_task" class="btn btn-info btn-success pull-right">下达设计任务</button>
   </form>
-  <!-- /.row -->
 </section>
-<!-- /.content -->
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
   var ctx = ctx + "build";

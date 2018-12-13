@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         员工列表
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
@@ -30,7 +28,6 @@
                 </div>
               </div>
             </div>
-            <!-- /.box-header -->
             <div class="box-body" style="margin-top: 50px">
               <div class="col-md-5">
                 <div id="deptTree" class="ztree"></div>
@@ -49,15 +46,10 @@
               </div>
             </div>
             </div>
-            <!-- /.box-body -->
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
-    <!-- /.content -->
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
       var ctx = ctx + "baseinfo";

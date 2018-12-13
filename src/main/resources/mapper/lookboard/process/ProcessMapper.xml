@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.lookboard.process.mapper.ProcessMapper">
+
+  <select id="findProjectByQuery" resultType="com.zw.design.modules.lookboard.process.model.ProcessModel" parameterType="com.zw.design.modules.lookboard.process.query.ProcessQuery">
+    select
+    a.id,
+    a.name,
+    a.demander,
+    a.address,
+    a.code,
+    a.code_special,
+    a.num,
+    a.comment,
+    a.status as projectStatus,
+    b.comp_status as firstStatus,
+    c.comp_status as secondStatus,
+    d.comp_status as thirdStatus
+    from project as a
+    left join task as b on a.id = b.project_id and b.task_name_id = 7
+    left join task as c on a.id = c.project_id and c.task_name_id = 8
+    left join task as d on a.id = d.project_id and d.task_name_id = 9
+    where 1 = 1
+    <if test="codeQuery != null and codeQuery != ''">
+      and a.code like #{codeQuery}
+    </if>
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.name like #{nameQuery}
+    </if>
+    <if test="yearQuery != null">
+      and year (a.create_time) = #{yearQuery}
+    </if>
+    <if test="statusQuery == 1">
+      and (b.comp_status != 2 or c.comp_status != 2 or d.comp_status != 2) and a.status = 2
+    </if>
+    <if test="statusQuery == 2">
+      and b.comp_status = 2 and c.comp_status = 2 and d.comp_status = 2 and a.status  = 4
+    </if>
+    order by a.order_no desc , a.code
+	</select>
+
+</mapper>

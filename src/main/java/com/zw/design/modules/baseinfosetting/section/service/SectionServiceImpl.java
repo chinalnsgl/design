@@ -45,6 +45,12 @@ public class SectionServiceImpl implements SectionService {
         return baseDataTableModel;
     }
 
+    // 按状态查询部门
+    @Override
+    public List<Section> findByStatus(Integer status) {
+        return sectionRepository.findByStatus(status);
+    }
+
     // 按名称查询部门
     @Override
     public Section findByNameAndStatus(String name, Integer status) {

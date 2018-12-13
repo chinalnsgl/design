@@ -2,18 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         部门列表
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-            <!-- /.box-header -->
             <div class="box-body" style="margin-top: 50px">
               <div class="col-md-offset-1 col-md-4">
                 <div id="deptTree" class="ztree"></div>
@@ -30,24 +27,17 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="box-footer">
                     <button type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
                   </div>
-                  <!-- /.box-footer -->
                 </form>
               </div>
             </div>
             </div>
-            <!-- /.box-body -->
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
-    <!-- /.content -->
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
       var ctx = ctx + "baseinfo";

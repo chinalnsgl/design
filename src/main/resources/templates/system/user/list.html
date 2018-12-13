@@ -3,21 +3,17 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         用户列表
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-
               <div class="row">
-
                 <div class="form-inline">
                   <div class="form-group" style="margin-right: 10px;">
                     <label>帐号</label>
@@ -30,11 +26,8 @@
                   <button class="btn btn-default" id="btn_search">搜索</button>
                   <a shiro:hasPermission="user:create" th:href="@{/sys/user/create}" class="btn btn-info pull-right" >添加</a>
                 </div>
-
               </div>
-
             </div>
-            <!-- /.box-header -->
             <div class="box-body">
               <div class="row">
                 <div class="col-md-7">
@@ -69,30 +62,21 @@
                     <div class="box-footer">
                       <button shiro:hasPermission="user:edit" type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
                     </div>
-                    <!-- /.box-footer -->
                   </form>
                 </div>
               </div>
-
-
             </div>
-            <!-- /.box-body -->
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
-    <!-- /.content -->
     <div th:include="include :: footer"></div>
-    <!-- page script -->
     <script th:inline="javascript">
-
+      var ctx = ctx + "sys/user";
       // 锁定用户
       function updateStatus(id,status) {
         $.modal.confirm("确定修改这个用户吗?",function () {
-          $.operate.post(ctx + "sys/user/status", {"id": id, "status": status}, function () {
+          $.operate.post(ctx + "/status", {"id": id, "status": status}, function () {
             $.table.refresh();
           })
         });
@@ -104,7 +88,7 @@
         $.table.init({
           id: "userDataTables",
           info: true,
-          url: ctx + "sys/user/list",
+          url: ctx + "/list",
           pageLength: 15,
           data : {
             userName: $("#account").val(),
@@ -152,7 +136,7 @@
           $("#name").val(data.name);
           $.tree.init({
             id: "roleTree",
-            url: ctx + "sys/user/roles/" + data.id,
+            url: ctx + "/roles/" + data.id,
             name: "roleName"
           });
           $("#btn_edit").removeAttr("disabled");
@@ -173,7 +157,7 @@
         // 编辑用户
         $("#btn_edit").click(function () {
           if ($.validate.isValid()) {
-            $.operate.post(ctx + "sys/user/update",$("#userForm").serialize() + "&role=" + $.tree.getCheckedNodes(),function () {
+            $.operate.post(ctx + "/update",$("#userForm").serialize() + "&role=" + $.tree.getCheckedNodes(),function () {
               $.table.refresh();
             });
             $.validate.reset();

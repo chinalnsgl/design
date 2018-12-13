@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         添加角色
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
@@ -33,21 +31,14 @@
               <div class="box-footer">
                 <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
               </div>
-              <!-- /.box-footer -->
             </form>
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
-    <!-- /.content -->
     <div th:include="include::footer"></div>
     <script th:inline="javascript">
-
       var roleForm = $("#roleForm");
-
       // z_tree配置
       var setting = {
         async: {
@@ -96,31 +87,6 @@
         });
         return treeData;
       }
-
-      /** 表单验证设置 */
-      /*function setValid() {
-        roleForm.bootstrapValidator({
-          feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-          },
-          fields: {
-            roleName: {
-              validators: {
-                notEmpty: {message: '请输入角色名称'},
-                remote: {
-                  url:"/sys/role/checkRoleNameUnique",
-                  message: '角色已存在',
-                  delay: 200,
-                  type: 'POST',
-                  data: {roleName: $("#roleName").val()}
-                }
-              }
-            }
-          }
-        });
-      }*/
 
       /** 编辑角色事件 */
       function createEvent() {

@@ -7,11 +7,9 @@ import com.zw.design.modules.build.create.entity.Project;
 import com.zw.design.modules.build.create.service.ProjectService;
 import com.zw.design.modules.build.distributedesigntask.entity.DeptTask;
 import com.zw.design.modules.build.distributedesigntask.entity.ProduceTask;
-import com.zw.design.modules.build.distributedesigntask.form.*;
 import com.zw.design.modules.build.distributedesigntask.model.CollectDto;
 import com.zw.design.modules.build.distributedesigntask.model.DeptTaskDto;
-import com.zw.design.modules.build.distributedesigntask.model.TaskDto;
-import com.zw.design.modules.build.distributedesigntask.query.ProjectQuery;
+import com.zw.design.modules.build.distributedesigntask.query.DistributeDesignTaskQuery;
 import com.zw.design.modules.build.distributedesigntask.query.TaskQuery;
 import com.zw.design.modules.build.distributedesigntask.service.ProcessService;
 import com.zw.design.modules.build.distributedesigntask.service.TaskService;
@@ -33,10 +31,10 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/build")
+@RequestMapping("/build/create")
 public class ProjectController {
 
-    private String prefix = "build";
+    private String prefix = "build/create";
     @Autowired
     private ProjectService projectService;
     @Autowired
@@ -51,17 +49,17 @@ public class ProjectController {
     /**
      * 创建项目页面
      */
-    @GetMapping("/creates")
+    @GetMapping("/page")
     @RequiresPermissions({"create:create"})
     public String create() {
-        return prefix + "/create/create";
+        return prefix + "/create";
     }
 
     /**
      * 项目编号唯一验证
      */
     @ResponseBody
-    @PostMapping("create/checkCodeUnique")
+    @PostMapping("/checkCodeUnique")
     @RequiresPermissions({"create:create"})
     public BaseValidResponse checkCodeUnique(@RequestParam("code") String code, @RequestParam(value = "id",required = false) Integer id) {
         Project project = projectService.findByCode(code);
@@ -77,19 +75,19 @@ public class ProjectController {
     /**
      * 创建项目
      */
-    @PostMapping("/create/create")
+    @PostMapping("/create")
     @RequiresPermissions({"create:create"})
     public String create(Project project) {
         project.setCode(project.getCode().trim());
         projectService.saveProject(project);
-        return "redirect:/build/ddts";
+        return "redirect:/build/ddt/page";
     }
 
     /**
      * 删除项目
      */
     @ResponseBody
-    @PostMapping("/create/del")
+    @PostMapping("/del")
     @RequiresPermissions({"create:del"})
     public BaseResponse create(@RequestParam("id")Integer id) {
         projectService.delProject(id);
@@ -99,23 +97,20 @@ public class ProjectController {
     /**
      * 修改项目
      */
-    @ResponseBody
+    /*@ResponseBody
     @PostMapping("/update")
     public BaseResponse update(ProjectForm project, HttpServletRequest request) {
         Project p = projectService.updateProject(project);
 //        logService.saveLog("删除项目：" + p.getName() + " 项目号：" + p.getCode(), request);
         return BaseResponse.toResponse(p.getId());
-    }
-
-
-
+    }*/
 
     /**
      * 已下达任务单的项目列表
      */
     @ResponseBody
     @PostMapping("/list/send")
-    public BaseResponse projectListForSend(ProjectQuery query) {
+    public BaseResponse projectListForSend(DistributeDesignTaskQuery query) {
         BaseDataTableModel<Project> dto = projectService.findProjectsForSendByCriteria(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
@@ -133,19 +128,19 @@ public class ProjectController {
     /**
      * 多项目列表数据
      */
-    @ResponseBody
+    /*@ResponseBody
     @PostMapping("/many")
-    public BaseResponse many(ProjectQuery query) {
-        if (query.getDepartmentQuery() != null && !"".equals(query.getDepartmentQuery())) {
-            String[] strings = query.getDepartmentQuery().split(",");
+    public BaseResponse many(DistributeDesignTaskQuery query) {
+        *//*if (query.getSectionQuery() != null && !"".equals(query.getSectionQuery())) {
+            String[] strings = query.getSectionQuery().split(",");
             query.setType(Integer.parseInt(strings[0]));
             query.setNum(Integer.parseInt(strings[1]));
-        }
+        }*//*
         BaseDataTableModel<TaskDto> dto = taskService.findByCriteria(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;
-    }
+    }*/
 
     /**
      * 修改项目页面

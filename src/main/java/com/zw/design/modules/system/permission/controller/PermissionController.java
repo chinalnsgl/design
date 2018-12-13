@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/sys")
+@RequestMapping("/sys/permission")
 public class PermissionController {
 
-    private String prefix = "system";
+    private String prefix = "system/permission";
 
     @Autowired
     private PermissionService permissionService;
@@ -26,16 +26,16 @@ public class PermissionController {
     /**
      * 权限列表页面
      */
-    @GetMapping("/permissions")
+    @GetMapping("/page")
     @RequiresPermissions({"permission:list"})
     public String permissions() {
-        return prefix + "/permission/list";
+        return prefix + "/list";
     }
     /**
      * 权限列表数据
      */
     @ResponseBody
-    @PostMapping("/permission/list")
+    @PostMapping("/list")
     @RequiresPermissions({"permission:list"})
     public BaseResponse permissionList(PermissionQuery query) {
         BaseDataTableModel<SysPermission> dto = permissionService.findPermissionByQuery(query);
@@ -48,7 +48,7 @@ public class PermissionController {
      * 删除权限, 修改状态为0
      */
     @ResponseBody
-    @PostMapping("/permission/status")
+    @PostMapping("/status")
     @RequiresPermissions({"permission:del"})
     public BaseResponse updatePermissionStatus(@RequestParam("id")Integer id) {
         SysPermission permission = permissionService.updatePermissionStatus(id,0);
@@ -59,7 +59,7 @@ public class PermissionController {
     /**
      * 权限添加页面
      */
-    @GetMapping("/permission/create")
+    @GetMapping("/create")
     @RequiresPermissions({"permission:create"})
     public String permissionCreate() {
         return prefix + "/permission/create";
@@ -67,18 +67,18 @@ public class PermissionController {
     /**
      * 子权限添加页面
      */
-    @GetMapping("/permission/create/{id}")
+    @GetMapping("/create/{id}")
     @RequiresPermissions({"permission:create"})
     public String permissionCreate(@PathVariable Integer id, Model model) {
         model.addAttribute("id", id);
-        return prefix + "/permission/create";
+        return prefix + "/create";
     }
 
     /**
      * 权限名唯一验证
      */
     @ResponseBody
-    @PostMapping("/permission/checkPermissionNameUnique")
+    @PostMapping("/checkPermissionNameUnique")
     @RequiresPermissions({"permission:create"})
     public BaseValidResponse checkPermissionNameUnique(@RequestParam("permissionName") String permissionName, @RequestParam(value = "id", required = false) Integer id) {
         SysPermission permission = permissionService.findByPermissionNameAndStatus(permissionName, 1);
@@ -94,7 +94,7 @@ public class PermissionController {
      * 保存权限
      */
     @ResponseBody
-    @PostMapping("/permission/save")
+    @PostMapping("/save")
     @RequiresPermissions({"permission:create"})
     public BaseResponse permissionSave(SysPermission permission) {
         SysPermission sysPermission = permissionService.savePermission(permission);
@@ -116,7 +116,7 @@ public class PermissionController {
      * 修改权限
      */
     @ResponseBody
-    @PostMapping("/permission/update")
+    @PostMapping("/update")
     @RequiresPermissions({"permission:edit"})
     public BaseResponse permissionUpdate(SysPermission permission) {
         SysPermission sysPermission = permissionService.updatePermission(permission);
@@ -128,7 +128,7 @@ public class PermissionController {
      * 所有权限数据
      */
     @ResponseBody
-    @GetMapping("/permission/all")
+    @GetMapping("/all")
     @RequiresPermissions({"role:create"})
     public List<SysPermission> allPermission() {
         return permissionService.findPermissionAll();

@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         添加权限
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
@@ -47,16 +45,11 @@
               <div class="box-footer">
                 <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
               </div>
-              <!-- /.box-footer -->
             </form>
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
-    <!-- /.content -->
     <div th:include="include :: footer"></div>
 
     <script>
@@ -82,7 +75,7 @@
         $("#btn_create").click(function () {
           if ($.validate.isValid()) {
             $.operate.post(ctx + "sys/permission/save",$("#permissionForm").serialize(), function (result) {
-              location.href = ctx + "sys/permissions";
+              location.href = ctx + "sys/permission/page";
             });
           }
         });

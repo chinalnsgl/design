@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.lookboard.multi.mapper.MultiMapper">
+
+  <select id="findProjectByQuery" resultType="com.zw.design.modules.lookboard.multi.model.MultiModel" parameterType="com.zw.design.modules.lookboard.multi.query.MultiQuery">
+    select
+    a.id,
+    a.name,
+    a.demander,
+    a.address,
+    a.code,
+    a.code_special,
+    a.num,
+    a.design_depts,
+    a.design_task_status,
+    a.process_task_status,
+    a.produce_task_status,
+    a.comment,
+    a.status as projectStatus,
+    b.comp_status as signStatus,
+    c.comp_status as contractStatus,
+    d.comp_status as debugStatus,
+    e.comp_status as acceptStatus,
+    f.comp_status as saveStatus,
+    g.messageCount
+    from project as a
+    left join task as b on a.id = b.project_id and b.task_name_id = 2
+    left join task as c on a.id = c.project_id and c.task_name_id = 3
+    left join task as d on a.id = d.project_id and d.task_name_id = 4
+    left join task as e on a.id = e.project_id and e.task_name_id = 5
+    left join task as f on a.id = f.project_id and f.task_name_id = 6
+    left join (
+    select count(id) as messageCount ,project_id from message group by project_id
+    ) as g on a.id = g.project_id
+    where 1 = 1
+    <if test="codeQuery != null and codeQuery != ''">
+      and a.code like #{codeQuery}
+    </if>
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.name like #{nameQuery}
+    </if>
+    <if test="demanderQuery != null and demanderQuery != ''">
+      and a.demander like #{demanderQuery}
+    </if>
+    <if test="yearQuery != null">
+      and year (a.create_time) = #{yearQuery}
+    </if>
+    <if test="sectionQuery != null and sectionQuery != ''">
+      and a.design_depts like  #{sectionQuery}
+    </if>
+    <if test="statusQuery != null">
+      and a.status = #{statusQuery}
+    </if>
+    <if test="startTimeQuery != null">
+      <![CDATA[ and a.create_time >= #{startTimeQuery} ]]>
+    </if>
+    <if test="endTimeQuery != null">
+      <![CDATA[ and a.create_time <= #{endTimeQuery} ]]>
+    </if>
+    order by a.order_no desc , a.code
+	</select>
+
+</mapper>

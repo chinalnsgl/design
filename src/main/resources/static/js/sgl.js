@@ -31,7 +31,7 @@
               autoWidth: options.autoWidth ? options.autoWidth : true,                                  // 自适应宽度
               lengthChange: false,                                                                      // 允许用户改变表格每页显示的记录数
               pageLength: options.pageLength ? options.pageLength : 300,                                // 每页多少条数据
-              dom: options.dom ? options.dom : "Tft<'row DTTTFooter'<'col-sm-6'li><'col-sm-6'p>>",      // 组件元素的显示和显示顺序
+              dom: options.dom ? options.dom : "Tft<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",      // 组件元素的显示和显示顺序
               searching: false,                                                                         // 开启本地搜索
               processing: true,                                                                         // 显示处理状态
               serverSide: true,                                                                         // 开启服务器模式
@@ -562,4 +562,9 @@ $(window).scroll(function () {
   } else {
     $('#goToTop').fadeOut();
   }
+});
+// 给按钮绑定一个click事件，点击按钮时，返回顶部
+$('#goToTop').click(function () {
+  $('html ,body').animate({scrollTop: 0}, 300);
+  return false;
 });

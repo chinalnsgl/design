@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         添加科室
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <form id="sectionForm" class="form-horizontal">
       <div class="row">
@@ -17,7 +15,6 @@
             <div class="box-header">
               <h3>科室基本信息</h3>
             </div>
-
             <div class="box-body">
               <div class="row">
                 <div class="col-md-6">
@@ -44,24 +41,15 @@
                 </div>
               </div>
             </div>
-
             <div class="box-footer">
               <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
             </div>
-              <!-- /.box-footer -->
-
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
       </form>
     </section>
-    <!-- /.content -->
-    <!-- jQuery 3 -->
     <div th:include="include :: footer"></div>
-    <!-- page script -->
     <script>
       var ctx = ctx + "baseinfo";
       $(function () {
@@ -88,13 +76,11 @@
         $("#btn_create").click(function () {
           if ($.validate.isValid()) {
             $.operate.post(ctx + "/sec/save",$("#sectionForm").serialize(), function () {
-              location.href = ctx + "/secs";
+              location.href = ctx + "/sec/page";
             });
           }
         });
-
       });
-
     </script>
 </body>
 </html>

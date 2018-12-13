@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         添加用户
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
@@ -42,24 +40,17 @@
                   </div>
                 </div>
               </div>
-
               <div class="box-footer">
                 <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
               </div>
-              <!-- /.box-footer -->
             </form>
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
-    <!-- /.content -->
-    <!-- jQuery 3 -->
     <div th:include="include :: footer"></div>
-    <!-- page script -->
     <script>
+      var ctx = ctx + "sys/user";
       $(function () {
         // 验证初始化
         $.validate.init("userForm",{
@@ -72,7 +63,7 @@
           if ($.validate.isValid("userForm")) {
             $.operate.post(ctx + "sys/user/update",$("#userForm").serialize(), function (result) {
               if (result.status === 200) {
-                location.href = ctx + "sys/users";
+                location.href = ctx + "/page";
               } else {
                 $.modal.fail("系统错误！");
               }

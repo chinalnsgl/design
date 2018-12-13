@@ -1,13 +1,6 @@
 package com.zw.design.modules.build.distributedesigntask.service;
 
 import com.zw.design.base.BaseDataTableModel;
-import com.zw.design.modules.baseinfosetting.section.entity.Section;
-import com.zw.design.modules.baseinfosetting.section.repository.SectionRepository;
-import com.zw.design.modules.baseinfosetting.sectiontype.entity.SectionType;
-import com.zw.design.modules.baseinfosetting.taskname.entity.TaskName;
-import com.zw.design.modules.baseinfosetting.tasktype.entity.TaskType;
-import com.zw.design.modules.baseinfosetting.tasktype.repository.TaskTypeRepository;
-import com.zw.design.modules.build.distributedesigntask.entity.Task;
 import com.zw.design.modules.build.distributedesigntask.model.CollectDto;
 import com.zw.design.modules.build.distributedesigntask.model.DeptTaskDto;
 import com.zw.design.modules.build.distributedesigntask.model.TaskDto;
@@ -15,19 +8,17 @@ import com.zw.design.modules.build.distributedesigntask.entity.DeptTask;
 import com.zw.design.modules.build.distributedesigntask.entity.ProduceTask;
 import com.zw.design.modules.build.create.entity.Project;
 import com.zw.design.modules.build.distributedesigntask.mapper.DeptTaskDao;
-import com.zw.design.modules.build.distributedesigntask.query.ProjectQuery;
+import com.zw.design.modules.build.distributedesigntask.query.DistributeDesignTaskQuery;
 import com.zw.design.modules.build.distributedesigntask.query.TaskQuery;
 import com.zw.design.modules.build.distributedesigntask.repository.DeptTaskRepository;
 import com.zw.design.modules.build.distributedesigntask.repository.ProduceTaskRepository;
 import com.zw.design.modules.build.create.repository.ProjectRepository;
-import com.zw.design.modules.build.distributedesigntask.repository.TaskRepository;
 import com.zw.design.modules.system.log.service.LogService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,56 +37,9 @@ public class TaskServiceImpl implements TaskService {
     private ProjectRepository projectRepository;
     @Autowired
     private LogService logService;
-    @Autowired
-    private SectionRepository sectionRepository;
-    @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private TaskTypeRepository taskTypeRepository;
 
-    // 下达设计任务
-    @Transactional
-    @CacheEvict(value = "projects",allEntries = true)
-    @Override
-    public boolean distributeDesignTAsk(Integer projectId, Integer[] sectionId) {
-        Project project = projectRepository.findById(projectId).get();
-        project.setStatus(2); // 设置项目为已下达状态
-        logService.saveLog("下达任务单", project.getName() + " 项目号：" + project.getCode());
-        Task task;
-        StringBuilder designDepts = new StringBuilder();
-        for (Integer id : sectionId) {
-            if (id != null) {
-                Section section = sectionRepository.findById(id).get();
-                designDepts.append(section.getName() + ",");
-                for (TaskName taskName : section.getSectionType().getTaskNames()) {
-                    task = new Task();
-                    task.setAlias(taskName.getName());
-                    task.setSection(section);
-                    task.setTaskName(taskName);
-                    task.setProject(project);
-                    taskRepository.save(task);
-                }
-            }
-        }
-        project.setDesignDepts(designDepts.toString().substring(0, designDepts.lastIndexOf(",")));
-        projectRepository.save(project);
-        List<TaskType> taskTypes = taskTypeRepository.findByIdNotAndStatus(2, 1);
-        for (TaskType taskType : taskTypes) {
-            for (TaskName taskName : taskType.getTaskNames()) {
-                task = new Task();
-                task.setAlias(taskName.getName());
-                task.setTaskName(taskName);
-                task.setProject(project);
-                if (taskName.getId() == 1) {
-                    task.setStartTime(new Date());
-                    task.setEndTime(new Date());
-                    task.setStatus(2);
-                }
-                taskRepository.save(task);
-            }
-        }
-        return true;
-    }
+
+
 
     /**
      * 保存科室任务
@@ -199,16 +143,16 @@ public class TaskServiceImpl implements TaskService {
     /**
      * 多项目看板列表
      */
-    @Cacheable(value = "projects",key = "'many'+#query")
-    public BaseDataTableModel<TaskDto> findByCriteria(ProjectQuery query) {
+    /*@Cacheable(value = "projects",key = "'many'+#query")
+    public BaseDataTableModel<TaskDto> findByCriteria(DistributeDesignTaskQuery query) {
         if (query.getCodeQuery() != null && !"".equals(query.getCodeQuery().trim())) {
             query.setCodeQuery("%" + query.getCodeQuery() + "%");
         }
         if (query.getNameQuery() != null && !"".equals(query.getNameQuery().trim())) {
             query.setNameQuery("%" + query.getNameQuery() + "%");
         }
-        if (query.getDemander() != null && !"".equals(query.getDemander().trim())) {
-            query.setDemander("%" + query.getDemander() + "%");
+        if (query.getDemanderQuery() != null && !"".equals(query.getDemanderQuery().trim())) {
+            query.setDemanderQuery("%" + query.getDemanderQuery() + "%");
         }
         query.setLength(query.getStart() + query.getLength());
         query.setStart(query.getStart() + 1);
@@ -220,7 +164,7 @@ public class TaskServiceImpl implements TaskService {
         baseDataTableModel.setRecordsTotal(count);
         baseDataTableModel.setRecordsFiltered(count);
         return baseDataTableModel;
-    }
+    }*/
 
     /**
      * 科室看板

@@ -17,10 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping("/baseinfo")
+@RequestMapping("/baseinfo/emp")
 public class EmployeeController {
 
-    private String prefix = "baseinfo";
+    private String prefix = "baseinfo/emp";
 
     @Autowired
     private EmployeeService employeeService;
@@ -28,16 +28,16 @@ public class EmployeeController {
     /**
      * 员工页面
      */
-    @GetMapping("/emps")
+    @GetMapping("/page")
     @RequiresRoles({"admin"})
     public String emps() {
-        return prefix + "/emp/list";
+        return prefix + "/list";
     }
     /**
      * 员工列表数据
      */
     @ResponseBody
-    @PostMapping("/emp/list")
+    @PostMapping("/list")
     @RequiresRoles({"admin"})
     public BaseResponse empList(EmployeeQuery query) {
         BaseDataTableModel<Employee> dto = employeeService.findEmployeeByQuery(query);
@@ -50,16 +50,16 @@ public class EmployeeController {
     /**
      * 创建员工页面
      */
-    @GetMapping("/emp/create")
+    @GetMapping("/create")
     @RequiresRoles({"admin"})
     public String empCreate() {
-        return  prefix + "/emp/create";
+        return  prefix + "/create";
     }
     /**
      * 保存员工
      */
     @ResponseBody
-    @PostMapping("/emp/save")
+    @PostMapping("/save")
     @RequiresRoles({"admin"})
     public BaseResponse empSave(Employee employee, @RequestParam("deptId") Integer deptId) {
         Department department = new Department();
@@ -73,18 +73,18 @@ public class EmployeeController {
     /**
      * 员工编辑页面
      */
-    @GetMapping("/emp/edit/{id}")
+    @GetMapping("/edit/{id}")
     @RequiresRoles({"admin"})
     public String empEdit(@PathVariable Integer id, Model model) {
         Employee employee = employeeService.findEmployeeById(id);
         model.addAttribute("emp", employee);
-        return prefix + "/emp/edit";
+        return prefix + "/edit";
     }
     /**
      * 所有部门，选中员工所在部门
      */
     @ResponseBody
-    @GetMapping("emp/dept/{id}")
+    @GetMapping("/dept/{id}")
     @RequiresRoles({"admin"})
     public List<Department> rolePermissions(@PathVariable Integer id) {
         return employeeService.findDeptByEmpId(id);
@@ -93,7 +93,7 @@ public class EmployeeController {
      * 修改员工
      */
     @ResponseBody
-    @PostMapping("/emp/update")
+    @PostMapping("/update")
     @RequiresRoles({"admin"})
     public BaseResponse empUpdate(Employee employee, @RequestParam("deptId") Integer deptId, HttpServletRequest request) {
         Department department = new Department();
@@ -107,7 +107,7 @@ public class EmployeeController {
      * 删除员工， 修改状态为0
      */
     @ResponseBody
-    @PostMapping("/emp/status")
+    @PostMapping("/status")
     @RequiresRoles({"admin"})
     public BaseResponse updateEmpStatus(@RequestParam("id")Integer id,  HttpServletRequest request) {
         Employee employee = employeeService.updateEmployeeStatus(id, 0);

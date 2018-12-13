@@ -13,10 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/baseinfo")
+@RequestMapping("/baseinfo/sectype")
 public class SectionTypeController {
 
-    private String prefix = "baseinfo";
+    private String prefix = "baseinfo/sectionType";
 
     @Autowired
     private SectionTypeService sectionTypeService;
@@ -24,16 +24,16 @@ public class SectionTypeController {
     /**
      * 到达部门类型列表页面
      */
-    @GetMapping("/sectypes")
+    @GetMapping("/page")
     @RequiresRoles({"admin"})
     public String users() {
-        return prefix + "/sectionType/list";
+        return prefix + "/list";
     }
     /**
      * 部门类型列表数据
      */
     @ResponseBody
-    @PostMapping("/sectype/list")
+    @PostMapping("/list")
     @RequiresRoles({"admin"})
     public BaseResponse sectionTypeList(SectionTypeQuery query) {
         BaseDataTableModel<SectionType> dto = sectionTypeService.findByQuery(query);
@@ -46,7 +46,7 @@ public class SectionTypeController {
      * 删除部门类型
      */
     @ResponseBody
-    @PostMapping("/sectype/status")
+    @PostMapping("/status")
     @RequiresRoles({"admin"})
     public BaseResponse updateSectionTypeStatus(@RequestParam("id")Integer id) {
         SectionType sectionType = sectionTypeService.updateSectionTypeStatus(id,0);
@@ -57,16 +57,16 @@ public class SectionTypeController {
     /**
      * 添加页面
      */
-    @GetMapping("/sectype/create")
+    @GetMapping("/create")
     @RequiresRoles({"admin"})
     public String sectionTypeCreate() {
-        return  prefix + "/sectionType/create";
+        return  prefix + "/create";
     }
     /**
      * 部门类型唯一验证
      */
     @ResponseBody
-    @PostMapping("/sectype/checkSecTypeNameUnique")
+    @PostMapping("/checkSecTypeNameUnique")
     @RequiresRoles({"admin"})
     public BaseValidResponse checkSectionTypeNameUnique(@RequestParam(value = "name") String name, @RequestParam(value = "id", required = false) Integer id ) {
         SectionType sectionType = sectionTypeService.findByNameAndStatus(name, 1);
@@ -82,7 +82,7 @@ public class SectionTypeController {
      * 保存部门类型
      */
     @ResponseBody
-    @PostMapping("/sectype/save")
+    @PostMapping("/save")
     @RequiresRoles({"admin"})
     public BaseResponse sectionTypeSave(SectionType sectionType) {
         SectionType secType = sectionTypeService.saveSectionType(sectionType);
@@ -94,7 +94,7 @@ public class SectionTypeController {
      * 修改部门类型
      */
     @ResponseBody
-    @PostMapping("/sectype/update")
+    @PostMapping("/update")
     @RequiresRoles({"admin"})
     public BaseResponse sectionTypeUpdate(SectionType sectionType) {
         SectionType secType = sectionTypeService.updateSectionType(sectionType);

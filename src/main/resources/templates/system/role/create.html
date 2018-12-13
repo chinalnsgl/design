@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         添加角色
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
@@ -37,19 +35,15 @@
                     <div id="permissionTree" class="ztree"></div>
                   </div>
                 </div>
+              </div>
               <div class="box-footer">
                 <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
               </div>
-              <!-- /.box-footer -->
             </form>
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
-    <!-- /.content -->
     <div th:include="include::footer"></div>
     <script>
       $(function () {
@@ -63,7 +57,7 @@
               validators: {
                 notEmpty: {message: '请输入角色名称'},
                 remote: {
-                  url:"/sys/role/checkRoleNameUnique",
+                  url: ctx + "sys/role/checkRoleNameUnique",
                   message: '角色已存在',
                   delay: 200,
                   type: 'POST'
@@ -82,13 +76,11 @@
         $("#btn_create").click(function () {
           if ($.validate.isValid()) {
             $.operate.post(ctx + "sys/role/save",$("#roleForm").serialize()+ "&permissions=" + $.tree.getCheckedNodes(), function () {
-              location.href = ctx + "sys/roles";
+              location.href = ctx + "sys/role/page";
             });
           }
         });
-
       });
-
     </script>
 </body>
 </html>

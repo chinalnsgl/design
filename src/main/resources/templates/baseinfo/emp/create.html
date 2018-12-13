@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         添加员工
       </h1>
     </section>
-    <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
@@ -40,16 +38,11 @@
               <div class="box-footer">
                 <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
               </div>
-              <!-- /.box-footer -->
             </form>
-          <!-- /.box -->
+          </div>
         </div>
-        </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
-    <!-- /.content -->
     <div th:include="include::footer"></div>
     <script>
       var ctx = ctx + "baseinfo";
@@ -79,7 +72,7 @@
           }
           if ($.validate.isValid()) {
             $.operate.post(ctx + "/emp/save",$("#empForm").serialize() + "&deptId=" + $.tree.getCheckedNodes(), function () {
-              location.href = ctx + "/emps";
+              location.href = ctx + "/emp/page";
             });
           }
         });

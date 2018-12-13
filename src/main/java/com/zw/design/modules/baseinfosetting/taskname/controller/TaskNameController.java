@@ -16,10 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/baseinfo")
+@RequestMapping("/baseinfo/taskname")
 public class TaskNameController {
 
-    private String prefix = "baseinfo";
+    private String prefix = "baseinfo/taskName";
 
     @Autowired
     private TaskNameService taskNameService;
@@ -31,18 +31,18 @@ public class TaskNameController {
     /**
      * 到达部门名称列表页面
      */
-    @GetMapping("/tasknames")
+    @GetMapping("/page")
     @RequiresRoles({"admin"})
     public String users(Model model) {
         model.addAttribute("taskType", taskTypeService.findByStatus(1));
         model.addAttribute("sectionType", sectionTypeService.findByStatus(1));
-        return prefix + "/taskName/list";
+        return prefix + "/list";
     }
     /**
      * 部门名称列表数据
      */
     @ResponseBody
-    @PostMapping("/taskname/list")
+    @PostMapping("/list")
     @RequiresRoles({"admin"})
     public BaseResponse taskNameList(TaskNameQuery query) {
         BaseDataTableModel<TaskName> dto = taskNameService.findByQuery(query);
@@ -55,7 +55,7 @@ public class TaskNameController {
      * 删除部门名称
      */
     @ResponseBody
-    @PostMapping("/taskname/status")
+    @PostMapping("/status")
     @RequiresRoles({"admin"})
     public BaseResponse updateTaskNameStatus(@RequestParam("id")Integer id) {
         TaskName taskName = taskNameService.updateTaskNameStatus(id,0);
@@ -66,19 +66,19 @@ public class TaskNameController {
     /**
      * 添加页面
      */
-    @GetMapping("/taskname/create")
+    @GetMapping("/create")
     @RequiresRoles({"admin"})
     public String taskNameCreate(Model model) {
         model.addAttribute("taskType", taskTypeService.findByStatus(1));
         model.addAttribute("sectionType", sectionTypeService.findByStatus(1));
-        return  prefix + "/taskName/create";
+        return  prefix + "/create";
     }
 
     /**
      * 部门名称唯一验证
      */
     @ResponseBody
-    @PostMapping("/taskname/checkTaskNameUnique")
+    @PostMapping("/checkTaskNameUnique")
     @RequiresRoles({"admin"})
     public BaseValidResponse checkTaskNameUnique(@RequestParam("name") String name, @RequestParam(value = "id", required = false) Integer id) {
         TaskName taskName = taskNameService.findByNameAndStatus(name, 1);
@@ -94,7 +94,7 @@ public class TaskNameController {
      * 保存部门名称
      */
     @ResponseBody
-    @PostMapping("/taskname/save")
+    @PostMapping("/save")
     @RequiresRoles({"admin"})
     public BaseResponse taskNameSave(TaskName taskName) {
         TaskName tName = taskNameService.saveTaskName(taskName);
@@ -106,7 +106,7 @@ public class TaskNameController {
      * 修改部门名称
      */
     @ResponseBody
-    @PostMapping("/taskname/update")
+    @PostMapping("/update")
     @RequiresRoles({"admin"})
     public BaseResponse taskNameUpdate(TaskName taskName) {
         TaskName tName = taskNameService.updateTaskName(taskName);

@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping("/sys")
+@RequestMapping("/sys/role")
 public class RoleController {
 
-    private String prefix = "system";
+    private String prefix = "system/role";
 
     @Autowired
     private RoleService roleService;
@@ -26,14 +26,14 @@ public class RoleController {
     /**
      * 角色列表页面
      */
-    @GetMapping("/roles")
+    @GetMapping("/page")
     @RequiresPermissions({"role:list"})
     public String roles() {
-        return prefix + "/role/list";
+        return prefix + "/list";
     }
     // 角色列表数据
     /*@ResponseBody
-    @PostMapping("/role/list")
+    @PostMapping("/list")
     @RequiresPermissions({"role:list"})
     public BaseResponse roleList(RoleQuery query) {
         BaseDataTableModel<SysRole> dto = roleService.findRoleByQuery(query);
@@ -45,7 +45,7 @@ public class RoleController {
      * 角色拥有权限数据
      */
     @ResponseBody
-    @GetMapping("role/permissions/{id}")
+    @GetMapping("/permissions/{id}")
     @RequiresPermissions({"role:list"})
     public List<SysPermission> rolePermissions(@PathVariable Integer id) {
         return roleService.findRolePermissionById(id);
@@ -56,7 +56,7 @@ public class RoleController {
      * 删除角色， 修改状态为0
      */
     @ResponseBody
-    @PostMapping("/role/status")
+    @PostMapping("/status")
     @RequiresPermissions({"role:del"})
     public BaseResponse updateRoleStatus(@RequestParam("id")Integer id) {
         SysRole role = roleService.updateRoleStatus(id, 0);
@@ -66,27 +66,27 @@ public class RoleController {
     /**
      * 创建角色页面
      */
-    @GetMapping("/role/create")
+    @GetMapping("/create")
     @RequiresPermissions({"role:create"})
     public String roleCreate() {
-        return  prefix + "/role/create";
+        return  prefix + "/create";
     }
 
     /**
      * 创建角色页面
      */
-    @GetMapping("/role/create/{id}")
+    @GetMapping("/create/{id}")
     @RequiresPermissions({"role:create"})
     public String roleCreate(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("id", id);
-        return prefix + "/role/create";
+        return prefix + "/create";
     }
 
     /**
      * 角色唯一验证
      */
     @ResponseBody
-    @PostMapping("/role/checkRoleNameUnique")
+    @PostMapping("/checkRoleNameUnique")
     @RequiresPermissions({"role:create"})
     public BaseValidResponse checkRoleNameUnique(@RequestParam("roleName") String roleName, @RequestParam(value = "id", required = false) Integer id) {
         SysRole role = roleService.findByRoleNameAndStatus(roleName, 1);
@@ -102,7 +102,7 @@ public class RoleController {
      * 保存角色
      */
     @ResponseBody
-    @PostMapping("/role/save")
+    @PostMapping("/save")
     @RequiresPermissions({"role:create"})
     public BaseResponse roleSave(SysRole role, Integer [] permissions) {
         SysRole sysRole = roleService.saveRole(role,permissions);
@@ -121,7 +121,7 @@ public class RoleController {
      * 修改角色
      */
     @ResponseBody
-    @PostMapping("/role/update")
+    @PostMapping("/update")
     @RequiresPermissions({"role:edit"})
     public BaseResponse roleUpdate(SysRole role, Integer [] permissions, HttpServletRequest request) {
         SysRole sysRole = roleService.updateRole(role,permissions);
@@ -133,7 +133,7 @@ public class RoleController {
      * 获取所有角色
      */
     @ResponseBody
-    @GetMapping("/role/all")
+    @GetMapping("/all")
     @RequiresPermissions({"user:create"})
     public List<SysRole> findAllRole() {
         return roleService.findAllByStatus();

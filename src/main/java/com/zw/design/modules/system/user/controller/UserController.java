@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/sys")
+@RequestMapping("/sys/user")
 public class UserController {
 
-    private String prefix = "system";
+    private String prefix = "system/user";
 
     @Autowired
     private UserService userService;
@@ -31,20 +31,19 @@ public class UserController {
     @Value("${upload.path}")
     private String uploadPath;
 
-
     /**
      * 到达用户列表页面
      */
-    @GetMapping("/users")
+    @GetMapping("/page")
     @RequiresPermissions({"user:list"})
     public String users() {
-        return prefix + "/user/list";
+        return prefix + "/list";
     }
     /**
      * 用户列表数据
      */
     @ResponseBody
-    @PostMapping("/user/list")
+    @PostMapping("/list")
     @RequiresPermissions({"user:list"})
     public BaseResponse userList(UserQuery query) {
         BaseDataTableModel<SysUser> dto = userService.findUserByQuery(query);
@@ -55,7 +54,7 @@ public class UserController {
     /**
      * 用户拥有角色
      */
-    @GetMapping("/user/roles/{id}")
+    @GetMapping("/roles/{id}")
     @ResponseBody
     @RequiresPermissions({"user:list"})
     public List<SysRole> userRoles(@PathVariable Integer id) {
@@ -67,7 +66,7 @@ public class UserController {
      * 锁定/解锁用户
      */
     @ResponseBody
-    @PostMapping("/user/status")
+    @PostMapping("/status")
     @RequiresPermissions(value = {"user:lock","user:unlock"}, logical = Logical.OR)
     public BaseResponse updateUserStatus(@RequestParam("id")Integer id, @RequestParam("status") Integer status) {
         SysUser user = userService.updateUserStatus(id,status);
@@ -78,16 +77,16 @@ public class UserController {
     /**
      * 添加页面
      */
-    @GetMapping("/user/create")
+    @GetMapping("/create")
     @RequiresPermissions({"user:create"})
     public String userCreate() {
-        return  prefix + "/user/create";
+        return  prefix + "/create";
     }
     /**
      * 帐号唯一验证
      */
     @ResponseBody
-    @PostMapping("/user/checkUserNameUnique")
+    @PostMapping("/checkUserNameUnique")
     @RequiresPermissions({"user:create"})
     public BaseValidResponse checkUserNameUnique(@RequestParam("userName") String userName) {
         SysUser user = userService.findByUserNameAndStatusGreaterThanEqual(userName, 1);
@@ -97,7 +96,7 @@ public class UserController {
      * 保存用户
      */
     @ResponseBody
-    @PostMapping("/user/save")
+    @PostMapping("/save")
     @RequiresPermissions({"user:create"})
     public BaseResponse userSave(SysUser user, Integer[] role) {
         SysUser sysUser = userService.saveUser(user,role);
@@ -109,7 +108,7 @@ public class UserController {
      * 修改用户
      */
     @ResponseBody
-    @PostMapping("/user/update")
+    @PostMapping("/update")
     @RequiresPermissions({"user:edit"})
     public BaseResponse userUpdate(SysUser user, Integer[] role) {
         SysUser sysUser = userService.updateUser(user,role);
@@ -121,7 +120,7 @@ public class UserController {
      * 所有用户列表
      */
     @ResponseBody
-    @GetMapping("/user/all")
+    @GetMapping("/all")
     public BaseResponse getAll() {
         List<SysUser> users = userService.findAllByStatus();
         BaseResponse baseResponse = new BaseResponse();
@@ -134,7 +133,7 @@ public class UserController {
      * 修改头像
      */
     @ResponseBody
-    @PostMapping("/user/updateImage")
+    @PostMapping("/updateImage")
     public BaseResponse updateImage(String imageData) {
         String imgName = UUID.randomUUID().toString() + ".png";
         SysUser user = userService.updateImage("/files/" + imgName);

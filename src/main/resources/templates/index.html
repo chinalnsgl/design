@@ -128,47 +128,47 @@
       <ul class="sidebar-menu" data-widget="tree">
 
         <!--<li shiro:hasPermission="overview:menu" class="treeview menu-open">-->
-        <li class="treeview menu-open">
+        <li shiro:hasPermission="overview:menu" class="treeview menu-open">
           <a href="#">
             <i class="fa fa-folder-open text-red"></i>
             <span>总览</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu" style="display: block;">
-            <li class="active"><a th:href="@{/sys/users}" shiro:hasPermission="overview:statistics" target="content"><i class="fa fa-circle-o text-red"></i> 项目统计</a></li>
-            <li><a href="#" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 工作日历</a></li>
-            <li><a th:href="@{/meeting/meetings}" shiro:hasPermission="meeting:list" target="content"><i class="fa fa-circle-o text-blue"></i> 公司战略纲领</a></li>
+            <li class="active"><a th:href="@{/overview/statistics/page}" shiro:hasPermission="statistics:list" target="content"><i class="fa fa-circle-o text-red"></i> 项目统计</a></li>
+            <li><a th:href="@{/overview/calendar/page}" shiro:hasPermission="calendar:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 工作日历</a></li>
+            <li><a th:href="@{/overview/meeting/page}" shiro:hasPermission="meeting:list" target="content"><i class="fa fa-circle-o text-blue"></i> 公司战略纲领</a></li>
           </ul>
         </li>
 
-        <li shiro:hasPermission="project:menu" class="treeview">
+        <li shiro:hasPermission="bulid:menu" class="treeview">
           <a href="#">
             <i class="fa fa-folder-open text-yellow"></i>
             <span>立项管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu">
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-red"></i> 项目意向</a></li>
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 意向审核</a></li>
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 创建项目</a></li>
-            <li><a th:href="@{/build/ddts}" shiro:hasPermission="ddt:list" target="content"><i class="fa fa-circle-o text-green"></i> 下达设计任务</a></li>
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-orange"></i> 下达生产任务</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-aqua"></i> 项目任务状态</a></li>
+            <li><a th:href="@{/build/intent/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-red"></i> 项目意向</a></li>
+            <li><a th:href="@{/build/check/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 意向审核</a></li>
+            <li><a th:href="@{/build/create/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 创建项目</a></li>
+            <li><a th:href="@{/build/ddt/page}" shiro:hasPermission="ddt:list" target="content"><i class="fa fa-circle-o text-green"></i> 下达设计任务</a></li>
+            <li><a th:href="@{/build/dpt/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-orange"></i> 下达生产任务</a></li>
+            <li><a th:href="@{/build/pts/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-aqua"></i> 项目任务状态</a></li>
           </ul>
         </li>
 
-        <li shiro:hasPermission="project:menu" class="treeview">
+        <li shiro:hasPermission="board:menu" class="treeview">
           <a href="#">
             <i class="fa fa-folder-open text-blue"></i>
             <span>项目看板</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu">
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="overview:statistics" target="content"><i class="fa fa-circle-o text-red"></i> 多项目看板</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-yellow"></i> 设计进度看板</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-blue"></i> 工艺进度看板</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="overview:meeting" target="content"><i class="fa fa-circle-o text-green"></i> 生产进度看板</a></li>
+            <li><a th:href="@{/board/multi/page}" shiro:hasPermission="multi:list" target="content"><i class="fa fa-circle-o text-red"></i> 多项目看板</a></li>
+            <li><a th:href="@{/board/design/page}" shiro:hasPermission="design:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 设计进度看板</a></li>
+            <li><a th:href="@{/board/process/page}" shiro:hasPermission="process:list" target="content"><i class="fa fa-circle-o text-blue"></i> 工艺进度看板</a></li>
+            <li><a th:href="@{/board/produce/page}" shiro:hasPermission="produce:list" target="content"><i class="fa fa-circle-o text-green"></i> 生产进度看板</a></li>
           </ul>
         </li>
 
-        <li shiro:hasPermission="aaa" class="treeview">
+        <li shiro:hasPermission="purchase:menu" class="treeview">
           <a href="#">
             <i class="fa fa-folder-open text-purple"></i>
             <span>采购管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
@@ -180,36 +180,36 @@
           </ul>
         </li>
 
-        <li shiro:hasPermission="aaa" class="treeview">
+        <li shiro:hasPermission="integrate:menu" class="treeview">
           <a href="#">
             <i class="fa fa-folder-open text-green"></i>
             <span>项目综合管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu">
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-red"></i> 物料清单</a></li>
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 工时统计</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 互动专区</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-aqua"></i> 邮件</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 外购件查询</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 任务单查询</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-green"></i> 技术协议查询</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-orange"></i> 合同查询</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-aqua"></i> 验收归档查询</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-purple"></i> 存档文件</a></li>
+            <li><a th:href="@{/integrate/user/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-red"></i> 物料清单</a></li>
+            <li><a th:href="@{/integrate/user/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 工时统计</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 互动专区</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-aqua"></i> 邮件</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 外购件查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 任务单查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-green"></i> 技术协议查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-orange"></i> 合同查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-aqua"></i> 验收归档查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-purple"></i> 存档文件</a></li>
           </ul>
         </li>
 
         <!--<li shiro:hasPermission="project:menu" class="treeview">-->
-        <li class="treeview">
+        <li shiro:hasPermission="sys:menu" class="treeview">
           <a href="#">
             <i class="fa fa-folder-open text-orange"></i>
             <span>系统管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu">
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="user:list" target="content"><i class="fa fa-circle-o text-red"></i> 帐号管理</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="role:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 角色管理</a></li>
-            <li><a th:href="@{/sys/permissions}" shiro:hasPermission="permission:list" target="content"><i class="fa fa-circle-o text-blue"></i> 权限管理</a></li>
-            <li><a th:href="@{/sys/logs}" shiro:hasPermission="log:list" target="content"><i class="fa fa-circle-o text-green"></i> 操作日志</a></li>
+            <li><a th:href="@{/sys/user/page}" shiro:hasPermission="user:list" target="content"><i class="fa fa-circle-o text-red"></i> 帐号管理</a></li>
+            <li><a th:href="@{/sys/role/page}" shiro:hasPermission="role:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 角色管理</a></li>
+            <li><a th:href="@{/sys/permission/page}" shiro:hasPermission="permission:list" target="content"><i class="fa fa-circle-o text-blue"></i> 权限管理</a></li>
+            <li><a th:href="@{/sys/log/page}" shiro:hasPermission="log:list" target="content"><i class="fa fa-circle-o text-green"></i> 操作日志</a></li>
           </ul>
         </li>
 
@@ -219,77 +219,22 @@
             <span>基本信息配置</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu">
-            <li><a th:href="@{/baseinfo/types}" target="content"><i class="fa fa-circle-o text-red"></i> 项目类型管理</a></li>
-            <li><a th:href="@{/baseinfo/depts}" target="content"><i class="fa fa-circle-o text-yellow"></i> 部门管理</a></li>
-            <li><a th:href="@{/baseinfo/emps}" target="content"><i class="fa fa-circle-o text-blue"></i> 员工管理</a></li>
-            <li><a th:href="@{/baseinfo/sectypes}" target="content"><i class="fa fa-circle-o text-green"></i> 科室类型管理</a></li>
-            <li><a th:href="@{/baseinfo/secs}" target="content"><i class="fa fa-circle-o text-orange"></i> 科室管理</a></li>
-            <li><a th:href="@{/baseinfo/tasktypes}" target="content"><i class="fa fa-circle-o text-aqua"></i> 项目任务类型</a></li>
-            <li><a th:href="@{/baseinfo/tasknames}" target="content"><i class="fa fa-circle-o text-purple"></i> 项目任务名称</a></li>
+            <li><a th:href="@{/baseinfo/type/page}" target="content"><i class="fa fa-circle-o text-red"></i> 项目类型管理</a></li>
+            <li><a th:href="@{/baseinfo/dept/page}" target="content"><i class="fa fa-circle-o text-yellow"></i> 部门管理</a></li>
+            <li><a th:href="@{/baseinfo/emp/page}" target="content"><i class="fa fa-circle-o text-blue"></i> 员工管理</a></li>
+            <li><a th:href="@{/baseinfo/sectype/page}" target="content"><i class="fa fa-circle-o text-green"></i> 科室类型管理</a></li>
+            <li><a th:href="@{/baseinfo/sec/page}" target="content"><i class="fa fa-circle-o text-orange"></i> 科室管理</a></li>
+            <li><a th:href="@{/baseinfo/tasktype/page}" target="content"><i class="fa fa-circle-o text-aqua"></i> 项目任务类型</a></li>
+            <li><a th:href="@{/baseinfo/taskname/page}" target="content"><i class="fa fa-circle-o text-purple"></i> 项目任务名称</a></li>
           </ul>
         </li>
-
-
-        <!--<li class="header">项目菜单</li>
-        <li shiro:hasPermission="meeting:index" >
-          <a th:href="@{/meeting/list}" target="content">
-            <i class="fa fa-book text-aqua"></i>
-            <span>公司战略纲领</span>
-          </a>
-        </li>
-        <li shiro:hasPermission="project:create" >
-          <a th:href="@{/project/create}" target="content">
-            <i class="fa fa-book text-red"></i>
-            <span>创建项目</span>
-          </a>
-        </li>
-        <li shiro:hasPermission="project:many" class="active">
-          <a th:href="@{/project/many}" target="content">
-            <i class="fa fa-files-o text-green"></i>
-            <span>多项目看板</span>
-          </a>
-        </li>
-        <li shiro:hasPermission="depts:index">
-          <a th:href="@{/project/depts}" target="content">
-            <i class="fa fa-pencil text-red"></i>
-            <span>设计进度看板</span>
-          </a>
-        </li>
-        <li shiro:hasPermission="process:index">
-          <a th:href="@{/project/process}" target="content">
-            <i class="fa fa-table text-yellow"></i>
-            <span>工艺进度看板</span>
-          </a>
-        </li>
-        <li shiro:hasPermission="produce:index">
-          <a th:href="@{/project/produce}" target="content">
-            <i class="fa fa-ambulance text-aqua"></i>
-            <span>生产进度看板</span>
-          </a>
-        </li>
-        <li shiro:hasPermission="system:menu" class="treeview">
-          <a href="#">
-            <i class="fa fa-folder-open text-orange"></i>
-            <span>系统菜单</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a th:href="@{/sys/users}" shiro:hasPermission="user:list" target="content"><i class="fa fa-circle-o text-red"></i> 用户列表</a></li>
-            <li><a th:href="@{/sys/roles}" shiro:hasPermission="role:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 角色列表</a></li>
-            <li><a th:href="@{/sys/permissions}" shiro:hasPermission="permission:list" target="content"><i class="fa fa-circle-o text-blue"></i> 权限列表</a></li>
-            <li><a th:href="@{/sys/logs}" shiro:hasPermission="log:list" target="content"><i class="fa fa-circle-o text-green"></i> 操作日志</a></li>
-          </ul>
-        </li>-->
       </ul>
     </section>
-    <!-- /.sidebar -->
   </aside>
-  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <iframe id="content" th:src="@{/project/many}" scrolling="auto" frameborder="0" name="content" width="100%" height="100%"></iframe>
+    <iframe id="content" th:src="@{/overview/statistics/page}" scrolling="auto" frameborder="0" name="content" width="100%" height="100%"></iframe>
   </div>
-  <!-- /.content-wrapper -->
 </div>
-<!-- ./wrapper -->
 
 <div th:include="include :: footer"></div>
 <script th:src="@{/js/index.js}"></script>

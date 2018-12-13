@@ -3,7 +3,7 @@ package com.zw.design.modules.build.distributedesigntask.mapper;
 import com.zw.design.modules.build.distributedesigntask.model.CollectDto;
 import com.zw.design.modules.build.distributedesigntask.model.DeptTaskDto;
 import com.zw.design.modules.build.distributedesigntask.model.TaskDto;
-import com.zw.design.modules.build.distributedesigntask.query.ProjectQuery;
+import com.zw.design.modules.build.distributedesigntask.query.DistributeDesignTaskQuery;
 import com.zw.design.modules.build.distributedesigntask.query.TaskQuery;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -14,8 +14,8 @@ import java.util.List;
 @Repository
 public interface DeptTaskDao {
 
-    List<TaskDto> findTasks(ProjectQuery query);
-    Integer findTasksCount(ProjectQuery query);
+    List<TaskDto> findTasks(DistributeDesignTaskQuery query);
+    Integer findTasksCount(DistributeDesignTaskQuery query);
 
     Integer findMaxStepNumByProjectId(@Param("id") Integer id);
 

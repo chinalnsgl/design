@@ -6,17 +6,16 @@ import com.zw.design.modules.build.distributedesigntask.model.DeptTaskDto;
 import com.zw.design.modules.build.distributedesigntask.model.TaskDto;
 import com.zw.design.modules.build.distributedesigntask.entity.DeptTask;
 import com.zw.design.modules.build.distributedesigntask.entity.ProduceTask;
-import com.zw.design.modules.build.distributedesigntask.query.ProjectQuery;
+import com.zw.design.modules.build.distributedesigntask.query.DistributeDesignTaskQuery;
 import com.zw.design.modules.build.distributedesigntask.query.TaskQuery;
 
 import java.util.List;
 
 public interface TaskService {
 
-    // 下达设计任务
-    boolean distributeDesignTAsk(Integer projectId, Integer[] sectionId);
 
-    BaseDataTableModel<TaskDto> findByCriteria(ProjectQuery query);
+
+//    BaseDataTableModel<TaskDto> findByCriteria(DistributeDesignTaskQuery query);
 
     DeptTask saveDeptTask(DeptTask deptTask);
 

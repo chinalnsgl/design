@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @Slf4j
-@RequestMapping("/meeting")
+@RequestMapping("/overview/meeting")
 public class MeetingController {
 
     private String prefix = "overview/meeting";
@@ -32,7 +32,7 @@ public class MeetingController {
     /**
      * 会议列表
      */
-    @GetMapping("/meetings")
+    @GetMapping("/page")
     @RequiresPermissions({"meeting:list"})
     public String meetings() {
         return prefix + "/list";

@@ -3,7 +3,6 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-
 <div class="modal fade" id="modal-create">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -50,9 +49,7 @@
         <button type="button" class="btn btn-info" id="btn-commit">确定</button>
       </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal-dialog -->
 </div>
 <div class="modal fade" id="modal-update">
   <div class="modal-dialog">
@@ -101,19 +98,14 @@
         <button type="button" class="btn btn-info" id="btn-update">修改</button>
       </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal-dialog -->
 </div>
-<!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
     公司战略纲领
   </h1>
 </section>
-<!-- Main content -->
 <section class="content">
-
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
@@ -135,11 +127,8 @@
               <a shiro:hasPermission="meeting:create" class="btn btn-info pull-right" id="btn-meeting-create">添加</a>
             </div>
           </div>
-
         </div>
-        <!-- /.box-header -->
         <div class="box-body">
-
           <table id="meetingTable" class="table table-bordered" width="100%">
             <thead>
             <tr>
@@ -152,26 +141,19 @@
             </tr>
             </thead>
           </table>
-
         </div>
-        <!-- /.box-body -->
       </div>
-      <!-- /.box -->
     </div>
-    <!-- /.col -->
   </div>
-  <!-- /.row -->
 </section>
-<!-- /.content -->
 <div th:include="include :: footer"></div>
-<!-- page script -->
 <script th:inline="javascript">
 
-
+  var ctx = ctx + "overview/meeting"
   // 删除会议
   function delMeeting(id) {
     $.modal.confirm("确定删除这项会议吗?",function () {
-      $.operate.post(ctx + "meeting/del", {"id": id}, function () {
+      $.operate.post(ctx + "/del", {"id": id}, function () {
         $.table.refresh();
       })
     });
@@ -181,7 +163,7 @@
   // 退回会议
   function returnMeeting(id) {
     $.modal.confirm("确定退回这项会议吗?",function () {
-      $.operate.post(ctx + "meeting/return", {"id": id}, function () {
+      $.operate.post(ctx + "/return", {"id": id}, function () {
         $.table.refresh();
       })
     });
@@ -191,7 +173,7 @@
   // 提交会议
   function commitMeeting(id) {
     $.modal.confirm("确定提交这项会议吗?",function () {
-      $.operate.post(ctx + "meeting/commit", {"id": id}, function () {
+      $.operate.post(ctx + "/commit", {"id": id}, function () {
         $.table.refresh();
       })
     });
@@ -236,7 +218,7 @@
     $.table.init({
       id: "meetingTable",
       info: true,
-      url: ctx + "meeting/list",
+      url: ctx + "/list",
       pageLength: 15,
       columns: [
         {
@@ -259,11 +241,11 @@
           render: function (data, type, row, meta) {
             var html = [];
             if (row.status === 1) {
-              html.push('<a style="margin-left: 5px" class="btn btn-info btn-xs" href="/meeting/' + data + '" >查看</a>');
+              html.push('<a style="margin-left: 5px" class="btn btn-info btn-xs" href="' + ctx + '/' + data + '" >查看</a>');
               html.push('<a style="margin-left: 5px" class="btn btn-warning btn-xs meeting-update" href="javascript:void(0);" onclick="updateMeeting(' + data + ',\'' + row.title + '\',\'' + row.content + '\',\'' + row.date + '\',\'' + row.address + '\',\'' + row.personnel + '\')">修改</a>');
               html.push('<a style="margin-left: 5px" class="btn btn-success btn-xs meeting-commit" href="javascript:void(0);" onclick="commitMeeting(' + data + ')">提交</a>');
             } else {
-              html.push('<a style="margin-left: 5px" class="btn btn-info btn-xs" href="/meeting/' + data + '" >查看</a>');
+              html.push('<a style="margin-left: 5px" class="btn btn-info btn-xs" href="' + ctx + '/' + data + '" >查看</a>');
               html.push('<a style="margin-left: 5px" class="btn btn-warning btn-xs meeting-return" href="javascript:void(0);" onclick="returnMeeting(' + data + ')">退回</a>');
               html.push('<a style="margin-left: 5px" class="btn btn-danger btn-xs meeting-del" href="javascript:void(0);" onclick="delMeeting(' + data + ')">删除</a>');
             }
@@ -303,7 +285,7 @@
     });
     // 添加
     $("#btn-commit").click(function () {
-      $.operate.post(ctx + "meeting/create", $("#meetingForm").serialize(), function () {
+      $.operate.post(ctx + "/create", $("#meetingForm").serialize(), function () {
         $.form.reset("meetingForm");
         $.modal.hide("modal-create");
         $.table.refresh();
@@ -311,7 +293,7 @@
     });
     // 修改
     $("#btn-update").click(function () {
-      $.operate.post(ctx + "meeting/update", $("#meetingUpdateForm").serialize(), function () {
+      $.operate.post(ctx + "/update", $("#meetingUpdateForm").serialize(), function () {
         $.form.reset("meetingUpdateForm");
         $.modal.hide("modal-update");
         $.table.refresh();

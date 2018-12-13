@@ -2,9 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="include :: header"></head>
-
 <body class="hold-transition skin-blue sidebar-mini">
-
 <div class="modal fade" id="modal-comment">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -28,17 +26,13 @@
         <button type="button" class="btn btn-info" id="btn-commit">确定</button>
       </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal-dialog -->
 </div>
-
 <section class="content-header">
   <h1>
     [[${meeting.title}]]
   </h1>
 </section>
-<!-- Main content -->
 <section class="content">
   <div class="row">
     <div class="col-xs-12">
@@ -55,7 +49,6 @@
           </table>
         </div>
         <div class="box-footer">
-
           <div class="row" id="commentList">
             <div class="col-md-12"><h3>评价</h3></div>
             <div style="margin-top: 5px;margin-bottom: 5px;font-size: medium" class="col-md-12" th:each="comment:${meeting.comments}">
@@ -70,20 +63,14 @@
           <button shiro:hasPermission="meeting:comment" style="margin-top: 5px;margin-left: 5px" class="btn btn-success pull-right" id="btn-comment" >评价</button>
           <button shiro:hasPermission="meeting:print" style="margin-top: 5px" class="btn btn-success pull-right" id="btn-print" >打印</button>
         </div>
-        <!-- /.box-body -->
       </div>
-      <!-- /.box -->
     </div>
-    <!-- /.col -->
   </div>
-  <!-- /.row -->
 </section>
-<!-- /.content -->
 <div th:include="include :: footer"></div>
-<!-- page script -->
 <script th:inline="javascript">
 
-
+  var ctx = ctx + "overview/meeting"
   // 打印
   function do_print(id_str)
   {
@@ -106,7 +93,7 @@
   /** 删除评价 */
   function delComment(id) {
     $.modal.confirm("确定删除这条评价吗?",function () {
-      $.operate.get(ctx + "meeting/comment/del/" + id, null, function () {
+      $.operate.get(ctx + "/comment/del/" + id, null, function () {
         location.reload();
       })
     });
@@ -121,7 +108,7 @@
 
     // 提交评价
     $("#btn-commit").click(function () {
-      $.operate.post(ctx + "meeting/comment", $("#commentForm").serialize(), function () {
+      $.operate.post(ctx + "/comment", $("#commentForm").serialize(), function () {
         location.reload();
       });
     });

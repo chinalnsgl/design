@@ -29,18 +29,15 @@ spring:
       max-request-size: -1
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
-  type-aliases-package: com.zw.design.domain.dbo
+  type-aliases-package: com.zw.design.entity.dbo
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 pagehelper:
   reasonable: true
 logging:
-  level:
+#  level:
 #    root: warn
-    com:
-      zw:
-        design:
-          mapper: debug
   path: e:/DesignProjectLog
 upload:
   path: e:/upload/

@@ -1,18 +1,14 @@
 package com.zw.design.modules.build.create.service;
 
 import com.zw.design.base.BaseDataTableModel;
+import com.zw.design.modules.build.create.entity.Project;
 import com.zw.design.modules.build.distributedesigntask.entity.DeptTask;
 import com.zw.design.modules.build.distributedesigntask.entity.ProduceTask;
-import com.zw.design.modules.build.create.entity.Project;
-import com.zw.design.modules.build.distributedesigntask.form.*;
-import com.zw.design.modules.build.distributedesigntask.query.ProjectQuery;
+import com.zw.design.modules.build.distributedesigntask.query.DistributeDesignTaskQuery;
 
 import javax.servlet.http.HttpServletResponse;
 
 public interface ProjectService {
-
-    // 按条件查询项目表格模型数据
-    BaseDataTableModel<Project> findProjectsByQuery(ProjectQuery query);
 
     // 按code查询项目
     Project findByCode(String code);
@@ -23,13 +19,13 @@ public interface ProjectService {
     // 删除项目
     void delProject(Integer id);
 
-    Boolean sendTask(ProjectSendForm form);
+//    Boolean sendTask(ProjectSendForm form);
 
-    BaseDataTableModel<Project> findProjectsForSendByCriteria(ProjectQuery query);
+    BaseDataTableModel<Project> findProjectsForSendByCriteria(DistributeDesignTaskQuery query);
 
     Project updateStatus(Integer id, Integer status, String comment);
 
-    Project findProjectByQuery(ProjectQuery query);
+    Project findProjectByQuery(DistributeDesignTaskQuery query);
 
 
 
@@ -39,7 +35,7 @@ public interface ProjectService {
 
     ProduceTask cancelProduce(Integer id);
 
-    Project updateProject(ProjectForm project);
+//    Project updateProject(ProjectForm project);
 
     void saveImage(Integer id, String fileName, String path, Integer type);
 
@@ -56,4 +52,6 @@ public interface ProjectService {
     void updateReceiverStatus(Integer receiverId);
 
     Integer findAcceptFileCount(Integer id);
+
+
 }
