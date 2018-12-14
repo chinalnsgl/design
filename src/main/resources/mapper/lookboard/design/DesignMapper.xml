@@ -3,15 +3,17 @@
 <mapper namespace="com.zw.design.modules.lookboard.design.mapper.DesignMapper">
 
   <select id="findProjectIdsBySection" resultType="java.lang.Integer" parameterType="com.zw.design.modules.lookboard.design.query.DesignQuery">
-    select DISTINCT project_id from task GROUP BY project_id, section_id HAVING 1 = 1
+    select DISTINCT project_id from task where section_id is not null
     <if test="sectionQuery != null">
       and section_id = #{sectionQuery}
     </if>
+    GROUP BY project_id
+    HAVING 1 = 1
     <if test="statusQuery == 1">
-      <![CDATA[ and sum(comp_status) < 8 ]]>
+      <![CDATA[ and sum(comp_status) < count(*) * 2 ]]>
     </if>
     <if test="statusQuery == 2">
-      and sum(comp_status) = 8
+      and sum(comp_status) = count(*) * 2
     </if>
   </select>
 
@@ -63,15 +65,12 @@
       and x.id in (${ids})
     </if>
     <if test="statusQuery == 1">
-      and (
-      y.comp_status != 2
-      or z.comp_status != 2
-      ) and x.status = 2
+      and x.status = 2
     </if>
     <if test="statusQuery == 2">
       and y.comp_status = 2
       and z.comp_status = 2
-      and x.status  = 4
+      <![CDATA[ and x.status > 0 ]]>
     </if>
     ) as r on a.id = r.id
     where 1 = 1
@@ -85,15 +84,12 @@
       and a.id in (${ids})
     </if>
     <if test="statusQuery == 1">
-      and (
-      d.comp_status != 2
-      or e.comp_status != 2
-      ) and a.status = 2
+      and a.status = 2
     </if>
     <if test="statusQuery == 2">
       and d.comp_status = 2
       and e.comp_status = 2
-      and a.status  = 4
+      <![CDATA[ and a.status > 0 ]]>
     </if>
     order by a.order_no desc , a.code
 	</select>

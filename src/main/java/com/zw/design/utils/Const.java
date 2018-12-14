@@ -25,6 +25,7 @@ public interface Const {
         put("content", "内容");
         put("address", "地址");
         put("personnel", "人员");
+        put("orderNo", "排序");
     }};
 
 }
