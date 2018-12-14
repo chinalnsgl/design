@@ -65,7 +65,7 @@
       and x.id in (${ids})
     </if>
     <if test="statusQuery == 1">
-      and x.status = 2
+      and x.status != 0
     </if>
     <if test="statusQuery == 2 and sectionQuery == null">
       and y.comp_status = 2
@@ -87,7 +87,7 @@
       and a.id in (${ids})
     </if>
     <if test="statusQuery == 1">
-      and a.status = 2
+      and a.status != 0
     </if>
     <if test="statusQuery == 2 and sectionQuery != null">
       <![CDATA[ and a.status > 0 ]]>
