@@ -2,50 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="include :: header"></head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="modal fade" id="modal-info">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">统计信息</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <label class="col-sm-4 no-padding-right">项目数量</label>
-          <div class="col-sm-2 center-info" id="project_num"></div>
-          <label  class="col-sm-4 no-padding-right">产品数量</label>
-          <div class="col-sm-2 center-info" id="product_num"></div>
-        </div>
-        <div class="row">
-          <label  class="col-sm-4 no-padding-right">已删除项目数量（未完成）</label>
-          <div class="col-sm-2 center-info" id="project_del_uncomp_num"></div>
-          <label  class="col-sm-4 no-padding-right">已删除项目产品数量</label>
-          <div class="col-sm-2 center-info" id="product_del_uncomp_num"></div>
-        </div>
-        <div class="row">
-          <label  class="col-sm-4 no-padding-right">已删除项目数量（完成）</label>
-          <div class="col-sm-2 center-info" id="project_del_comp_num"></div>
-          <label  class="col-sm-4 no-padding-right">已删除项目产品数量</label>
-          <div class="col-sm-2 center-info" id="product_del_comp_num"></div>
-        </div>
-        <div class="row">
-          <label  class="col-sm-4 no-padding-right">未完成数量</label>
-          <div class="col-sm-2 center-info" id="project_dept_undone_num"></div>
-          <label  class="col-sm-4 no-padding-right">未完成产品数量</label>
-          <div class="col-sm-2 center-info" id="product_dept_undone_num"></div>
-        </div>
-        <div class="row">
-          <label class="col-sm-4 no-padding-right">已完成数量</label>
-          <div class="col-sm-2 center-info" id="project_dept_done_num"></div>
-          <label  class="col-sm-4 no-padding-right">已完成产品数量</label>
-          <div class="col-sm-2 center-info" id="product_dept_done_num"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-info btn-close" data-dismiss="modal">确定</button>
-      </div>
-    </div>
-  </div>
-</div>
     <section class="content-header">
       <h1>
         工艺进度看板
@@ -119,43 +75,6 @@
       var ctx = ctx + 'board'
       var statusName = ["未开始","执行中","已完成","已取消"];
       var statusColor = ["", "#f39c12", "#00a65a"];
-      
-      /** 统计按钮事件 */
-      function collectEvent() {
-        $("#btn_collect").click(function () {
-          $("#btn_search").trigger('click');
-          $.ajax({
-            url: "/project/dept/collect",
-            type: "POST",
-            data: {
-              "code": $("#codeQuery").val(),
-              "name": $("#nameQuery").val(),
-              departmentQuery : $("#departmentQuery").val(),
-              "status" : $("#status").val()
-            },
-            success: function (result) {
-              if (result.status === 200) {
-                var list = result.content;
-                $("#project_num").text(list[0].projectNum);
-                $("#product_num").text(list[0].productNum);
-                $("#project_del_uncomp_num").text(list[1].projectNum);
-                $("#product_del_uncomp_num").text(list[1].productNum);
-                $("#project_del_comp_num").text(list[2].projectNum);
-                $("#product_del_comp_num").text(list[2].productNum);
-                $("#project_dept_undone_num").text(list[3].projectNum);
-                $("#product_dept_undone_num").text(list[3].productNum);
-                $("#project_dept_done_num").text(list[4].projectNum);
-                $("#product_dept_done_num").text(list[4].productNum);
-
-                $("#modal-info").modal('show');
-              }
-            },
-            error: function () {
-              toastr.success("服务器失败！");
-            }
-          });
-        });
-      }
       
       function yearSelectCreate() {
         var myDate= new Date();

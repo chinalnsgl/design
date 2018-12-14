@@ -3,9 +3,11 @@ package com.zw.design.modules.lookboard.design.controller;
 import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.base.BaseResponse;
 import com.zw.design.modules.baseinfosetting.section.service.SectionService;
+import com.zw.design.modules.lookboard.design.model.DesignModel;
+import com.zw.design.modules.lookboard.design.query.DesignQuery;
+import com.zw.design.modules.lookboard.design.service.DesignService;
 import com.zw.design.modules.lookboard.multi.model.MultiModel;
 import com.zw.design.modules.lookboard.multi.query.MultiQuery;
-import com.zw.design.modules.lookboard.multi.service.MultiService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Slf4j
-@RequestMapping("/board")
+@RequestMapping("/board/design")
 public class DesignController {
 
     private String prefix = "lookboard/design";
 
     @Autowired
-    private MultiService multiService;
+    private DesignService designService;
 
     @Autowired
     private SectionService sectionService;
@@ -32,7 +34,7 @@ public class DesignController {
     /**
      * 设计进度看板页面
      */
-    @GetMapping("/designs")
+    @GetMapping("/page")
     @RequiresPermissions({"design:list"})
     public String distributePage(Model model) {
         model.addAttribute("sections", sectionService.findByStatus(1));
@@ -43,10 +45,10 @@ public class DesignController {
      * 列表数据
      */
     @ResponseBody
-    @PostMapping("/design/list")
+    @PostMapping("/list")
     @RequiresPermissions({"design:list"})
-    public BaseResponse ddtList(MultiQuery query) {
-        BaseDataTableModel<MultiModel> dto = multiService.findByQuery(query);
+    public BaseResponse ddtList(DesignQuery query) {
+        BaseDataTableModel<DesignModel> dto = designService.findByQuery(query);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setContent(dto);
         return baseResponse;

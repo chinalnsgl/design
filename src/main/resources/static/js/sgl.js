@@ -21,6 +21,11 @@
               if (options.drawCallback) {
                 options.drawCallback();
               }
+            })
+            .on( 'page.dt', function () {
+              if (options.pageCallBack) {
+                options.pageCallBack();
+              }
             }).DataTable({
               buttons: options.buttons ? options.buttons : {},                                          // 按钮配置（导出等）
               fixedHeader: options.fixedHeader ? options.fixedHeader : false,                           // 固定表头

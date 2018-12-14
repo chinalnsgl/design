@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.lookboard.design.mapper.DesignMapper">
+
+  <select id="findProjectIdsBySection" resultType="java.lang.Integer" parameterType="com.zw.design.modules.lookboard.design.query.DesignQuery">
+    select DISTINCT project_id from task GROUP BY project_id, section_id HAVING 1 = 1
+    <if test="sectionQuery != null">
+      and section_id = #{sectionQuery}
+    </if>
+    <if test="statusQuery == 1">
+      <![CDATA[ and sum(comp_status) < 8 ]]>
+    </if>
+    <if test="statusQuery == 2">
+      and sum(comp_status) = 8
+    </if>
+  </select>
+
+  <select id="findProjectByQuery" resultType="com.zw.design.modules.lookboard.design.model.DesignModel" parameterType="com.zw.design.modules.lookboard.design.query.DesignQuery">
+    select
+    a.id,
+    a.name,
+    a.demander,
+    a.address,
+    a.code,
+    a.code_special,
+    a.num,
+    a.comment,
+    a.status as projectStatus,
+    b.firstStatus,
+    b.secondStatus,
+    b.thirdStatus,
+    b.fourthStatus,
+    c.name as sectionName,
+    d.comp_status as signStatus,
+    e.comp_status as debugStatus,
+    r.rowNumber
+    from project as a
+    -- 行转列，求状态
+    left join (
+    select project_id, section_id,
+    max(CASE WHEN task_name_id in (14,18,22,26) then comp_status end) as firstStatus,
+    max(CASE WHEN task_name_id in (15,19,23,27) then comp_status end) as secondStatus,
+    max(CASE WHEN task_name_id in (16,20,24,28) then comp_status end) as thirdStatus,
+    max(CASE WHEN task_name_id in (17,21,25,29) then comp_status end) as fourthStatus
+    from task group by project_id,section_id having section_id is not null
+    ) as b on a.id = b.project_id
+    left join section as c on b.section_id = c.id
+    left join task d on a.id = d.project_id and d.task_name_id = 2
+    left join task e on a.id = e.project_id and e.task_name_id = 4
+    -- 求行号
+    left join (
+    select ROW_NUMBER() OVER(Order by x.order_no desc, x.code) as rowNumber, x.id from project as x
+    left join task y on x.id = y.project_id and y.task_name_id = 2
+    left join task z on x.id = z.project_id and z.task_name_id = 4
+    where 1 = 1
+    <if test="codeQuery != null and codeQuery != ''">
+      and x.code like #{codeQuery}
+    </if>
+    <if test="nameQuery != null and nameQuery != ''">
+      and x.name like #{nameQuery}
+    </if>
+    <if test="ids != null and ids != '' ">
+      and x.id in (${ids})
+    </if>
+    <if test="statusQuery == 1">
+      and (
+      y.comp_status != 2
+      or z.comp_status != 2
+      ) and x.status = 2
+    </if>
+    <if test="statusQuery == 2">
+      and y.comp_status = 2
+      and z.comp_status = 2
+      and x.status  = 4
+    </if>
+    ) as r on a.id = r.id
+    where 1 = 1
+    <if test="codeQuery != null and codeQuery != ''">
+      and a.code like #{codeQuery}
+    </if>
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.name like #{nameQuery}
+    </if>
+    <if test="ids != null and ids != '' ">
+      and a.id in (${ids})
+    </if>
+    <if test="statusQuery == 1">
+      and (
+      d.comp_status != 2
+      or e.comp_status != 2
+      ) and a.status = 2
+    </if>
+    <if test="statusQuery == 2">
+      and d.comp_status = 2
+      and e.comp_status = 2
+      and a.status  = 4
+    </if>
+    order by a.order_no desc , a.code
+	</select>
+
+</mapper>
