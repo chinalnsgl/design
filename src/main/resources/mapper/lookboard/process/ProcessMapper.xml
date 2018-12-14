@@ -31,10 +31,10 @@
       and year (a.create_time) = #{yearQuery}
     </if>
     <if test="statusQuery == 1">
-      and (b.comp_status != 2 or c.comp_status != 2 or d.comp_status != 2) and a.status = 2
+      and (b.comp_status != 2 or c.comp_status != 2 or d.comp_status != 2) and a.status != 0
     </if>
     <if test="statusQuery == 2">
-      and b.comp_status = 2 and c.comp_status = 2 and d.comp_status = 2 and a.status  = 4
+      and b.comp_status = 2 and c.comp_status = 2 and d.comp_status = 2 and a.status != 0
     </if>
     order by a.order_no desc , a.code
 	</select>

@@ -67,9 +67,12 @@
     <if test="statusQuery == 1">
       and x.status = 2
     </if>
-    <if test="statusQuery == 2">
+    <if test="statusQuery == 2 and sectionQuery == null">
       and y.comp_status = 2
       and z.comp_status = 2
+      <![CDATA[ and x.status > 0 ]]>
+    </if>
+    <if test="statusQuery == 2 and sectionQuery != null">
       <![CDATA[ and x.status > 0 ]]>
     </if>
     ) as r on a.id = r.id
@@ -86,7 +89,10 @@
     <if test="statusQuery == 1">
       and a.status = 2
     </if>
-    <if test="statusQuery == 2">
+    <if test="statusQuery == 2 and sectionQuery != null">
+      <![CDATA[ and a.status > 0 ]]>
+    </if>
+    <if test="statusQuery == 2 and sectionQuery == null">
       and d.comp_status = 2
       and e.comp_status = 2
       <![CDATA[ and a.status > 0 ]]>
