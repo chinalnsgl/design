@@ -16,6 +16,10 @@ public class DesignModel implements Serializable {
     private Integer num;                            // 数量
     private String sectionName;                     // 设计科室
     private Integer signStatus;                     // 技术协议
+    private Integer firstCompleteStatus;                    // 设计
+    private Integer secondCompleteStatus;                   // 条件相关
+    private Integer thirdCompleteStatus;                    // 采购计划
+    private Integer fourthCompleteStatus;                   // 下图纸
     private Integer firstStatus;                    // 设计
     private Integer secondStatus;                   // 条件相关
     private Integer thirdStatus;                    // 采购计划

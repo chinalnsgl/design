@@ -1,8 +1,9 @@
-package com.zw.design.modules.build.distributedesigntask.entity;
+package com.zw.design.modules.lookboard.single.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zw.design.modules.build.create.entity.Project;
+import com.zw.design.modules.build.distributedesigntask.entity.Task;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,9 +28,14 @@ public class Image implements Serializable {
     private String userId;
     private String userName;
     private Integer type; // 1,任务单 2，技术协议 3，合同
+
     @ManyToOne
     @JoinColumn(name = "projectId")
     @JsonIgnoreProperties("images")
     private Project project;
 
+    @ManyToOne
+    @JoinColumn(name = "taskId")
+    @JsonIgnoreProperties("images")
+    private Task task;
 }

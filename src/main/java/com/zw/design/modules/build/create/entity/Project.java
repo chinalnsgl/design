@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zw.design.modules.build.distributedesigntask.entity.*;
 import com.zw.design.modules.baseinfosetting.projecttype.entity.ProjectType;
+import com.zw.design.modules.lookboard.single.entity.Image;
+import com.zw.design.modules.lookboard.single.entity.Message;
 import lombok.Getter;
 import lombok.Setter;
 

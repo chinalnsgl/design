@@ -1,6 +1,6 @@
-package com.zw.design.modules.build.distributedesigntask.repository;
+package com.zw.design.modules.lookboard.single.repository;
 
-import com.zw.design.modules.build.distributedesigntask.entity.Receiver;
+import com.zw.design.modules.lookboard.single.entity.Receiver;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

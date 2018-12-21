@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!--任务进度模态框-->
+<div class="modal fade" id="modal-task">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">编辑任务进度</h4>
+      </div>
+      <div class="modal-body">
+        <form id="taskForm" class="form-horizontal" role="form">
+          <input type="hidden" name="id" id="id">
+          <input type="hidden" name="compStatus" id="compStatus">
+          <div class="form-group">
+            <label for="principal" class="col-sm-2 control-label no-padding-right">项目</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="projectName" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="principal" class="col-sm-2 control-label no-padding-right">任务</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="alias" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right">状态</label>
+            <div class="col-sm-10">
+              <span id="status">已完成</span>
+              <button shiro:hasPermission="single:sign:edit" type="button" class="btn btn-info btn-commit-task" id="btn-sign-commit">开始</button>
+              <button shiro:hasPermission="single:contract:edit" type="button" class="btn btn-info btn-commit-task" id="btn-contract-commit">开始</button>
+              <button shiro:hasPermission="single:dept:edit" type="button" class="btn btn-info btn-commit-task" id="btn-dept-commit">开始</button>
+              <button shiro:hasPermission="single:process:edit" type="button" class="btn btn-info btn-commit-task" id="btn-process-commit">开始</button>
+              <button shiro:hasPermission="single:produce:edit" type="button" class="btn btn-info btn-commit-task" id="btn-produce-commit">开始</button>
+              <button shiro:hasPermission="single:debug:edit" type="button" class="btn btn-info btn-commit-task" id="btn-debug-commit">开始</button>
+              <button shiro:hasPermission="single:accept:edit" type="button" class="btn btn-info btn-commit-task" id="btn-accept-commit">开始</button>
+              <button shiro:hasPermission="single:save:edit" type="button" class="btn btn-info btn-commit-task" id="btn-save-commit">开始</button>
+
+              <button shiro:hasPermission="single:sign:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-sign-cancel">撤消</button>
+              <button shiro:hasPermission="single:contract:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-contract-cancel">撤消</button>
+              <button shiro:hasPermission="single:dept:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-dept-cancel">撤消</button>
+              <button shiro:hasPermission="single:process:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-process-cancel">撤消</button>
+              <button shiro:hasPermission="single:produce:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-produce-cancel">撤消</button>
+              <button shiro:hasPermission="single:debug:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-debug-cancel">撤消</button>
+              <button shiro:hasPermission="single:accept:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-accept-cancel">撤消</button>
+              <button shiro:hasPermission="single:save:cancel" type="button" class="btn btn-info btn-cancel-task" id="btn-save-cancel">撤消</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="principal" class="col-sm-2 control-label no-padding-right">负责人</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="principal" name="principal" placeholder="请输入负责人" >
+            </div>
+          </div>
+          <div class="form-group" id="contractDiv">
+            <label for="contractNo" class="col-sm-2 control-label no-padding-right">合同号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="contractNo" name="contractNo" placeholder="请输入合同号" >
+            </div>
+          </div>
+          <div class="form-group" id="planFinishTimeDiv">
+            <label for="planFinishTime" class="col-sm-2 control-label no-padding-right">预计时间</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control datepicker" id="planFinishTime" name="planFinishTime" readonly >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="comment" class="col-sm-2 control-label no-padding-right">备注</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="comment" name="comment" placeholder="请输入备注" >
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button shiro:hasPermission="single:sign:edit" type="button" class="btn btn-info btn-update-task" id="btn-sign-update">确定</button>
+        <button shiro:hasPermission="single:contract:edit" type="button" class="btn btn-info btn-update-task" id="btn-contract-update">确定</button>
+        <button shiro:hasPermission="single:dept:edit" type="button" class="btn btn-info btn-update-task" id="btn-dept-update">确定</button>
+        <button shiro:hasPermission="single:process:edit" type="button" class="btn btn-info btn-update-task" id="btn-process-update">确定</button>
+        <button shiro:hasPermission="single:produce:edit" type="button" class="btn btn-info btn-update-task" id="btn-produce-update">确定</button>
+        <button shiro:hasPermission="single:debug:edit" type="button" class="btn btn-info btn-update-task" id="btn-debug-update">确定</button>
+        <button shiro:hasPermission="single:accept:edit" type="button" class="btn btn-info btn-update-task" id="btn-accept-update">确定</button>
+        <button shiro:hasPermission="single:save:edit" type="button" class="btn btn-info btn-update-task" id="btn-save-update">确定</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!--文件上传下载模态框-->
+<div class="modal fade" id="modal-upload">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">上传文件</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-offset-1">
+            <form id="uploadForm" th:action="@{/board/single/upload}" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
+              <input type="hidden" name="projectId" id="upload_projectId">
+              <input type="hidden" name="taskId" id="upload_taskId">
+              <input type="hidden" name="code" id="upload_code">
+              <div class="form-group"  shiro:hasPermission="task:download" id="file_group"></div>
+              <div class="form-group">
+                <label for="upload_file">上传文件</label>
+                <input type="file" multiple="multiple" id="upload_file" name="file">
+                <p class="help-block">请选择所需要上传的文件</p>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" id="btn-upload">上传</button>
+        <a href="" class="btn btn-success" id="btn-download">下载</a>
+        <button type="button" class="btn btn-danger" id="btn-del">删除</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!--任务信息模态框-->
+<div class="modal fade" id="modal-info">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">查看信息</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <label for="info_projectName" class="col-sm-2 no-padding-right">项目</label>
+          <div class="col-sm-10 center-info" id="info_projectName"></div>
+        </div>
+        <div class="row">
+          <label for="info_taskName" class="col-sm-2 no-padding-right">任务</label>
+          <div class="col-sm-10 center-info" id="info_taskName"></div>
+        </div>
+        <div class="row" id="contractInfoDiv">
+          <label for="info_contractNo" class="col-sm-2 no-padding-right">合同号</label>
+          <div class="col-sm-10 center-info" id="info_contractNo"></div>
+        </div>
+        <div class="row">
+          <label for="info_completeStatus" class="col-sm-2 no-padding-right">状态</label>
+          <div class="col-sm-10 center-info" id="info_completeStatus"></div>
+        </div>
+        <div class="row">
+          <label for="info_principal" class="col-sm-2 no-padding-right">负责人</label>
+          <div class="col-sm-10 center-info" id="info_principal"></div>
+        </div>
+        <div class="row" id="planTimeDiv">
+          <label for="info_planTime" class="col-sm-2 no-padding-right">预计时间</label>
+          <div class="col-sm-10 center-info" id="info_planTime"></div>
+        </div>
+        <div class="row">
+          <label for="info_startTime" class="col-sm-2 no-padding-right">开始时间</label>
+          <div class="col-sm-10 center-info" id="info_startTime"></div>
+        </div>
+        <div class="row">
+          <label for="info_endTime" class="col-sm-2 no-padding-right">完成时间</label>
+          <div class="col-sm-10 center-info" id="info_endTime"></div>
+        </div>
+        <div class="row">
+          <label for="info_comment" class="col-sm-2 no-padding-right">备注</label>
+          <div class="col-sm-10 center-info" id="info_comment"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-close" data-dismiss="modal">确定</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!--修改项目状态提示模态框-->
+<div class="modal fade" id="modal-cause">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" th:text="|确定对${project.name}进行这种操作吗？|"></h4>
+      </div>
+      <div class="modal-body">
+
+        <form id="cause" class="form-horizontal" role="form">
+          <input type="hidden" name="id" th:value="${project.id}">
+          <input type="hidden" name="status" id="cause_status">
+          <div class="form-group">
+            <label for="comment" class="col-sm-2 control-label no-padding-right">原因</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="comment" th:value="${project.comment}" placeholder="请输入原因" >
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="btn-cause">确定</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!--互动专区模态框-->
+<div class="modal fade" id="modal-receiver">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">互动专区</h4>
+      </div>
+      <div class="modal-body">
+        <div class="box direct-chat direct-chat-primary">
+          <div class="box-body" id="message-box-body">
+            <div class="direct-chat-messages" id="message-box" style="height: 500px">
+              <div class="direct-chat-msg" th:each="message:${project.messages}"
+                   th:classappend="${message.user.id == session.user.id ? 'right':''}">
+                <div class="direct-chat-info clearfix">
+                  <span class="direct-chat-name"
+                        th:classappend="${message.user.id == session.user.id ? 'pull-right':'pull-left'}"
+                        th:text="${message.user.name}">Alexander Pierce</span>
+                  <span class="direct-chat-timestamp"
+                        th:classappend="${message.user.id == session.user.id ? 'pull-left':'pull-right'}"
+                        th:text="${#dates.format(message.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
+                <img class="direct-chat-img" th:src="${#strings.isEmpty(message.user.img)}?@{/img/person.png}:${message.user.img}" alt="Message User Image">
+                <div class="direct-chat-text" th:text="${message.content}"></div>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer">
+            <form method="post" id="messageForm">
+              <div class="input-group">
+                <input type="hidden" name="projectId" th:value="${project.id}">
+                <input type="text" name="content" id="message" autocomplete="off" data-provide="typeahead" placeholder="请输入内容" class="form-control">
+                <span class="input-group-btn">
+                  <button shiro:hasPermission="single:sendMessage" type="button" class="btn btn-primary btn-flat" id="btn-send">发送</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--项目负责人分配模态框-->
+<div class="modal fade" id="modal-employees">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">任务负责人</h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="content-header">
+  <button style="margin-right: 10px" th:if="${project.status == 2}" shiro:hasPermission="single:cancel" type="button" class="btn btn-danger pull-right" th:onclick="|updateStatus( 0)|" >取消</button>
+  <button style="margin-right: 10px" th:if="${project.status == 0}" shiro:hasPermission="single:regain" type="button" class="btn btn-success pull-right" th:onclick="|updateStatus(2)|" >恢复</button>
+  <a style="margin-right: 10px" shiro:hasPermission="single:update" class="btn btn-warning pull-right" th:href="@{'/board/single/update/'+${project.id}}">修改项目</a>
+  <h1>
+    单项目看板
+  </h1>
+  <h7>
+    [[${project.name}]]&nbsp;&nbsp;&nbsp;&nbsp;
+    [[${project.num}]]&nbsp;&nbsp;&nbsp;&nbsp;
+    [[${project.demander}]]&nbsp;&nbsp;&nbsp;&nbsp;
+    [[${project.address}]]&nbsp;&nbsp;&nbsp;&nbsp;
+    [[${project.code}]]&nbsp;&nbsp;&nbsp;&nbsp;
+    [[${project.codeSpecial}]]&nbsp;&nbsp;&nbsp;&nbsp;
+    [[${#strings.abbreviate(project.comment,10)}]]&nbsp;&nbsp;&nbsp;&nbsp;
+  </h7>
+</section>
+<section class="content">
+  <div class="row" id="rowDiv">
+    <!--任务单与互动专区-->
+    <div id="div1" class="col-md-2">
+      <div class="box box-success box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title" th:text="${project.tasks[0].alias}">任务单</h3>
+          <small class="pull-right" th:if="${project.tasks[0].images.size() != 0}" th:text="|已上传：${project.tasks[0].images.size()}|"></small>
+          <div th:id="|file_div_${project.tasks[0].id}|" hidden>
+            <div class="row" th:each="image: ${project.tasks[0].images}">
+              <input style="margin-left: 20px" type="checkbox" name="ids" th:value="${image.id}" >
+              <label style="margin-left: 10px" th:text="${image.name}"></label>
+            </div>
+          </div>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div>时间：<span th:text="${#dates.format(project.tasks[0].startTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <br>
+          <br>
+          <br>
+          <br>
+        </div>
+        <div class="box-footer">
+          <button style="margin-right: 5px" shiro:hasAnyPermissions="single:dt:upload,single:dt:download,single:dt:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[0].id},'${project.code}','file_div_${project.tasks[0].id}')|">文件</button>
+        </div>
+      </div>
+      <div class="box box-info box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">互动专区</h3>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div th:each="message,stat:${project.messages}" th:if="${stat.index < 5}">
+            <span th:text="${message.user.name}"></span>：
+            <span th:text="${#strings.abbreviate(message.content,10)}"></span>
+          </div>
+          <div th:if="${project.messages.size() < 5}" th:each="n : ${#numbers.sequence(1,5 - project.messages.size())}"><span>&nbsp;</span></div>
+        </div>
+        <div class="box-footer">
+          <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" onclick="messageInfo()">查看</button>
+        </div>
+      </div>
+    </div>
+    <!--技术协议与合同-->
+    <div id="div2" class="col-md-2">
+      <div class="box box-solid" th:classappend="${project.tasks[1].status == 2 ? 'box-danger' : (project.tasks[1].compStatus == 0 ? 'box-default' : (project.tasks[1].compStatus == 1 ? 'box-warning' : 'box-success'))}">
+        <div class="box-header box- with-border">
+          <h3 class="box-title" th:text="${project.tasks[1].alias}" >技术协议</h3>
+          <small class="pull-right" th:if="${project.tasks[1].images.size() != 0}" th:text="|已上传：${project.tasks[1].images.size()}|"></small>
+          <div th:id="|file_div_${project.tasks[1].id}|" hidden>
+            <div class="row" th:each="image: ${project.tasks[1].images}">
+              <input style="margin-left: 20px" type="checkbox" name="ids" th:value="${image.id}" >
+              <label style="margin-left: 10px" th:text="${image.name}"></label>
+            </div>
+          </div>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div th:if="${project.tasks[1].startTime}">从<span th:text="${#dates.format(project.tasks[1].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[1].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.tasks[1].startTime}">时间</div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[1].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>预计时间：<span th:text="${#dates.format(project.tasks[1].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div>状态：
+            <span th:switch="${project.tasks[1].compStatus}">
+              <span th:case="0">未开始</span>
+              <span th:case="1">执行中</span>
+              <span th:case="2">已完成</span>
+            </span>
+          </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.tasks[1].comment,10)}">无</span></div>
+        </div>
+        <div class="box-footer">
+          <button th:if="${project.status == 2 && project.tasks[1].status == 1}" shiro:hasPermission="single:sign:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[1].id},${project.tasks[1].taskName.id},'${project.name}','${project.tasks[1].alias}',${project.tasks[1].compStatus},'${project.tasks[1].employees}','${#dates.format(project.tasks[1].planFinishTime,'yyyy-MM-dd')}','${project.tasks[1].comment}','${project.tasks[1].contractNo}')|">编辑任务</button>
+          <button th:if="${project.status == 2 && project.tasks[1].status == 1}" style="margin-right: 5px" shiro:hasAnyPermissions="single:sign:upload,single:sign:download,single:sign:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[1].id},'${project.code}', 'file_div_${project.tasks[1].id}')|">文件</button>
+          <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[1].alias}',${project.tasks[1].compStatus},'${project.tasks[1].employees}','${#dates.format(project.tasks[1].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[1].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[1].endTime,'yyyy-MM-dd')}','${project.tasks[1].comment}')|">查看</button>
+        </div>
+      </div>
+      <div class="box box-solid" th:classappend="${project.tasks[2].status == 2 ? 'box-danger' : (project.tasks[2].compStatus == 0 ? 'box-default' : (project.tasks[2].compStatus == 1 ? 'box-warning' :'box-success'))}">
+        <div class="box-header with-border">
+          <h3 class="box-title" th:text="${project.tasks[2].alias}" >合同</h3>
+          <small class="pull-right" th:if="${project.tasks[2].images.size() != 0}" th:text="|已上传：${project.tasks[2].images.size()}|"></small>
+          <div th:id="|file_div_${project.tasks[2].id}|" hidden>
+            <div class="row" th:each="image: ${project.tasks[2].images}">
+              <input style="margin-left: 20px" type="checkbox" name="ids" th:value="${image.id}" >
+              <label style="margin-left: 10px" th:text="${image.name}"></label>
+            </div>
+          </div>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div th:if="${project.tasks[2].startTime}">从<span th:text="${#dates.format(project.tasks[2].startTime,'yyyy-MM-dd')}"></span>到<span th:text="${#dates.format(project.tasks[2].endTime,'yyyy-MM-dd')}"></span></div>
+          <div th:unless="${project.tasks[2].startTime}">时间</div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[2].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div th:if="${project.tasks[2].contractNo}">合同号：<span th:text="${#strings.abbreviate(project.tasks[2].contractNo,10)}">合同号</span></div>
+          <div th:unless="${project.tasks[2].contractNo}">合同号：</div>
+          <div>状态：
+            <span th:switch="${project.tasks[2].compStatus}">
+              <span th:case="0">未开始</span>
+              <span th:case="1">执行中</span>
+              <span th:case="2">已完成</span>
+            </span>
+          </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.tasks[2].comment,10)}"></span></div>
+        </div>
+        <div class="box-footer">
+          <!--<button th:if="${project.status == 2 and project.tasks[2].status == 2}" shiro:hasPermission="contract:cancel" type="button" class="btn btn-danger btn-xs pull-right" th:onclick="|cancelSignContractTaskSchedule(${project.tasks[2].id})|" id="btn-cancel-contract">撤消</button>-->
+          <button th:if="${project.status == 2 && project.tasks[2].status == 1}" shiro:hasPermission="single:contract:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[2].id},${project.tasks[2].taskName.id},'${project.name}','${project.tasks[2].alias}',${project.tasks[2].compStatus},'${project.tasks[2].employees}','${#dates.format(project.tasks[2].planFinishTime,'yyyy-MM-dd')}','${project.tasks[2].comment}','${project.tasks[2].contractNo}')|">编辑任务</button>
+          <button th:if="${project.status == 2 && project.tasks[2].status == 1}" style="margin-right: 5px" shiro:hasAnyPermissions="single:contract:upload,single:contract:download,single:contract:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[2].id},'${project.code}', 'file_div_${project.tasks[2].id}')|">文件</button>
+          <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[2].alias}',${project.tasks[2].compStatus},'${project.tasks[2].employees}','${#dates.format(project.tasks[2].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[2].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[2].endTime,'yyyy-MM-dd')}','${project.tasks[2].comment}','${project.tasks[2].contractNo}')|">查看</button>
+        </div>
+      </div>
+    </div>
+    <!--设计任务-->
+    <div id="div3" class="col-md-8">
+      <div class="row">
+        <div class="col-lg-3" th:each="task: ${project.tasks}" th:if="${task.taskName.taskType.id == 2}">
+          <div class="box box-solid" th:classappend="${task.status == 0 ? 'box-danger' : (task.compStatus == 0 ? 'box-default' : (task.compStatus == 1 ? 'box-warning' : 'box-success' ))}">
+            <div class="box-header with-border">
+              <h3 class="box-title" th:text="${task.alias}"></h3>
+            </div>
+            <div class="box-body" style="display: block;">
+              <div th:if="${task.startTime}">从<span th:text="${#dates.format(task.startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(task.endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+              <div th:unless="${task.startTime}">时间</div>
+              <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+              <div th:unless="${task.employees}">负责人：</div>
+              <div>预计时间：<span th:text="${#dates.format(task.planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+              <div>状态：
+                <span th:switch="${task.compStatus}">
+                  <span th:case="0">未开始</span>
+                  <span th:case="1">执行中</span>
+                  <span th:case="2">已完成</span>
+                </span>
+              </div>
+              <div>备注：<span th:text="${#strings.abbreviate(task.comment,10)}">无</span></div>
+            </div>
+            <div class="box-footer">
+              <button th:if="${project.status == 2 && task.status == 1}" shiro:hasRole="${task.section.code}" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${task.id},${task.taskName.id},'${project.name}','${task.alias}',${task.compStatus},'${task.employees}','${#dates.format(task.planFinishTime,'yyyy-MM-dd')}','${task.comment}','${task.contractNo}')|">编辑任务</button>
+              <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${task.alias}',${task.compStatus},'${task.employees}','${#dates.format(task.planFinishTime,'yyyy-MM-dd')}','${#dates.format(task.startTime,'yyyy-MM-dd')}','${#dates.format(task.endTime,'yyyy-MM-dd')}','${task.comment}')|">查看</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="height: 3px; background-color: #1a2226; margin: 10px auto 30px 0;"></div>
+  <div class="row">
+    <!--工艺任务-->
+    <div class="col-md-2 col-md-offset-2">
+      <div class="box box-solid" th:each="task: ${project.tasks}" th:if="${task.taskName.taskType.id == 3}" th:classappend="${task.status == 2 ? 'box-danger' : (task.compStatus == 0 ? 'box-default' : (task.compStatus == 1 ? 'box-warning' : 'box-success'))}">
+        <div class="box-header with-border">
+          <h3 class="box-title" th:text="${task.alias}" >原材料外协计划</h3>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div th:if="${task.startTime}">从<span th:text="${#dates.format(task.startTime,'yyyy-MM-dd')}">3018-08-01</span>到<span th:text="${#dates.format(task.endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${task.startTime}">时间</div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>预计时间：<span th:text="${#dates.format(task.planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div>状态：
+            <span th:switch="${task.compStatus}">
+              <span th:case="0">未开始</span>
+              <span th:case="1">执行中</span>
+              <span th:case="2">已完成</span>
+            </span>
+          </div>
+          <div>备注：<span th:text="${#strings.abbreviate(task.comment,10)}">无</span></div>
+        </div>
+        <div class="box-footer">
+          <button th:if="${project.status == 2 && task.status == 1}" shiro:hasPermission="single:process:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${task.id},${task.taskName.id},'${project.name}','${task.alias}',${task.compStatus},'${task.employees}','${#dates.format(task.planFinishTime,'yyyy-MM-dd')}','${task.comment}','${task.contractNo}')|">编辑任务</button>
+          <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${task.alias}',${task.compStatus},'${task.employees}','${#dates.format(task.planFinishTime,'yyyy-MM-dd')}','${#dates.format(task.startTime,'yyyy-MM-dd')}','${#dates.format(task.endTime,'yyyy-MM-dd')}','${task.comment}')|">查看</button>
+        </div>
+      </div>
+    </div>
+    <!--生产任务-->
+    <div class="col-md-2">
+      <div class="box box-solid" th:each="task: ${project.tasks}" th:if="${task.taskName.taskType.id == 4}" th:classappend="${task.status == 2 ? 'box-danger' : (task.compStatus == 0 ? 'box-default' : (task.compStatus == 1 ? 'box-warning' : 'box-success'))}">
+        <div class="box-header with-border">
+          <h3 class="box-title" th:text="${task.alias}" >技术协议</h3>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div th:if="${task.startTime}">从<span th:text="${#dates.format(task.startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(task.endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${task.startTime}">时间</div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>预计时间：<span th:text="${#dates.format(task.planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div>状态：
+            <span th:switch="${task.compStatus}">
+              <span th:case="0">未开始</span>
+              <span th:case="1">执行中</span>
+              <span th:case="2">已完成</span>
+            </span>
+          </div>
+          <div>备注：<span th:text="${#strings.abbreviate(task.comment,10)}">无</span></div>
+        </div>
+        <div class="box-footer">
+          <button th:if="${project.status == 2 && task.status == 1}" shiro:hasPermission="produce1:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${task.id},${task.taskName.id},'${project.name}','${task.alias}',${task.compStatus},'${task.employees}','${#dates.format(task.planFinishTime,'yyyy-MM-dd')}','${task.comment}','${task.contractNo}')|">编辑任务</button>
+          <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${task.alias}',${task.compStatus},'${task.employees}','${#dates.format(task.planFinishTime,'yyyy-MM-dd')}','${#dates.format(task.startTime,'yyyy-MM-dd')}','${#dates.format(task.endTime,'yyyy-MM-dd')}','${task.comment}')|">查看</button>
+        </div>
+      </div>
+    </div>
+    <!--运行调试-->
+    <div class="col-md-2">
+      <div class="box box-solid" th:classappend="${project.tasks[3].status == 2 ? 'box-danger' : (project.tasks[3].compStatus == 0 ? 'box-default' : (project.tasks[3].compStatus == 1 ? 'box-warning' : 'box-success'))}">
+        <div class="box-header with-border">
+          <h3 class="box-title" th:text="${project.tasks[3].alias}" >技术协议</h3>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div th:if="${project.tasks[3].startTime}">从<span th:text="${#dates.format(project.tasks[3].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[3].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.tasks[3].startTime}">时间</div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[3].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>预计时间：<span th:text="${#dates.format(project.tasks[3].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div>状态：
+            <span th:switch="${project.tasks[3].compStatus}">
+              <span th:case="0">未开始</span>
+              <span th:case="1">执行中</span>
+              <span th:case="2">已完成</span>
+            </span>
+          </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.tasks[3].comment,10)}">无</span></div>
+        </div>
+        <div class="box-footer">
+          <button th:if="${project.status == 2 && project.tasks[3].status == 1}" shiro:hasPermission="debug:edit" style="margin-right: 10px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[3].id},${project.tasks[3].taskName.id},'${project.name}','${project.tasks[3].alias}',${project.tasks[3].compStatus},'${project.tasks[3].employees}','${#dates.format(project.tasks[3].planFinishTime,'yyyy-MM-dd')}','${project.tasks[3].comment}','${project.tasks[3].contractNo}')|">编辑任务</button>
+          <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[3].alias}',${project.tasks[3].compStatus},'${project.tasks[3].employees}','${#dates.format(project.tasks[3].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[3].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[3].endTime,'yyyy-MM-dd')}','${project.tasks[3].comment}')|">查看</button>
+        </div>
+      </div>
+    </div>
+    <!--验收-->
+    <div class="col-md-2">
+      <div class="box box-solid" th:classappend="${project.tasks[4].status == 2 ? 'box-danger' : (project.tasks[4].compStatus == 0 ? 'box-default' : (project.tasks[4].compStatus == 1 ? 'box-warning' : 'box-success'))}">
+        <div class="box-header with-border">
+          <h3 class="box-title" th:text="${project.tasks[4].alias}" >技术协议</h3>
+          <small class="pull-right" th:if="${project.tasks[4].images.size() != 0}" th:text="|已上传：${project.tasks[4].images.size()}|"></small>
+          <div th:id="|file_div_${project.tasks[4].id}|" hidden>
+            <div class="row" th:each="image: ${project.tasks[4].images}">
+              <input style="margin-left: 20px" type="checkbox" name="ids" th:value="${image.id}" >
+              <label style="margin-left: 10px" th:text="${image.name}"></label>
+            </div>
+          </div>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div th:if="${project.tasks[4].startTime}">从<span th:text="${#dates.format(project.tasks[4].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[4].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.tasks[4].startTime}">时间</div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[4].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>预计时间：<span th:text="${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div>状态：
+            <span th:switch="${project.tasks[4].compStatus}">
+              <span th:case="0">未开始</span>
+              <span th:case="1">执行中</span>
+              <span th:case="2">已完成</span>
+            </span>
+          </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.tasks[4].comment,10)}">无</span></div>
+        </div>
+        <div class="box-footer">
+          <button th:if="${project.status == 2 && project.tasks[4].status == 1}" shiro:hasPermission="accept:edit" style="margin-right: 6px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[4].id},${project.tasks[4].taskName.id},'${project.name}','${project.tasks[4].alias}',${project.tasks[4].compStatus},'${project.tasks[4].employees}','${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}','${project.tasks[4].comment}','${project.tasks[4].contractNo}')|">编辑任务</button>
+          <button th:if="${project.status == 2 && project.tasks[4].status == 1}"style="margin-right: 5px" shiro:hasAnyPermissions="single:accept:upload,single:accept:download,single:accept:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[4].id},'${project.code}', 'file_div_${project.tasks[4].id}')|">文件</button>
+          <button style="margin-right: 6px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[4].alias}',${project.tasks[4].compStatus},'${project.tasks[4].employees}','${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[4].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[4].endTime,'yyyy-MM-dd')}','${project.tasks[4].comment}')|">查看</button>
+        </div>
+      </div>
+    </div>
+    <!--图纸存档-->
+    <div class="col-md-2">
+      <div class="box box-solid" th:classappend="${project.tasks[5].status == 2 ? 'box-danger' : (project.tasks[5].compStatus == 0 ? 'box-default' : (project.tasks[5].compStatus == 1 ? 'box-warning' : 'box-success'))}">
+        <div class="box-header with-border">
+          <h3 class="box-title" th:text="${project.tasks[5].alias}" >技术协议</h3>
+        </div>
+        <div class="box-body" style="display: block;">
+          <div th:if="${project.tasks[5].startTime}">从<span th:text="${#dates.format(project.tasks[5].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[5].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div th:unless="${project.tasks[5].startTime}">时间</div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[5].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>预计时间：<span th:text="${#dates.format(project.tasks[5].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
+          <div>状态：
+            <span th:switch="${project.tasks[5].compStatus}">
+              <span th:case="0">未开始</span>
+              <span th:case="1">执行中</span>
+              <span th:case="2">已完成</span>
+            </span>
+          </div>
+          <div>备注：<span th:text="${#strings.abbreviate(project.tasks[5].comment,10)}">无</span></div>
+        </div>
+        <div class="box-footer">
+          <button th:if="${project.status == 2 or project.status == 4}" shiro:hasPermission="save:edit" style="margin-right: 6px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[5].id},${project.tasks[5].taskName.id},'${project.name}','${project.tasks[5].alias}',${project.tasks[5].compStatus},'${project.tasks[5].employees}','${#dates.format(project.tasks[5].planFinishTime,'yyyy-MM-dd')}','${project.tasks[5].comment}','${project.tasks[5].contractNo}')|">编辑任务</button>
+          <button style="margin-right: 6px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[5].alias}',${project.tasks[5].compStatus},'${project.tasks[5].employees}','${#dates.format(project.tasks[5].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[5].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[5].endTime,'yyyy-MM-dd')}','${project.tasks[5].comment}')|">查看</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+  var statusName = ["未开始","执行中","已完成"];
+  var downhref = [[@{/board/single/download}]] + "?code=" + [[${project.code}]];
+
+  // 显示编辑任务模态框
+  function editTaskModel(id, taskNameId, projectName, alias, compStatus, employees, planFinishTime, comment, contractNo) {
+    $(".btn-cancel-task").hide();
+    $(".btn-commit-task").hide();
+    $(".btn-update-task").hide();
+    $("#status").hide();
+    $("#contractDiv").hide();
+    $("#planStartTimeDiv").show();
+    // 表单赋值
+    $("#id").val(id);
+    $("#projectName").val(projectName);
+    $("#alias").val(alias);
+    // $("#principal").val(principal != 'null' ? principal : '');
+    $("#planFinishTime").val(planFinishTime != 'null' ? planFinishTime : '');
+    $("#comment").val(comment != 'null' ? comment : '');
+    $("#contractNo").val(contractNo != 'null' ? contractNo : '');
+    switch (taskNameId) {
+      case 2:
+        $("#btn-sign-commit").show();
+        $("#btn-sign-cancel").show();
+        $("#btn-sign-update").show();
+        break;
+      case 3:
+        $("#btn-contract-commit").show();
+        $("#btn-contract-cancel").show();
+        $("#btn-contract-update").show();
+        $("#contractDiv").show();
+        $("#planFinishTimeDiv").hide();
+        break;
+      case 4:
+        $("#btn-debug-commit").show();
+        $("#btn-debug-cancel").show();
+        $("#btn-debug-update").show();
+        break;
+      case 5:
+        $("#btn-accept-commit").show();
+        $("#btn-accept-cancel").show();
+        $("#btn-accept-update").show();
+        break;
+      case 6:
+        $("#btn-save-commit").show();
+        $("#btn-save-cancel").show();
+        $("#btn-save-update").show();
+        break;
+      case 7:
+      case 8:
+      case 9:
+        $("#btn-process-commit").show();
+        $("#btn-process-cancel").show();
+        $("#btn-process-update").show();
+        break;
+      case 10:
+      case 11:
+      case 12:
+      case 13:
+        $("#btn-produce-commit").show();
+        $("#btn-produce-cancel").show();
+        $("#btn-produce-update").show();
+        break;
+      default:
+        $("#btn-dept-commit").show();
+        $("#btn-dept-cancel").show();
+        $("#btn-dept-update").show();
+    }
+    if (compStatus == 0) {
+      $("#compStatus").val(1);
+      $(".btn-commit-task").text("开始");
+      $(".btn-cancel-task").hide();
+      if (taskNameId == 2 || taskNameId == 12) {
+        $("#compStatus").val(2);
+        $(".btn-commit-task").text("完成");
+      }
+    } else if (compStatus == 1) {
+      $("#compStatus").val(2);
+      $(".btn-commit-task").text("完成");
+    } else {
+      $("#status").show();
+      $(".btn-commit-task").hide();
+    }
+    $.modal.open("modal-task");
+  }
+
+  // 查看信息
+  function info(projectName, taskName, completeStatus, principal, planFinishTime, startTime, endTime, comment, contractNo) {
+    $("#info_projectName").text(projectName);
+    $("#info_taskName").text(taskName);
+    $("#info_completeStatus").text(statusName[completeStatus]);
+    $("#info_principal").text(principal != 'null' ? principal : '');
+    $("#info_planTime").text(planFinishTime != 'null' ? planFinishTime : '');
+    $("#info_startTime").text(startTime != 'null' ? startTime : '');
+    $("#info_endTime").text(endTime != 'null' ? endTime : '');
+    $("#info_comment").text(comment != 'null' ? comment : '');
+    if (contractNo != undefined) {
+      $("#contractInfoDiv").show();
+      $("#info_contractNo").text(contractNo != 'null' ? contractNo : '');
+      $("#planTimeDiv").hide();
+    }
+    else {
+      $("#contractInfoDiv").hide();
+      $("#planTimeDiv").show();
+    }
+    $("#modal-info").modal('show');
+  }
+
+  // 修改项目㹜态提示模态框
+  function updateStatus(status) {
+    $("#cause_status").val(status);
+    $.modal.open("modal-cause");
+  }
+
+  // 上传模态框
+  function uploadModel(projectId, taskId, code, fileDiv) {
+    $("#file_group").empty().append($("#" + fileDiv).clone(true));
+    $("#file_group").children(":first").show();
+    $("#upload_projectId").val(projectId);
+    $("#upload_taskId").val(taskId);
+    $("#upload_code").val(code);
+    $.modal.open("modal-upload")
+  }
+
+  // 重置窗口大小居中对齐
+  $(window).resize(function(){
+    var hi = ($("#rowDiv").outerHeight() - $("#div1").outerHeight())/2;
+    var hi2 = ($("#rowDiv").outerHeight() - $("#div2").outerHeight())/2;
+    var hi3 = ($("#rowDiv").outerHeight() - $("#div3").outerHeight())/2;
+    $("#div1").css("margin-top", hi);
+    $("#div2").css("margin-top", hi2);
+    $("#div3").css("margin-top", hi3);
+  });
+
+  // 显示互动专区模态框
+  function messageInfo() {
+    $.modal.open("modal-receiver");
+    $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;
+  }
+
+  $(function () {
+
+    $(window).resize();
+
+    // 上传文件
+    $("#btn-upload").click(function(){
+      $("#uploadForm").ajaxSubmit({
+        success: function (result) {
+          if (result.status === 200) {
+            location.reload();
+          }
+          else {
+            $.modal.fail("操作失败 (┬＿┬) ！！");
+          }
+        },
+        error: function () {
+          $.modal.fail("操作失败 (┬＿┬) ！！");
+        }
+      })
+    });
+
+    // 下载文件
+    $("#btn-download").click(function () {
+      if ($("input:checkbox:checked").length == 0) {
+        $.modal.warning("请至少选择一个文件");
+        return false;
+      } else {
+        var temp_href = downhref;
+        $("input:checkbox:checked").each(function () {
+          temp_href += "&ids=" + $(this).val();
+        });
+        $("#btn-download").attr("href",temp_href);
+      }
+    });
+
+    // 删除文件
+    $("#btn-del").click(function () {
+      if ($("input:checkbox:checked").length == 0) {
+        $.modal.warning("请至少选择一个文件");
+      } else {
+        $("#uploadForm").ajaxSubmit({
+          url: ctx + "board/single/delFile",
+          success: function (result) {
+            if (result.status === 200) {
+              location.reload();
+            }
+            else {
+              $.modal.fail("操作失败 (┬＿┬) ！！");
+            }
+          },
+          error: function () {
+            $.modal.fail("操作失败 (┬＿┬) ！！");
+          }
+        })
+      }
+    });
+
+    // 提交任务进度和信息
+    $(".btn-commit-task").click(function () {
+      $.operate.post(ctx + "board/single/editTask", $("#taskForm").serialize(), function () {
+        location.reload();
+      });
+    });
+    // 撤消任务进度
+    $(".btn-cancel-task").click(function () {
+      $.operate.post(ctx + "board/single/cancelTask", {id : $("#id").val()}, function () {
+        location.reload();
+      });
+    });
+    // 提交任务信息
+    $(".btn-update-task").click(function () {
+      $.operate.post(ctx + "board/single/editTask", {
+        id : $("#id").val(),
+        planFinishTime: $("#planFinishTime").val(),
+        comment: $("#comment").val(),
+        contractNo: $("#contractNo").val()
+      }, function () {
+        location.reload();
+      });
+    });
+
+    // 取消恢复项目
+    $("#btn-cause").click(function () {
+      $.operate.post(ctx + "board/single/status",$("#cause").serialize(),function () {
+        location.reload();
+      });
+    });
+
+    // 发送消息
+    $("#btn-send").click(function () {
+      $.operate.post(ctx + "board/single/sendMessage",$("#messageForm").serialize(),function () {
+        var img = ctx + "img/person.png";
+        if (sessionUser.img != null) {
+          img = sessionUser.img;
+          $("#message-box").append('<div class="direct-chat-msg right">' +
+              '<div class="direct-chat-info clearfix">' +
+              '<span class="direct-chat-name pull-right">' + sessionUser.name +
+              '</span><span class="direct-chat-timestamp pull-left">' + new Date().format("yyyy-MM-dd hh:mm:ss") +
+              '</span></div>' +
+              '<img class="direct-chat-img" alt="Message User Image" src="' + img
+              + '"><div class="direct-chat-text">' + $("#message").val() +
+              '</div></div>');
+          $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;
+          $("#message").val('');
+        }
+      });
+    });
+
+    // 获取用户列表载入自动完成数据 @提到我功能
+    $.operate.get(ctx + "board/single/users",{},function (result) {
+      $("#message").typeahead({
+        items:10,
+        source: result.content,
+        matcher: function (item) {
+          return ~item.name.indexOf(this.query.substring(this.query.lastIndexOf("@") + 1));
+        },
+        updater: function (item) {
+          return  this.query.substring(0,this.query.lastIndexOf("@") + 1) + item.name + " ";
+        },
+        afterSelect: function () {
+          window.document.getElementById("message").focus();
+        }
+      });
+    });
+
+  });
+</script>
+</body>
+</html>

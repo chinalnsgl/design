@@ -55,5 +55,6 @@
 	<script th:inline="javascript">
     var ctx = [[@{/}]];
 		var permissions = [[${session.permissions}]];
+    var sessionUser = [[${session.user}]];
 	</script>
 </div>

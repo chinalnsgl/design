@@ -10,7 +10,7 @@ window.onresize = function () {
 function getReceiver() {
   $("#unread-message").html('');
   $("#messageCount").html('');
-  $.operate.get(ctx + "message/user/receiver", $("#userForm").serialize(), function (result) {
+  $.operate.get(ctx + "user/receiver", $("#userForm").serialize(), function (result) {
     if (result.content.length > 0) {
       $("#messageCount").html(result.content.length);
       // $("#titleQuery-message").html('未读消息');
@@ -20,7 +20,7 @@ function getReceiver() {
         if (img == null) {
           img = ctx + "img/person.png";
         }
-        $("#unread-message").append('<li><ul class="menu"><li><a class="message-single" href="/project/single/message/' + data[i].project.id + '/' + data[i].id +
+        $("#unread-message").append('<li><ul class="menu"><li><a class="message-single" href="' + ctx + 'board/single/' + data[i].project.id + '/' + data[i].id +
             '" target="content"><div class="pull-left">' +
             '<img class="img-circle" alt="User Image" src="' + img
             + '"></div><h4>' + data[i].message.user.name +
@@ -109,8 +109,8 @@ var sendPhoto = function(){
     width: 300,
     height: 300
   }).toDataURL('image/png');
-  $.operate.post(ctx + "sys/user/updateImage", {imageData : photo}, function (result) {
-    $('#userImage').attr('src', data.content);
+  $.operate.post(ctx + "update/user/img", {imageData : photo}, function (result) {
+    $('#userImage').attr('src', result.content);
     $.modal.hide("modal-upload");
   });
 }
@@ -118,6 +118,7 @@ var sendPhoto = function(){
 $(function () {
   // iframe 自动高度
   changeFrameHeight();
+
   // 验证初始化
   $.validate.init("userForm",{
     fields: {
@@ -128,7 +129,7 @@ $(function () {
   // 修改密码
   $("#btn-updatePassword").click(function () {
     if ($.validate.isValid()) {
-      $.operate.save(ctx + "update",$("#userForm").serialize(), "modal-updatePassword");
+      $.operate.save(ctx + "update/user/pwd",$("#userForm").serialize(), "modal-updatePassword");
     }
   });
 
@@ -141,4 +142,4 @@ $(function () {
 
   initCropperInModal($('#photo'),$('#photoInput'),$('#modal-upload'));
 
-})
+});

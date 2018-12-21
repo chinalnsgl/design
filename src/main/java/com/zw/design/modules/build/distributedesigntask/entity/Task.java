@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zw.design.modules.baseinfosetting.section.entity.Section;
 import com.zw.design.modules.baseinfosetting.taskname.entity.TaskName;
 import com.zw.design.modules.build.create.entity.Project;
+import com.zw.design.modules.lookboard.single.entity.Image;
+import com.zw.design.modules.lookboard.single.entity.TaskEmployee;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
@@ -62,7 +64,14 @@ public class Task {
 
     private String contractNo; // 合同号
 
+    private Integer config; // 配置 0：排除   1：设计   2：工艺   3：生产
+
     @ManyToOne
     @JsonIgnoreProperties("tasks")
     Project project;
+
+    @OneToMany(mappedBy = "task")
+    @Where(clause = "status = 1")
+    @JsonIgnoreProperties("task")
+    private List<Image> images;// 文件
 }

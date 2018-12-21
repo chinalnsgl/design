@@ -33,7 +33,7 @@ public class DistributeDesignTaskController {
     /**
      * 下达设计任务页面
      */
-    @GetMapping("/ddts")
+    @GetMapping("/ddt/page")
     @RequiresPermissions({"ddt:list"})
     public String distributePage(Model model) {
         model.addAttribute("sectionType", sectionTypeService.findByStatus(1));

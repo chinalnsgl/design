@@ -3,12 +3,10 @@ package com.zw.design.modules.login.controller;
 import com.zw.design.aspect.LogAnnotation;
 import com.zw.design.base.BaseResponse;
 import com.zw.design.modules.system.user.entity.SysUser;
-import com.zw.design.modules.system.user.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,8 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class LoginController {
 
-    @Autowired
-    private UserService userService;
 
     @PostMapping("/login")
     @ResponseBody
@@ -38,16 +34,5 @@ public class LoginController {
         }
     }
 
-    /**
-     * 修改密码
-     */
-    @ResponseBody
-    @PostMapping("/update")
-    @LogAnnotation(value = "修改密码")
-    public BaseResponse updatePassword(String password) {
-        SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        sysUser.setPassword(password);
-        sysUser = userService.updateUserPassword(sysUser);
-        return BaseResponse.toResponse(sysUser);
-    }
+
 }

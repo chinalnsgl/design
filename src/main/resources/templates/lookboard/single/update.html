@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<section class="content-header">
+  <h1>
+    修改项目
+  </h1>
+  <form th:action="@{/board/single/update/code}" method="get">
+    <div class="row">
+      <div class="form-inline pull-right">
+        <div class="form-group" style="margin-right: 10px;">
+          <label>项目号</label>
+          <input type="text" id="codeQuery" name="codeQuery" class="form-control" placeholder="请输入计划名称">
+        </div>
+        <button type="submit" class="btn btn-default">搜索</button>
+      </div>
+    </div>
+  </form>
+</section>
+<section class="content">
+
+  <div th:if="${project != null}">
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="box">
+          <div class="box-header">
+            <h3>项目任务列表</h3>
+          </div>
+          <div class="box-body">
+            <table id="taskTable" class="table table-bordered table-hover" width="100%">
+              <thead>
+              <tr>
+                <th>序号</th>
+                <th>任务名</th>
+                <th>类型</th>
+                <th>操作</th>
+              </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <form id="projectForm" class="form-horizontal">
+          <div class="box">
+          <div class="box-header">
+            <h3>项目基本信息</h3>
+            <input type="hidden" id="id" th:value="${project.id}" name="id">
+          </div>
+          <div class="box-body">
+            <div class="form-group">
+              <label for="name" class="col-sm-2 control-label">项目名称</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" name="name" th:value="${project.name}" placeholder="项目名称">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="demander" class="col-sm-2 control-label">需方</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="demander" name="demander" th:value="${project.demander}" placeholder="甲方">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="address" class="col-sm-2 control-label">安装地点</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="address" name="address" th:value="${project.address}" placeholder="安装地点">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="code" class="col-sm-2 control-label">项目号</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="code" name="code" th:value="${project.code}" placeholder="项目号" disabled>
+              </div>
+              <!--<div class="col-sm-5">
+                <label class="checkbox-inline icheck">
+                  <input type="checkbox" name="orderNo" class="minimal-red" value="1" th:checked="${project.orderNo == 1}" >优先排序
+                </label>
+              </div>-->
+            </div>
+            <div class="form-group">
+              <label for="codeSpecial" class="col-sm-2 control-label">任务单号号</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="codeSpecial" name="codeSpecial" th:value="${project.codeSpecial}" placeholder="附属项目号">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="num" class="col-sm-2 control-label">数量</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="num" name="num" th:value="${project.num}" placeholder="数量">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="planTime" class="col-sm-2 control-label no-padding-right">预计时间</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control datepicker" id="planTime" name="planTime" th:value="${#dates.format(project.planTime,'yyyy-MM-dd')}" readonly >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="comment" class="col-sm-2 control-label">备注</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="comment" name="comment" th:value="${project.comment}" placeholder="备注">
+              </div>
+            </div>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <form id="sectionForm">
+        <div class="col-md-3" th:each="type: ${sectionType}">
+        <div class="box box-default box-solid">
+          <div class="box-header with-border">
+            <h3 class="box-title" th:text="${type.name}">机械设计</h3>
+          </div>
+          <div class="box-body" style="display: block;">
+            <div class="form-group">
+              <select class="form-control select2" name="sectionId" style="width: 100%;">
+                <option value="" selected="selected">请选择</option>
+                <option th:each="section:${type.sections}" th:selected="${section.id == first || section.id == second || section.id == third || section.id == fourth}" th:value="${section.id}" th:text="${section.name}"></option>
+              </select>
+            </div>
+            <p class="text-muted" th:each="taskName: ${type.taskNames}" th:text="${taskName.name}"></p>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+    <div shiro:hasPermission="project:update">
+      <button type="button" id="btn_create" class="btn btn-info pull-right">提交</button>
+    </div>
+  </div>
+  <h1 th:unless="${project != null}">找不到此编号项目，可能此项目已取消或者完成</h1>
+</section>
+<!-- /.content -->
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+
+  function updateTaskStatus(id, status) {
+    $.operate.post(ctx + "board/single/updateTaskStatus",{id: id, status:status}, function () {
+      $.table.refresh();
+    });
+  }
+
+  $(function () {
+    // 加载表格
+    $.table.init({
+      id: "taskTable",
+      url: ctx + "board/single/list",
+      dom: "Tft",
+      data: {
+        idQuery: $("#id").val()
+      },
+      columns: [
+        {
+          data: null,
+          render : function (data, type, row, meta) {
+            return meta.row + 1;
+          }
+        },
+        { data: "alias"},
+        { data: "taskName.taskType.name"},
+        { data: "id",
+          render : function(data, type, row, meta) {
+            var html = [];
+            if(row.project.status !== 0){
+              if (row.status === 1) {
+                html.push('<a class="btn btn-danger btn-xs" style="margin-left: 5px" href="javascript:void(0);" onclick="updateTaskStatus(' + data + ', 2)">不需要</a>');
+              } else {
+                html.push('<a class="btn btn-warning btn-xs" style="margin-left: 5px" href="javascript:void(0);" onclick="updateTaskStatus(' + data + ', 1)">需要</a>');
+              }
+            }
+            return html.join('');
+          }
+        }
+      ]
+    });
+
+    // 下拉列表改变事件
+    $(".select2").change(function () {
+      if ($(this).val()) {
+        $(this).parents(".box").removeClass("box-default");
+        $(this).parents(".box").addClass("box-info");
+        $(this).parents(".box").find("p").removeClass("text-muted");
+        $(this).parents(".box").find("p").addClass("text-aqua");
+      } else {
+        $(this).parents(".box").addClass("box-default");
+        $(this).parents(".box").removeClass("box-info");
+        $(this).parents(".box").find("p").removeClass("text-aqua");
+        $(this).parents(".box").find("p").addClass("text-muted");
+      }
+    });
+
+    // 验证初始化
+    $.validate.init("projectForm",{
+      fields: {
+        name: {validators: {notEmpty: {message: '项目名必需填写'}}},
+        num: {validators: {notEmpty: {message: '数量必须填写'}}},
+        demander: {validators: {notEmpty: {message: '需方必须填写'}}},
+        address: {validators: {notEmpty: {message: '安装地址必须填写'}}}
+      }
+    });
+    // 修改项目
+    $("#btn_create").click(function () {
+      if ($.validate.isValid()) {
+        $.operate.post(ctx + "board/single/update",$("#projectForm").serialize() + "&" + $("#sectionForm").serialize(), function () {
+          location.reload();
+        });
+      }
+    });
+
+    $(".select2").trigger("change");
+
+  });
+
+</script>
+</body>
+</html>

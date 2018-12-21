@@ -1,8 +1,9 @@
-package com.zw.design.modules.build.distributedesigntask.entity;
+package com.zw.design.modules.lookboard.single.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zw.design.modules.baseinfosetting.emp.entity.Employee;
+import com.zw.design.modules.build.distributedesigntask.entity.Task;
 import lombok.Getter;
 import lombok.Setter;
 

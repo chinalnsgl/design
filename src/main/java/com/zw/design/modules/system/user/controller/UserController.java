@@ -28,9 +28,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
     /**
      * 到达用户列表页面
      */
@@ -115,35 +112,4 @@ public class UserController {
         return BaseResponse.toResponse(sysUser);
     }
 
-
-    /**
-     * 所有用户列表
-     */
-    @ResponseBody
-    @GetMapping("/all")
-    public BaseResponse getAll() {
-        List<SysUser> users = userService.findAllByStatus();
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setContent(users);
-        return baseResponse;
-    }
-
-
-    /**
-     * 修改头像
-     */
-    @ResponseBody
-    @PostMapping("/updateImage")
-    public BaseResponse updateImage(String imageData) {
-        String imgName = UUID.randomUUID().toString() + ".png";
-        SysUser user = userService.updateImage("/files/" + imgName);
-        try {
-            FileUtils.decodeBase64DataURLToImage(imageData, uploadPath, imgName);
-            BaseResponse baseResponse = new BaseResponse();
-            baseResponse.setContent(user.getImg());
-            return baseResponse;
-        } catch (IOException e) {
-            return BaseResponse.STATUS_400;
-        }
-    }
 }

@@ -197,47 +197,63 @@
                 }
               }
             },
-            { data: "firstStatus",
+            { data: "firstCompleteStatus",
               width: "70px",
               render: function (data, type, row, meta) {
                 return statusName[data];
               },
               createdCell: function (td, cellData, rowData, row, col) {
                 if (rowData.projectStatus !== 0) {
-                  $(td).css("background-color", statusColor[cellData]);
+                  if (rowData.firstStatus === 0) {
+                    $(td).css("background-color",'#FF0000');
+                  } else {
+                    $(td).css("background-color", statusColor[cellData]);
+                  }
                 }
               }
             },
-            { data: "secondStatus",
+            { data: "secondCompleteStatus",
               width: "70px",
               render: function (data, type, row, meta) {
                 return statusName[data];
               },
               createdCell: function (td, cellData, rowData, row, col) {
                 if (rowData.projectStatus !== 0) {
-                  $(td).css("background-color", statusColor[cellData]);
+                  if (rowData.secondStatus === 0) {
+                    $(td).css("background-color",'#FF0000');
+                  } else {
+                    $(td).css("background-color", statusColor[cellData]);
+                  }
                 }
               }
             },
-            { data: "thirdStatus",
+            { data: "thirdCompleteStatus",
               width: "70px",
               render: function (data, type, row, meta) {
                 return statusName[data];
               },
               createdCell: function (td, cellData, rowData, row, col) {
                 if (rowData.projectStatus !== 0) {
-                  $(td).css("background-color", statusColor[cellData]);
+                  if (rowData.thirdStatus === 0) {
+                    $(td).css("background-color",'#FF0000');
+                  } else {
+                    $(td).css("background-color", statusColor[cellData]);
+                  }
                 }
               }
             },
-            { data: "fourthStatus",
+            { data: "fourthCompleteStatus",
               width: "70px",
               render: function (data, type, row, meta) {
                 return statusName[data];
               },
               createdCell: function (td, cellData, rowData, row, col) {
                 if (rowData.projectStatus !== 0) {
-                  $(td).css("background-color", statusColor[cellData]);
+                  if (rowData.fourthStatus === 0) {
+                    $(td).css("background-color",'#FF0000');
+                  } else {
+                    $(td).css("background-color", statusColor[cellData]);
+                  }
                 }
               }
             },
@@ -264,7 +280,7 @@
             { data: "id",
               "width": "40px",
               render : function(data, type, row, meta) {
-                return '<a target="_blank" style="margin-right: 5px" class="btn btn-info btn-xs many-view" href="/project/single/' + data + '">查看</a>';
+                return '<a target="_blank" style="margin-right: 5px" class="btn btn-info btn-xs many-view" href="' + ctx + '/single/' + data + '">查看</a>';
               }
             }
           ],
