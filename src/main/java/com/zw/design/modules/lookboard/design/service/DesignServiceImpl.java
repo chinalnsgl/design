@@ -28,6 +28,12 @@ public class DesignServiceImpl implements DesignService {
         if (query.getNameQuery() != null && !"".equals(query.getNameQuery().trim())) {
             query.setNameQuery("%" + query.getNameQuery() + "%");
         }
+        if (query.getDemanderQuery() != null && !"".equals(query.getDemanderQuery().trim())) {
+            query.setDemanderQuery("%" + query.getDemanderQuery().trim() + "%");
+        }
+        if (query.getAddressQuery() != null && !"".equals(query.getAddressQuery().trim())) {
+            query.setAddressQuery("%" + query.getAddressQuery().trim() + "%");
+        }
         List<Integer> ids = designMapper.findProjectIdsBySection(query);
         // 没有符合要求的项目带入一个查询不到的条件，否则会查询全部记录
         if (ids.size() < 1) {

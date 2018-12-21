@@ -45,6 +45,9 @@
     <if test="yearQuery != null">
       and year (a.create_time) = #{yearQuery}
     </if>
+    <if test="addressQuery != null and addressQuery != ''">
+      and a.address like #{addressQuery}
+    </if>
     <if test="sectionQuery != null and sectionQuery != ''">
       and a.design_depts like  #{sectionQuery}
     </if>

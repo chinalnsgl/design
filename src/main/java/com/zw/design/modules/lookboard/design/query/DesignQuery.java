@@ -16,6 +16,11 @@ public class DesignQuery implements Serializable {
     private Integer statusQuery;
     private Integer sectionQuery;
     private String ids; // 项目IDS
+    private Date startTimeQuery;
+    private Date endTimeQuery;
+    private String demanderQuery;
+    private Integer yearQuery;
+    private String addressQuery;
 
     public int getPageNum() {
         return start / length + 1;

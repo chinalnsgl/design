@@ -19,6 +19,7 @@ public class MultiQuery implements Serializable {
     private String sectionQuery;
     private String demanderQuery;
     private Integer yearQuery;
+    private String addressQuery;
 
     public int getPageNum() {
         return start / length + 1;

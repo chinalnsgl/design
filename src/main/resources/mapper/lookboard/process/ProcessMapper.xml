@@ -36,6 +36,18 @@
     <if test="statusQuery == 2">
       and b.comp_status = 2 and c.comp_status = 2 and d.comp_status = 2 and a.status != 0
     </if>
+    <if test="demanderQuery != null and demanderQuery != ''">
+      and a.demander like #{demanderQuery}
+    </if>
+    <if test="addressQuery != null and addressQuery != ''">
+      and a.address like #{addressQuery}
+    </if>
+    <if test="startTimeQuery != null">
+      <![CDATA[ and a.create_time >= #{startTimeQuery} ]]>
+    </if>
+    <if test="endTimeQuery != null">
+      <![CDATA[ and a.create_time <= #{endTimeQuery} ]]>
+    </if>
     order by a.order_no desc , a.code
 	</select>
 

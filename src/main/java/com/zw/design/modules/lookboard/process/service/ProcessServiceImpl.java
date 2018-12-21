@@ -27,6 +27,12 @@ public class ProcessServiceImpl implements ProcessService {
         if (query.getNameQuery() != null && !"".equals(query.getNameQuery().trim())) {
             query.setNameQuery("%" + query.getNameQuery() + "%");
         }
+        if (query.getDemanderQuery() != null && !"".equals(query.getDemanderQuery().trim())) {
+            query.setDemanderQuery("%" + query.getDemanderQuery().trim() + "%");
+        }
+        if (query.getAddressQuery() != null && !"".equals(query.getAddressQuery().trim())) {
+            query.setAddressQuery("%" + query.getAddressQuery().trim() + "%");
+        }
         PageHelper.startPage(query.getPageNum(), query.getLength());
         List<ProcessModel> model = processMapper.findProjectByQuery(query);
         PageInfo<ProcessModel> pageInfo = new PageInfo(model);

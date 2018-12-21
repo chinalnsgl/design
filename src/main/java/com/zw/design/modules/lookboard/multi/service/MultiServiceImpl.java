@@ -22,16 +22,19 @@ public class MultiServiceImpl implements MultiService {
     @Override
     public BaseDataTableModel<MultiModel> findByQuery(MultiQuery query) {
         if (query.getCodeQuery() != null && !"".equals(query.getCodeQuery().trim())) {
-            query.setCodeQuery("%" + query.getCodeQuery() + "%");
+            query.setCodeQuery("%" + query.getCodeQuery().trim() + "%");
         }
         if (query.getNameQuery() != null && !"".equals(query.getNameQuery().trim())) {
-            query.setNameQuery("%" + query.getNameQuery() + "%");
+            query.setNameQuery("%" + query.getNameQuery().trim() + "%");
         }
         if (query.getDemanderQuery() != null && !"".equals(query.getDemanderQuery().trim())) {
-            query.setDemanderQuery("%" + query.getDemanderQuery() + "%");
+            query.setDemanderQuery("%" + query.getDemanderQuery().trim() + "%");
         }
         if (query.getSectionQuery() != null && !"".equals(query.getSectionQuery().trim())) {
-            query.setSectionQuery("%" + query.getSectionQuery() + "%");
+            query.setSectionQuery("%" + query.getSectionQuery().trim() + "%");
+        }
+        if (query.getAddressQuery() != null && !"".equals(query.getAddressQuery().trim())) {
+            query.setAddressQuery("%" + query.getAddressQuery().trim() + "%");
         }
         PageHelper.startPage(query.getPageNum(), query.getLength());
         List<MultiModel> model = multiMapper.findProjectByQuery(query);
