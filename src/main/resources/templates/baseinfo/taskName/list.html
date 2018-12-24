@@ -160,7 +160,6 @@
         $("#btn_edit").click(function () {
           if ($.validate.isValid()) {
             $.operate.post(ctx + "/taskname/update",$("#taskNameForm").serialize(),function () {
-              debugger;
               $.table.refresh();
             });
             $.validate.reset();

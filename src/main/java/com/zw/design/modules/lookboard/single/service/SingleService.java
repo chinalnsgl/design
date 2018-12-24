@@ -5,6 +5,7 @@ import com.zw.design.modules.baseinfosetting.sectiontype.entity.SectionType;
 import com.zw.design.modules.build.create.entity.Project;
 import com.zw.design.modules.lookboard.single.entity.Message;
 import com.zw.design.modules.build.distributedesigntask.entity.Task;
+import com.zw.design.modules.lookboard.single.entity.TaskEmployee;
 import com.zw.design.modules.lookboard.single.query.SingleQuery;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +37,18 @@ public interface SingleService {
     // 编辑任务
     Task editTask(Task task);
 
+    // 按任务ID查任务负责人表格数据模型
+    BaseDataTableModel<TaskEmployee> findTaskEmployeeByTaskId(SingleQuery taskId);
+
+    // 添加负责人
+    TaskEmployee saveEmployee(TaskEmployee taskEmployee);
+
+    // 修改负责人
+    TaskEmployee updateEmployee(TaskEmployee taskEmployee);
+
+    // 修改负责人状态
+    TaskEmployee updateEmployeeStatus(Integer id, int status);
+
     // 撤消任务
     Task cancelTask(Integer id);
 
@@ -56,6 +69,5 @@ public interface SingleService {
 
     // 删除文件
     void delFile(Integer[] ids);
-
 
 }

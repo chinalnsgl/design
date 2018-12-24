@@ -5,6 +5,8 @@ spring:
 #    password: zw1234aA#
     url: jdbc:sqlserver://192.168.72.229:1433;DatabaseName=DB_DESIGN
     password: 123
+#    url: jdbc:sqlserver://192.168.72.155:1433;DatabaseName=DB_DESIGN
+#    password: zw1234aA#
   jpa:
     hibernate:
       ddl-auto: update

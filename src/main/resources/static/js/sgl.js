@@ -96,8 +96,13 @@
       refresh: function () {
         $.table._table.ajax.reload(null, false);
       },
+      // 重载
       reload: function () {
         $.table._table.ajax.reload();
+      },
+      // 销毁
+      destroy: function () {
+        $.table._table.destroy();
       }
     },
     // 表单封装处理

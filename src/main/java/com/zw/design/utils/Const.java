@@ -32,6 +32,8 @@ public interface Const {
         put("compStatus", "完成状态");
         put("comment", "备注");
         put("contractNo", "合同号");
+        put("empName", "负责人");
+        put("duration", "历时");
     }};
 
 }

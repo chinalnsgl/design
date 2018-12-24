@@ -54,7 +54,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label no-padding-right">负责人</label>
             <div class="col-sm-10">
-              <button type="button" class="btn btn-warning" id="btn-employee">编辑联系人</button>
+              <button type="button" class="btn btn-warning" onclick="openEmployeeModal()">编辑联系人</button>
             </div>
           </div>
           <div class="form-group" id="contractDiv">
@@ -109,7 +109,7 @@
               <input type="hidden" name="projectId" id="upload_projectId">
               <input type="hidden" name="taskId" id="upload_taskId">
               <input type="hidden" name="code" id="upload_code">
-              <div class="form-group"  shiro:hasPermission="task:download" id="file_group"></div>
+              <div class="form-group" id="file_group"></div>
               <div class="form-group">
                 <label for="upload_file">上传文件</label>
                 <input type="file" multiple="multiple" id="upload_file" name="file">
@@ -268,7 +268,60 @@
         <h4 class="modal-title">任务负责人</h4>
       </div>
       <div class="modal-body">
-
+        <div class="row">
+          <div class="col-md-8">
+            <table id="empTable" class="table table-bordered table-hover" width="100%">
+              <thead>
+              <tr>
+                <th style="width: 8%;">序号</th>
+                <th style="width: 10%;">负责人</th>
+                <th style="width: 30%;">内容</th>
+                <th style="width: 15%;">开始时间</th>
+                <th style="width: 15%;">结束时间</th>
+                <th style="width: 8%;">历时</th>
+                <th style="width: 14%;">操作</th>
+              </tr>
+              </thead>
+            </table></div>
+          <div class="col-md-4">
+            <input type="hidden" id="empId" name="id">
+            <form id="empForm" class="form-horizontal">
+              <input type="hidden" id="empTaskId" name="task.id">
+              <div class="form-group">
+                <label for="empName" class="col-sm-4 control-label">负责人</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="empName" name="empName" placeholder="请输入负责人名称">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="empContent" class="col-sm-4 control-label">内容</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="empContent" name="content" placeholder="请输入内容">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="empStartTime" class="col-sm-4 control-label">开始时间</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control datepicker" id="empStartTime" name="startTime" readonly >
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="empEndTime" class="col-sm-4 control-label">结束时间</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control datepicker" id="empEndTime" name="endTime" readonly >
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="empDuration" class="col-sm-4 control-label">历时</label>
+                <div class="col-sm-8">
+                  <input type="number" class="form-control" id="empDuration" name="duration" placeholder="请输入天数">
+                </div>
+              </div>
+              <button type="button" style="margin-left: 10px" class="btn btn-warning pull-right" disabled id="btn-employee-update">修改</button>
+              <button type="button" style="margin-left: 10px" class="btn btn-info pull-right" id="btn-employee-create">添加</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -349,7 +402,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[1].startTime}">从<span th:text="${#dates.format(project.tasks[1].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[1].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${project.tasks[1].startTime}">时间</div>
-          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[1].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[1].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></div>
           <div>预计时间：<span th:text="${#dates.format(project.tasks[1].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${project.tasks[1].compStatus}">
@@ -380,7 +433,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[2].startTime}">从<span th:text="${#dates.format(project.tasks[2].startTime,'yyyy-MM-dd')}"></span>到<span th:text="${#dates.format(project.tasks[2].endTime,'yyyy-MM-dd')}"></span></div>
           <div th:unless="${project.tasks[2].startTime}">时间</div>
-          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[2].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[2].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></div>
           <div th:if="${project.tasks[2].contractNo}">合同号：<span th:text="${#strings.abbreviate(project.tasks[2].contractNo,10)}">合同号</span></div>
           <div th:unless="${project.tasks[2].contractNo}">合同号：</div>
           <div>状态：
@@ -411,7 +464,7 @@
             <div class="box-body" style="display: block;">
               <div th:if="${task.startTime}">从<span th:text="${#dates.format(task.startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(task.endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
               <div th:unless="${task.startTime}">时间</div>
-              <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+              <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></div>
               <div th:unless="${task.employees}">负责人：</div>
               <div>预计时间：<span th:text="${#dates.format(task.planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
               <div>状态：
@@ -443,7 +496,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${task.startTime}">从<span th:text="${#dates.format(task.startTime,'yyyy-MM-dd')}">3018-08-01</span>到<span th:text="${#dates.format(task.endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${task.startTime}">时间</div>
-          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></div>
           <div>预计时间：<span th:text="${#dates.format(task.planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${task.compStatus}">
@@ -469,7 +522,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${task.startTime}">从<span th:text="${#dates.format(task.startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(task.endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${task.startTime}">时间</div>
-          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></div>
           <div>预计时间：<span th:text="${#dates.format(task.planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${task.compStatus}">
@@ -495,7 +548,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[3].startTime}">从<span th:text="${#dates.format(project.tasks[3].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[3].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${project.tasks[3].startTime}">时间</div>
-          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[3].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[3].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></div>
           <div>预计时间：<span th:text="${#dates.format(project.tasks[3].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${project.tasks[3].compStatus}">
@@ -528,7 +581,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[4].startTime}">从<span th:text="${#dates.format(project.tasks[4].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[4].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${project.tasks[4].startTime}">时间</div>
-          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[4].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[4].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></div>
           <div>预计时间：<span th:text="${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${project.tasks[4].compStatus}">
@@ -555,7 +608,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[5].startTime}">从<span th:text="${#dates.format(project.tasks[5].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[5].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${project.tasks[5].startTime}">时间</div>
-          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[5].employees}" th:if="${stat.index < 5}" th:text="${employee.name}"></span></div>
+          <div>负责人：<span style="margin-left: 5px" th:each="employee,stat:${project.tasks[5].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></div>
           <div>预计时间：<span th:text="${#dates.format(project.tasks[5].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${project.tasks[5].compStatus}">
@@ -660,6 +713,29 @@
       $(".btn-commit-task").hide();
     }
     $.modal.open("modal-task");
+  }
+
+  // 负责人模态框
+  function openEmployeeModal() {
+    $("#empTaskId").val($("#id").val());
+    // $.table._table.columns.adjust().draw();
+    $.modal.open("modal-employees");
+    $.table.search({
+      idQuery: $("#empTaskId").val()
+    });
+    $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
+  }
+
+  function delEmployee(id) {
+    $.modal.confirm("确定删除这个人吗?",function () {
+      if (id == $("#empId").val()) {
+        $.form.reset("empForm");
+        $("#btn-employee-update").attr("disabled", true);
+      }
+      $.operate.post(ctx + "board/single/editTask/employee/status", {"id": id}, function () {
+        $.table.refresh();
+      });
+    });
   }
 
   // 查看信息
@@ -771,6 +847,76 @@
           }
         })
       }
+    });
+
+    // 添加联系人信息
+    $("#btn-employee-create").click(function () {
+      if ($.validate.isValid()) {
+        $.operate.post(ctx + "board/single/editTask/employee/save",$("#empForm").serialize(), function () {
+          $.table.refresh();
+          $.form.reset("empForm");
+          $("#btn-employee-update").attr("disabled", true);
+        });
+        $.validate.reset();
+      }
+    });
+
+    // 修改联系人信息
+    $("#btn-employee-update").click(function () {
+      if ($.validate.isValid()) {
+        $.operate.post(ctx + "board/single/editTask/employee/update",$("#empForm").serialize() + "&id=" + $("#empId").val(), function () {
+          $.table.refresh();
+          $.form.reset("empForm");
+          $("#btn-employee-update").attr("disabled", true);
+        });
+        $.validate.reset();
+      }
+    });
+
+    // 验证
+    $.validate.init("empForm",{
+      fields: {
+        empName: {validators: {notEmpty: {message: '请输入负责人'}}},
+      }
+    });
+
+    // 加载负责人表格
+    $.table.init({
+      id: "empTable",
+      url: ctx + "board/single/editTask/employee/list",
+      dom: "Tft",
+      data : {
+        idQuery: $("#empTaskId").val()
+      },
+      columns: [
+        {
+          data: null,
+          render : function (data, type, row, meta) {
+            return meta.row + 1;
+          }
+        },
+        { data: "empName"},
+        { data: "content"},
+        { data: "startTime"},
+        { data: "endTime"},
+        { data: "duration"},
+        { data: "id",
+          render : function(data, type, row, meta) {
+            return '<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="delEmployee(' + data + ')">删除</a>';
+          }
+        }
+      ]
+    });
+    // 点击行
+    $.table.rowClick(function (data) {
+      $("#empId").val(data.id);
+      $("#empName").val(data.empName);
+      $("#empContent").val(data.content);
+      $("#empStartTime").val(data.startTime);
+      $("#empEndTime").val(data.endTime);
+      $("#empDuration").val(data.duration);
+      $("#empTaskId").val(data.task.id);
+      $("#btn-employee-update").removeAttr("disabled");
     });
 
     // 提交任务进度和信息

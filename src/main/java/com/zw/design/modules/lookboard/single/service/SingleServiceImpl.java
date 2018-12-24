@@ -13,24 +13,22 @@ import com.zw.design.modules.build.distributedesigntask.repository.TaskRepositor
 import com.zw.design.modules.lookboard.single.entity.Image;
 import com.zw.design.modules.lookboard.single.entity.Message;
 import com.zw.design.modules.lookboard.single.entity.Receiver;
+import com.zw.design.modules.lookboard.single.entity.TaskEmployee;
 import com.zw.design.modules.lookboard.single.mapper.SingleMapper;
 import com.zw.design.modules.lookboard.single.query.SingleQuery;
 import com.zw.design.modules.lookboard.single.repository.ImageRepository;
 import com.zw.design.modules.lookboard.single.repository.MessageRepository;
 import com.zw.design.modules.lookboard.single.repository.ReceiverRepository;
+import com.zw.design.modules.lookboard.single.repository.TaskEmployeeRepository;
 import com.zw.design.modules.system.log.service.LogService;
 import com.zw.design.modules.system.user.entity.SysUser;
 import com.zw.design.modules.system.user.repository.SysUserRepository;
 import com.zw.design.utils.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -67,6 +65,8 @@ public class SingleServiceImpl implements SingleService {
     private SectionTypeRepository sectionTypeRepository;
     @Autowired
     private SectionRepository sectionRepository;
+    @Autowired
+    private TaskEmployeeRepository taskEmployeeRepository;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -253,6 +253,55 @@ public class SingleServiceImpl implements SingleService {
         Project p = projectRepository.findById(t.getProject().getId()).get();
         updateProject(p);
         return t;
+    }
+
+    // 按任务ID查询任务负责人表格数据模型
+    @Override
+    public BaseDataTableModel<TaskEmployee> findTaskEmployeeByTaskId(SingleQuery query) {
+        List<TaskEmployee> employees = taskEmployeeRepository.findAll((Specification<TaskEmployee>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> list = new ArrayList<>();
+            list.add(criteriaBuilder.equal(root.get("task").get("id"), query.getIdQuery()));
+            list.add(criteriaBuilder.equal(root.get("status"), 1));
+            Predicate[] p = new Predicate[list.size()];
+            return criteriaBuilder.and(list.toArray(p));
+        });
+        BaseDataTableModel<TaskEmployee> baseDataTableModel = new BaseDataTableModel<>();
+        baseDataTableModel.setDraw(query.getDraw());
+        baseDataTableModel.setData(employees);
+        baseDataTableModel.setRecordsTotal(employees.size());
+        baseDataTableModel.setRecordsFiltered(employees.size());
+        return baseDataTableModel;
+    }
+
+    // 添加负责人
+    @Override
+    public TaskEmployee saveEmployee(TaskEmployee taskEmployee) {
+        Task task = taskRepository.findById(taskEmployee.getTask().getId()).get();
+        Project project = projectRepository.findById(task.getProject().getId()).get();
+        logService.saveLog("添加负责人" , "【项目：" + project.getName() + "，任务名：" + task.getTaskName() + "负责人：" + taskEmployee.getEmpName() + "】");
+        return taskEmployeeRepository.save(taskEmployee);
+    }
+
+    // 修改负责人
+    @Override
+    public TaskEmployee updateEmployee(TaskEmployee taskEmployee) {
+        TaskEmployee emp = taskEmployeeRepository.findById(taskEmployee.getId()).get();
+        logService.saveLog("修改负责人", emp, taskEmployee);
+        emp.setEmpName(taskEmployee.getEmpName());
+        emp.setContent(taskEmployee.getContent());
+        emp.setStartTime(taskEmployee.getStartTime());
+        emp.setEndTime(taskEmployee.getEndTime());
+        emp.setDuration(taskEmployee.getDuration());
+        return taskEmployeeRepository.save(emp);
+    }
+
+    // 修改负责人状态
+    @Override
+    public TaskEmployee updateEmployeeStatus(Integer id, int status) {
+        TaskEmployee taskEmployee = taskEmployeeRepository.findById(id).get();
+        logService.saveLog("删除负责人" , taskEmployee.getEmpName());
+        taskEmployee.setStatus(status);
+        return taskEmployeeRepository.save(taskEmployee);
     }
 
     // 撤消任务

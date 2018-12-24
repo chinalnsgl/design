@@ -6,6 +6,7 @@ import com.zw.design.modules.build.create.entity.Project;
 import com.zw.design.modules.build.distributedesigntask.query.DistributeDesignTaskQuery;
 import com.zw.design.modules.lookboard.single.entity.Message;
 import com.zw.design.modules.build.distributedesigntask.entity.Task;
+import com.zw.design.modules.lookboard.single.entity.TaskEmployee;
 import com.zw.design.modules.lookboard.single.query.SingleQuery;
 import com.zw.design.modules.lookboard.single.service.SingleService;
 import com.zw.design.modules.system.user.entity.SysUser;
@@ -154,6 +155,41 @@ public class SingleController {
         }
         Task t = singleService.editTask(task);
         return BaseResponse.toResponse(t);
+    }
+
+    // 负责人列表
+    @ResponseBody
+    @PostMapping("/editTask/employee/list")
+    @RequiresPermissions(value = {"single:sign:edit", "single:contract:edit", "single:dept:edit", "single:process:edit", "single:produce:edit","single:debug:edit","single:accept:edit","single:save:edit"},logical = Logical.OR)
+    public BaseResponse empList(SingleQuery singleQuery) {
+        BaseDataTableModel<TaskEmployee> tasks = singleService.findTaskEmployeeByTaskId(singleQuery);
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setContent(tasks);
+        return baseResponse;
+    }
+
+    // 添加负责人
+    @ResponseBody
+    @PostMapping("/editTask/employee/save")
+    @RequiresPermissions(value = {"single:sign:edit", "single:contract:edit", "single:dept:edit", "single:process:edit", "single:produce:edit","single:debug:edit","single:accept:edit","single:save:edit"},logical = Logical.OR)
+    public BaseResponse empSave(TaskEmployee taskEmployee) {
+        return BaseResponse.toResponse(singleService.saveEmployee(taskEmployee));
+    }
+
+    // 修改负责人
+    @ResponseBody
+    @PostMapping("/editTask/employee/update")
+    @RequiresPermissions(value = {"single:sign:edit", "single:contract:edit", "single:dept:edit", "single:process:edit", "single:produce:edit","single:debug:edit","single:accept:edit","single:save:edit"},logical = Logical.OR)
+    public BaseResponse empUpdate(TaskEmployee taskEmployee) {
+        return BaseResponse.toResponse(singleService.updateEmployee(taskEmployee));
+    }
+
+    // 删除负责人
+    @ResponseBody
+    @PostMapping("/editTask/employee/status")
+    @RequiresPermissions(value = {"single:sign:edit", "single:contract:edit", "single:dept:edit", "single:process:edit", "single:produce:edit","single:debug:edit","single:accept:edit","single:save:edit"},logical = Logical.OR)
+    public BaseResponse updateEmpLoyeeStatus(@RequestParam("id")Integer id) {
+        return BaseResponse.toResponse(singleService.updateEmployeeStatus(id, 0));
     }
 
     // 撤消任务进度

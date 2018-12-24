@@ -43,7 +43,7 @@ public class TaskEmployee implements Serializable {
 
     private String comment; // 备注
 
-    private float duration; // 历时（天数）
+    private Float duration; // 历时（天数）
 
     @ManyToOne
     @JsonIgnoreProperties("employees")
