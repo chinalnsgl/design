@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.integrate.performance.mapper.PerformanceMapper">
+
+  <select id="findProjectByQuery" resultType="com.zw.design.modules.build.create.entity.Project" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
+    select a.* from project a
+    right join (
+    select distinct p.id from project as p
+    left join task t on p.id = t.project_id
+    left join task_employee e on t.id = e.task_id
+    where e.emp_name = #{nameQuery}
+    ) b on a.id = b.id
+    order by a.order_no desc, a.code
+  </select>
+
+
+</mapper>
