@@ -25,7 +25,9 @@ public class Message implements Serializable {
     private SysUser user; // 消息发送用户
 
     private Integer status = 1; // 状态
+
     private String users; // 接收消秘的用户名
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime = new Date();
 

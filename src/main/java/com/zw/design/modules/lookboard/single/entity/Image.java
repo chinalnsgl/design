@@ -31,11 +31,11 @@ public class Image implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "projectId")
-    @JsonIgnoreProperties("images")
+    @JsonIgnoreProperties({"images","tasks"})
     private Project project;
 
     @ManyToOne
     @JoinColumn(name = "taskId")
-    @JsonIgnoreProperties("images")
+    @JsonIgnoreProperties({"images","project"})
     private Task task;
 }

@@ -105,6 +105,108 @@
         $.table._table.destroy();
       }
     },
+    // 表格封装处理
+    doubleTable: {
+      _table: {},
+      _selector: {},
+      // 初始化表格
+      init: function(options) {
+        $.doubleTable._selector = $("#" + options.id);
+        $.doubleTable._table = $.doubleTable._selector
+            .on( 'preXhr.dt', function () {                                                           // ajax 请求之前处理
+              $.modal.loading("处理中，请稍假...");
+            })
+            .on( 'xhr.dt', function () {                                                              // ajax 请求之后处理
+              $.modal.closeLoading();
+            })
+            .on( 'draw.dt', function () {                                                             // 表格绘制完成处理
+              if (options.drawCallback) {
+                options.drawCallback();
+              }
+            })
+            .on( 'page.dt', function () {
+              if (options.pageCallBack) {
+                options.pageCallBack();
+              }
+            }).DataTable({
+              buttons: options.buttons ? options.buttons : {},                                          // 按钮配置（导出等）
+              fixedHeader: options.fixedHeader ? options.fixedHeader : false,                           // 固定表头
+              scrollX: options.scrollX ? options.scrollX : false,                                       // 水平滚动条
+              scrollY: false,                                                                           // 重直滚动条
+              info: options.info ? options.info : false,                                                // 表格左下角的信息
+              ordering: false,                                                                          // 开启排序
+              autoWidth: options.autoWidth ? options.autoWidth : true,                                  // 自适应宽度
+              lengthChange: false,                                                                      // 允许用户改变表格每页显示的记录数
+              pageLength: options.pageLength ? options.pageLength : 300,                                // 每页多少条数据
+              dom: options.dom ? options.dom : "Tft<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",      // 组件元素的显示和显示顺序
+              searching: false,                                                                         // 开启本地搜索
+              processing: true,                                                                         // 显示处理状态
+              serverSide: true,                                                                         // 开启服务器模式
+              deferRender: true,                                                                        // 延迟渲染
+              ajax: {                                                                                   // ajax请求
+                url : options.url,
+                type : options.type ? options.type : "POST",
+                data : options.data ? options.data : {},
+                dataSrc : function (result) {                                                           // ajax请求之后处理数据
+                  if (result.status === 200) {
+                    result.draw = result.content.draw;
+                    result.recordsTotal = result.content.recordsTotal;
+                    result.recordsFiltered = result.content.recordsFiltered;
+                    result.data = result.content.data;
+                  }
+                  return result.data;
+                }
+              },
+              columns: options.columns,                                                                  // 列配置
+              createdRow: options.createdRow ? options.createdRow : function (node) {  },               // 创建行事件
+              language : {                                                                               // 国际化配置
+                "sProcessing" : "正在获取数据，请稍后...",
+                "sLengthMenu" : "显示 _MENU_ 条",
+                "sZeroRecords" : "没有找到数据",
+                "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "infoEmpty" : "记录数为0",
+                "infoFiltered" : "(全部记录数 _MAX_ 条)",
+                "paginate" : {
+                  "first" : "第一页",
+                  "previous" : "上一页",
+                  "next" : "下一页",
+                  "last" : "最后一页"
+                }
+              }
+            });
+      },
+      // 搜索
+      search: function(data) {
+        $.doubleTable._table.settings()[0].ajax.data = data;
+        $.doubleTable._table.ajax.reload();
+      },
+      // 行点击事件
+      rowClick: function (callback) {
+        if (callback) {
+          $.doubleTable._selector.on('click', 'tbody tr', function () {
+            if ($(this).hasClass("active")) {
+              return false;
+            } else {
+              $.doubleTable._selector.find("tr").removeClass("active");
+              $(this).addClass("active");
+              callback($.doubleTable._table.row(this).data());
+            }
+          });
+        }
+      },
+      // 刷新
+      refresh: function () {
+        $.doubleTable._table.ajax.reload(null, false);
+      },
+      // 重载
+      reload: function () {
+        $.doubleTable._table.ajax.reload();
+      },
+      // 销毁
+      destroy: function () {
+        $.doubleTable._table.destroy();
+      }
+    },
     // 表单封装处理
     form: {
       // 表单重置
@@ -202,7 +304,7 @@
     // 操作封装处理
     operate: {
       // 提交数据
-      submit: function(url, type, dataType, data, callBack) {
+      submit: function(url, type, dataType, data, callBack, topic) {
         $.modal.loading("处理中，请稍后...");
         var config = {
           url: url,
@@ -214,7 +316,9 @@
             if (callBack) {
               $.modal.closeLoading();
               if (result.status === web_status.SUCCESS) {
-                $.modal.success("操作成功！O(∩_∩)O~ ！");
+                if (!topic) {
+                  $.modal.success("操作成功！O(∩_∩)O~ ！");
+                }
                 callBack(result);
               } else {
                 $.modal.fail("操作失败 (┬＿┬) ！！");
@@ -233,6 +337,10 @@
       // post请求传输
       post: function(url, data, callBack) {
         $.operate.submit(url, "post", "json", data, callBack);
+      },
+      // post无提示请求
+      postTopic: function (url, data, callBack) {
+        $.operate.submit(url, "post", "json", data, callBack, true);
       },
       // 登录
       login: function (url, redirect, data) {

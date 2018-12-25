@@ -726,6 +726,7 @@
     $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
   }
 
+  // 删除负责人
   function delEmployee(id) {
     $.modal.confirm("确定删除这个人吗?",function () {
       if (id == $("#empId").val()) {
@@ -735,6 +736,7 @@
       $.operate.post(ctx + "board/single/editTask/employee/status", {"id": id}, function () {
         $.table.refresh();
       });
+      event.stopPropagation();
     });
   }
 

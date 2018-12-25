@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.integrate.interactive.mapper.InteractiveMapper">
+
+  <select id="findProjectByQuery" resultType="com.zw.design.modules.build.create.entity.Project" parameterType="com.zw.design.modules.integrate.interactive.query.InteractiveQuery">
+    select a.* from project a
+    right join (
+    select distinct p.id from project as p
+    left join (
+    select project_id, count(id) as countNum from message group by project_id
+    ) as msg on p.id = msg.project_id
+    left join message m on p.id = m.project_id
+    left join receiver r on p.id = r.project_id
+    left join sys_user u1 on m.user_id = u1.id
+    left join sys_user u2 on r.user_id = u2.id
+    where
+    <![CDATA[ msg.countNum > 0 ]]>
+    <if test="senderQuery != null and senderQuery != ''">
+      and u1.name like #{senderQuery}
+    </if>
+    <if test="receiverQuery != null and receiverQuery != ''">
+      and u2.name like #{receiverQuery}
+    </if>
+    ) b on a.id = b.id
+  </select>
+
+  <select id="findMessageByQuery" resultType="com.zw.design.modules.lookboard.single.entity.Message" parameterType="com.zw.design.modules.integrate.interactive.query.InteractiveQuery">
+    select message.*, u.name from message
+    left join sys_user u on message.user_id = u.id
+    where message.status = 1 and project_id = #{projectIdQuery}
+	</select>
+
+</mapper>

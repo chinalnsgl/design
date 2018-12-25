@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <section class="content-header">
+      <h1>
+        互动专区
+      </h1>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="row">
+                <div class="form-inline">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>发送者</label>
+                    <input type="text" id="senderQuery" name="senderQuery" class="form-control" placeholder="请输入名称">
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>接收者</label>
+                    <input type="text" id="receiverQuery" name="receiverQuery" class="form-control" placeholder="请输入名称">
+                  </div>
+                  <button class="btn btn-default" id="btn_search">搜索</button>
+                </div>
+              </div>
+            </div>
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <table id="projectTable" class="table table-bordered table-hover" width="100%">
+                    <thead>
+                    <tr>
+                      <th>序号</th>
+                      <th>项目名称</th>
+                      <th>需方</th>
+                      <th>安装地点</th>
+                      <th>项目号</th>
+                      <th>任务单号</th>
+                      <th>数量</th>
+                      <th>操作</th>
+                    </tr>
+                    </thead>
+                  </table>
+                </div>
+                <div class="col-md-6">
+                  <!--<table id="messageTable" class="table table-bordered table-hover" width="100%">
+                    <thead>
+                    <tr>
+                      <th>序号</th>
+                      <th>接收者</th>
+                      <th>内容</th>
+                      <th>发送者</th>
+                      <th>发送时间</th>
+                    </tr>
+                    </thead>
+                  </table>-->
+                  <div class="box direct-chat direct-chat-primary">
+                    <div class="box-body" id="message-box-body">
+                      <div class="direct-chat-messages" id="message-box" style="height: 700px">
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+
+      $(function () {
+        // 加载项目表格
+        $.table.init({
+          id: "projectTable",
+          info: true,
+          url: ctx + "integrate/interactive/project/list",
+          pageLength: 15,
+          data : {
+            senderQuery: $("#senderQuery").val(),
+            receiverQuery: $("#receiverQuery").val()
+          },
+          columns: [
+            {
+              data: null,
+              render : function (data, type, row, meta) {
+                return meta.row + 1;
+              }
+            },
+            { data: "name"},
+            { data: "demander"},
+            { data: "address"},
+            { data: "code"},
+            { data: "codeSpecial"},
+            { data: "num"},
+            { data: "id",
+              render : function(data, type, row, meta) {
+                return '<a target="_blank" style="margin-right: 5px" class="btn btn-info btn-xs" href="' + ctx + '/single/' + data + '">查看</a>';
+              }
+            }
+          ]
+        });
+
+        // 点击行
+        $.table.rowClick(function (data) {
+          $.operate.postTopic(ctx + "integrate/interactive/message/list",{id: data.id},function (data) {
+            debugger;
+            var img = ctx + "img/person.png";
+            if (sessionUser.img != null) {
+              img = sessionUser.img;
+              var html = [];
+              $.each(data.content, function (idx, obj) {
+                debugger;
+                if (obj.user.id == sessionUser.id) {
+                  html.push('<div class="direct-chat-msg right">');
+                  html.push('<div class="direct-chat-info clearfix">');
+                  html.push('<span class="direct-chat-name pull-right">');
+                  html.push(obj.user.name);
+                  html.push('</span>');
+                  html.push('<span class="direct-chat-timestamp pull-left">');
+                  html.push(obj.createTime);
+                  html.push('</span>');
+                } else {
+                  html.push('<div class="direct-chat-msg">');
+                  html.push('<div class="direct-chat-info clearfix">');
+                  html.push('<span class="direct-chat-name pull-left">');
+                  html.push(obj.user.name);
+                  html.push('</span>');
+                  html.push('<span class="direct-chat-timestamp pull-right">');
+                  html.push(obj.createTime);
+                  html.push('</span>');
+                }
+                html.push('</div>');
+                html.push('<img class="direct-chat-img" alt="Message User Image" src="' + img + '">');
+                html.push('<div class="direct-chat-text">');
+                html.push(obj.content);
+                html.push('</div>');
+                html.push('</div>');
+              });
+              $("#message-box").empty().append(html.join(''));
+              $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;
+            }
+          });
+        });
+
+        // 搜索
+        $("#btn_search").click(function () {
+          $.table.search({
+            senderQuery: $("#senderQuery").val(),
+            receiverQuery: $("#receiverQuery").val()
+          });
+        });
+      });
+
+    </script>
+</body>
+</html>
