@@ -78,7 +78,7 @@ public class SingleController {
     // 修改项目页面
     @GetMapping("/update/code")
     @RequiresPermissions({"single:update"})
-    public String updateProject(@RequestParam("codeQuery") String code, Model model) {
+    public String updateProject(@RequestParam(value = "codeQuery", required = false) String code, Model model) {
         Project project = singleService.findProjectByCode(code);
         if (project != null) {
             findSectionId(model, project);
@@ -219,7 +219,7 @@ public class SingleController {
         return BaseResponse.toResponse(msg);
     }
 
-    // 所有用户
+    // 所有用户 @提到我功能
     @ResponseBody
     @GetMapping("/users")
     @RequiresAuthentication
