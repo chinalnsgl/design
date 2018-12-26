@@ -21,4 +21,4 @@ ${AnsiColor.BRIGHT_RED}
                                         *     ****
 
 ${AnsiColor.YELLOW}
-::: 机械工程部 :::
+::: 忠旺机械设备制造有限公司 :::
