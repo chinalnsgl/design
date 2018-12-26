@@ -6,17 +6,9 @@ import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.modules.build.create.entity.Project;
 import com.zw.design.modules.integrate.performance.mapper.PerformanceMapper;
 import com.zw.design.modules.integrate.performance.query.PerformanceQuery;
-import com.zw.design.modules.lookboard.single.entity.TaskEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
