@@ -2,12 +2,9 @@ package com.zw.design.base;
 
 import java.io.Serializable;
 
-import org.springframework.stereotype.Component;
-
 /**
  * json封装Dto
  */
-@Component
 public class BaseResponse implements Serializable{
 
 	private static final long serialVersionUID = -28667821450923254L;
