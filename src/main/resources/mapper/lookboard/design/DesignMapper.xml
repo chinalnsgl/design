@@ -45,7 +45,7 @@
     max(CASE WHEN task_name_id in (15,19,23,27) then status end) as secondStatus,
     max(CASE WHEN task_name_id in (16,20,24,28) then status end) as thirdStatus,
     max(CASE WHEN task_name_id in (17,21,25,29) then status end) as fourthStatus
-    from task group by project_id,section_id having section_id is not null
+    from task where status = 1 group by project_id,section_id having section_id is not null
     ) as b on a.id = b.project_id
     left join section as c on b.section_id = c.id
     left join task d on a.id = d.project_id and d.task_name_id = 2
