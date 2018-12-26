@@ -62,7 +62,7 @@ public class PermissionController {
     @GetMapping("/create")
     @RequiresPermissions({"permission:create"})
     public String permissionCreate() {
-        return prefix + "/permission/create";
+        return prefix + "/create";
     }
     /**
      * 子权限添加页面
