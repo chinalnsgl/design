@@ -10,14 +10,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+#    show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServer2008Dialect
     open-in-view: true
   thymeleaf:
     cache: false
-#    mode: LEGACYHTML5
     mode: HTML
   cache:
     type: redis
@@ -36,7 +35,7 @@ mybatis:
   type-aliases-package: com.zw.design.entity.dbo
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 pagehelper:
   reasonable: true
 logging:

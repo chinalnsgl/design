@@ -110,7 +110,7 @@ public class PermissionController {
     public String permissionEdit(@PathVariable Integer id, Model model) {
         SysPermission permission = permissionService.findById(id);
         model.addAttribute("permission", permission);
-        return prefix + "/permission/edit";
+        return prefix + "/edit";
     }
     /**
      * 修改权限
