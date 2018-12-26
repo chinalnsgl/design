@@ -38,8 +38,8 @@ mybatis:
 pagehelper:
   reasonable: true
 logging:
-#  level:
-#    root: warn
+  level:
+    root: warn
   path: e:/DesignProjectLog
 upload:
   path: e:/upload/
