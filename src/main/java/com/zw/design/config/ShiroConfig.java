@@ -74,11 +74,14 @@ public class ShiroConfig {
         //拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         //配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
-        filterChainDefinitionMap.put("/project/**", "authc");
-        filterChainDefinitionMap.put("/sys/**", "authc");
+        filterChainDefinitionMap.put("/overview/**", "authc");// 总览
+        filterChainDefinitionMap.put("/build/**", "authc"); // 立项
+        filterChainDefinitionMap.put("/board/**", "authc"); // 看板
+        filterChainDefinitionMap.put("/purchase/**", "authc"); // 采购
+        filterChainDefinitionMap.put("/integrate/**", "authc"); // 综合管理
+        filterChainDefinitionMap.put("/sys/**", "authc"); // 系统
+        filterChainDefinitionMap.put("/baseinfo/**", "authc"); // 基本信息
         filterChainDefinitionMap.put("/update", "authc");
-        filterChainDefinitionMap.put("/meeting/**", "authc");
-        filterChainDefinitionMap.put("/message/**", "authc");
         shiroFilterFactoryBean.setLoginUrl("/");
         filterChainDefinitionMap.put("/logout", "logout");
         shiroFilterFactoryBean.setSuccessUrl("/index");
