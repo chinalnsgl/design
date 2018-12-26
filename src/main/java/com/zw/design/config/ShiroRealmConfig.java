@@ -36,7 +36,7 @@ public class ShiroRealmConfig extends AuthorizingRealm {
             for (SysRole sysRole : roleList) {
                 simpleAuthorizationInfo.addRole(sysRole.getRoleCode());
             }
-            simpleAuthorizationInfo.addRole("*");
+            simpleAuthorizationInfo.addRole("admin");
             simpleAuthorizationInfo.addStringPermission("*:*:*");
         } else {
             //添加角色和权限
