@@ -105,7 +105,7 @@ public class PermissionController {
     /**
      * 权限编辑页面
      */
-    @GetMapping("/permission/edit/{id}")
+    @GetMapping("/edit/{id}")
     @RequiresPermissions({"permission:edit"})
     public String permissionEdit(@PathVariable Integer id, Model model) {
         SysPermission permission = permissionService.findById(id);
