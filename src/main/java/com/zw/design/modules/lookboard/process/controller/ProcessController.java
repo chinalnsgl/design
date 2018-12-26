@@ -2,8 +2,6 @@ package com.zw.design.modules.lookboard.process.controller;
 
 import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.base.BaseResponse;
-import com.zw.design.modules.lookboard.multi.model.MultiModel;
-import com.zw.design.modules.lookboard.multi.query.MultiQuery;
 import com.zw.design.modules.lookboard.process.model.ProcessModel;
 import com.zw.design.modules.lookboard.process.query.ProcessQuery;
 import com.zw.design.modules.lookboard.process.service.ProcessService;

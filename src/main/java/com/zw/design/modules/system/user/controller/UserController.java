@@ -1,23 +1,19 @@
 package com.zw.design.modules.system.user.controller;
 
-import com.zw.design.base.BaseResponse;
 import com.zw.design.base.BaseDataTableModel;
+import com.zw.design.base.BaseResponse;
 import com.zw.design.base.BaseValidResponse;
 import com.zw.design.modules.system.role.entity.SysRole;
 import com.zw.design.modules.system.user.entity.SysUser;
 import com.zw.design.modules.system.user.query.UserQuery;
 import com.zw.design.modules.system.user.service.UserService;
-import com.zw.design.utils.FileUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/sys/user")

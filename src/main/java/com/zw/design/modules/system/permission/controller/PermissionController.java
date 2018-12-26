@@ -1,10 +1,8 @@
 package com.zw.design.modules.system.permission.controller;
 
 import com.zw.design.base.BaseResponse;
-import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.base.BaseValidResponse;
 import com.zw.design.modules.system.permission.entity.SysPermission;
-import com.zw.design.modules.system.permission.query.PermissionQuery;
 import com.zw.design.modules.system.permission.service.PermissionService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

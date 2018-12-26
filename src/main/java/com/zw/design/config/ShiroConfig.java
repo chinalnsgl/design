@@ -81,7 +81,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/integrate/**", "authc"); // 综合管理
         filterChainDefinitionMap.put("/sys/**", "authc"); // 系统
         filterChainDefinitionMap.put("/baseinfo/**", "authc"); // 基本信息
-        filterChainDefinitionMap.put("/update", "authc");
+        filterChainDefinitionMap.put("/user/**", "authc");
+        filterChainDefinitionMap.put("/update/**", "authc");
         shiroFilterFactoryBean.setLoginUrl("/");
         filterChainDefinitionMap.put("/logout", "logout");
         shiroFilterFactoryBean.setSuccessUrl("/index");

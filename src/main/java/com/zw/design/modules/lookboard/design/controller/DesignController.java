@@ -6,8 +6,6 @@ import com.zw.design.modules.baseinfosetting.section.service.SectionService;
 import com.zw.design.modules.lookboard.design.model.DesignModel;
 import com.zw.design.modules.lookboard.design.query.DesignQuery;
 import com.zw.design.modules.lookboard.design.service.DesignService;
-import com.zw.design.modules.lookboard.multi.model.MultiModel;
-import com.zw.design.modules.lookboard.multi.query.MultiQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
