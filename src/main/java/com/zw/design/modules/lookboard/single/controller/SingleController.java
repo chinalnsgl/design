@@ -276,7 +276,7 @@ public class SingleController {
     @ResponseBody
     @PostMapping("/delFile")
     @RequiresPermissions(value = {"single:dt:delFile", "single:sign:delFile", "single:contract:delFile", "single:accept:delFile"},logical = Logical.OR)
-    public BaseResponse delFile(@RequestParam("ids") Integer[] ids, HttpServletRequest request) {
+    public BaseResponse delFile(@RequestParam("ids") Integer[] ids) {
         singleService.delFile(ids);
         return BaseResponse.STATUS_200;
     }
