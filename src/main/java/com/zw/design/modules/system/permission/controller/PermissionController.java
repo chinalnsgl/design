@@ -6,6 +6,7 @@ import com.zw.design.base.BaseValidResponse;
 import com.zw.design.modules.system.permission.entity.SysPermission;
 import com.zw.design.modules.system.permission.query.PermissionQuery;
 import com.zw.design.modules.system.permission.service.PermissionService;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,18 +31,6 @@ public class PermissionController {
     @RequiresPermissions({"permission:list"})
     public String permissions() {
         return prefix + "/list";
-    }
-    /**
-     * 权限列表数据
-     */
-    @ResponseBody
-    @PostMapping("/list")
-    @RequiresPermissions({"permission:list"})
-    public BaseResponse permissionList(PermissionQuery query) {
-        BaseDataTableModel<SysPermission> dto = permissionService.findPermissionByQuery(query);
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setContent(dto);
-        return baseResponse;
     }
 
     /**
@@ -102,16 +91,14 @@ public class PermissionController {
     }
 
 
-    /**
-     * 权限编辑页面
-     */
+    /*
     @GetMapping("/edit/{id}")
     @RequiresPermissions({"permission:edit"})
     public String permissionEdit(@PathVariable Integer id, Model model) {
         SysPermission permission = permissionService.findById(id);
         model.addAttribute("permission", permission);
         return prefix + "/edit";
-    }
+    }*/
     /**
      * 修改权限
      */
@@ -129,7 +116,7 @@ public class PermissionController {
      */
     @ResponseBody
     @GetMapping("/all")
-    @RequiresPermissions({"role:create"})
+    @RequiresPermissions(value = {"role:create", "permission:list"}, logical = Logical.OR)
     public List<SysPermission> allPermission() {
         return permissionService.findPermissionAll();
     }

@@ -22,6 +22,7 @@
       and u2.name like #{receiverQuery}
     </if>
     ) b on a.id = b.id
+    order by a.order_no desc, a.code
   </select>
 
   <select id="findMessageByQuery" resultType="com.zw.design.modules.lookboard.single.entity.Message" parameterType="com.zw.design.modules.integrate.interactive.query.InteractiveQuery">

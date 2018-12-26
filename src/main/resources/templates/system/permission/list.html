@@ -12,30 +12,45 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-            <div class="box-header">
-              <div class="row">
-                <div class="form-inline">
-                  <div class="form-group" style="margin-right: 10px;">
-                    <label>权限码</label>
-                    <input type="text" id="permissionName" name="permissionName" class="form-control" placeholder="请输入权限名">
-                  </div>
-                  <button class="btn btn-default" id="btn_search">搜索</button>
-                  <a shiro:hasPermission="permission:create" th:href="@{/sys/permission/create}" class="btn btn-info pull-right" id="btn_add">添加</a>
-                </div>
+            <div class="box-body" style="margin-top: 50px">
+              <div class="col-md-offset-1 col-md-4">
+                <div id="permissionTree" class="ztree"></div>
+                <a shiro:hasPermission="permission:create" th:href="@{/sys/permission/create}" class="btn btn-info pull-right" >添加</a>
               </div>
-            </div>
-            <div class="box-body">
-              <table id="permissionDataTable" class="table table-bordered" width="100%">
-                <thead>
-                <tr>
-                  <th></th>
-                  <th>权限</th>
-                  <th>权限码</th>
-                  <th>分组排序</th>
-                  <th>操作</th>
-                </tr>
-                </thead>
-              </table>
+              <div class="col-md-offset-1 col-md-4">
+                <form id="permissionForm" class="form-horizontal">
+                  <input type="hidden" id="id" name="id">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="description" class="col-sm-2 control-label">描述</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="description" name="description" placeholder="描述">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="permissionName" class="col-sm-2 control-label">权限名</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="permissionName" name="permissionName" placeholder="权限名" >
+                      </div>
+                    </div>
+                    <!--<div class="form-group">
+                      <label for="url" class="col-sm-2 control-label">Url</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="url" name="url" th:value="${permission.url}" placeholder="资源地址">
+                      </div>
+                    </div>-->
+                    <div class="form-group">
+                      <label for="orderNo" class="col-sm-2 control-label">分组排序</label>
+                      <div class="col-sm-10">
+                        <input type="number" class="form-control" id="orderNo" name="orderNo" placeholder="请输入分组排序">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="box-footer">
+                    <button shiro:hasPermission="permission:edit" type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -43,103 +58,95 @@
     </section>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-      // 构建子项
-      function buildChildren (d) {
-        var html = [];
-        html.push('<table class="table table-bordered">');
-        var hasChildren = false;
-        $.each(d.children, function(i,v){
-          html.push('<tr><td>&nbsp;</td>');
-          html.push('<td>' + v.description + '</td>');
-          html.push('<td>' + v.permissionName + '</td>');
-          html.push('<td>' + v.orderNo + '</td>');
-          html.push('<td><a style="margin-right: 5px" class="btn btn-warning btn-xs permission-update" href="' + ctx + 'sys/permission/edit/' + v.id + '" >编辑</a>');
-          html.push('<a class="btn btn-danger btn-xs permission-delete" href="javascript:void(0)" onclick="updateStatus(' + v.id + ')" >删除</a></td></tr>');
-          hasChildren = true;
-        });
-        if(!hasChildren){
-          html.push('<tr><td>这里没有子权限</td></tr>');
-        }
-        html.push('</table>');
-        return html.join('');
-      }
-
-      // 删除
-      function updateStatus(id) {
-        $.modal.confirm("确定删除这个权限吗?",function () {
-          $.operate.post(ctx + "sys/permission/status", {id: id, status: status}, function () {
-            $.table.refresh();
-          })
-        });
-      }
 
       $(function () {
-        // 加载表格
-        $.table.init({
-          id: "permissionDataTable",
-          info: true,
-          url: ctx + "sys/permission/list",
-          data : {
-            permissionName: $("#permissionName").val()
+        // 初始化tree
+        $.tree.init({
+          id: "permissionTree",
+          url: ctx + "sys/permission/all",
+          name : "description",
+          addHoverDom: function (treeId, treeNode) {
+            var sObj = $("#" + treeNode.tId + "_a");
+            if ($("#addBtn_" + treeNode.id).length > 0) { return; }
+            if ($("#updBtn_" + treeNode.id).length > 0) { return; }
+            if ($("#delBtn_" + treeNode.id).length > 0) { return; }
+            //添加
+            if ($.inArray('permission:create', permissions) === 0 || $.inArray('*:*:*', permissions) === 0) {
+              var addStr = "<button class='btn btn-info btn-xs' style='margin-left: 10px' id='addBtn_" + treeNode.id + "' onclick='location=\"" + ctx + "sys/permission/create/"+ treeNode.id + "\"'>添加</button>";
+              sObj.append(addStr);
+            }
+            //修改
+            if ($.inArray('permission:edit', permissions) === 0 || $.inArray('*:*:*', permissions) === 0) {
+              var updStr = "<button class='btn btn-warning btn-xs' style='margin-left: 10px' id='updBtn_" + treeNode.id + "'>修改</button>";
+              sObj.append(updStr);
+              $("#updBtn_" + treeNode.id).bind("click", function () {
+                $("#btn_edit").removeAttr("disabled");
+                $("#id").val(treeNode.id);
+                $("#description").val(treeNode.description);
+                $("#orderNo").val(treeNode.orderNo);
+                $("#permissionName").val(treeNode.permissionName);
+                $.validate.validing();
+              });
+            }
+            //删除
+            if (!treeNode.children.length > 0 && ($.inArray('permission:del', permissions) === 0 || $.inArray('*:*:*', permissions) === 0)) {
+              var delStr = "<button class='btn btn-danger btn-xs' style='margin-left: 10px' id='delBtn_" + treeNode.id + "'>删除</button>";
+              sObj.append(delStr);
+              $("#delBtn_" + treeNode.id).bind("click", function () {
+                $.modal.confirm("确定删除这个权限吗?",function () {
+                  $.operate.post(ctx + "sys/permission/status", {id: treeNode.id}, function () {
+                    $.tree.refresh();
+                    $.validate.reset();
+                    if (treeNode.id == $("#id").val()) {
+                      $("#btn_edit").attr("disabled", true);
+                      $("#id").val('');
+                      $("#description").val('');
+                      $("#orderNo").val('');
+                      $("#permissionName").val('');
+                    }
+                  })
+                });
+              });
+            }
           },
-          columns: [
-            { "data": null,
-              "className": 'details-control',
-              "defaultContent": ''
-            },
-            { "data": "description"},
-            { "data": "permissionName"},
-            { "data": "orderNo"},
-            { "data": "id",
-              render : function(data, type, row) {
-                var html = [];
-                if (row.children.length > 0) {
-                  html.push('<a style="margin-right: 5px" shiro:hasPermission="permission:create" class="btn btn-info btn-xs permission-create" href="' + ctx + 'sys/permission/create/' + data + '" >添加</a>');
-                  html.push('<a style="margin-right: 5px" shiro:hasPermission="permission:update" class="btn btn-warning btn-xs permission-update" href="' + ctx + 'sys/permission/edit/' + data + '" >编辑</a>');
-                } else {
-                  html.push('<a style="margin-right: 5px" shiro:hasPermission="permission:create" class="btn btn-info btn-xs permission-create" href="' + ctx + 'sys/permission/create/' + data + '" >添加</a>');
-                  html.push('<a style="margin-right: 5px" shiro:hasPermission="permission:update" class="btn btn-warning btn-xs permission-update" href="' + ctx + 'sys/permission/edit/' + data + '" >编辑</a>');
-                  html.push('<a shiro:hasPermission="permission:delete" class="btn btn-danger btn-xs" href="javascript:void(0) permission-delete" onclick="updateStatus(' + data + ')" >删除</a>');
+          removeHoverDom: function (treeId, treeNode) {
+            $("#addBtn_"+treeNode.id).unbind().remove();
+            $("#updBtn_"+treeNode.id).unbind().remove();
+            $("#delBtn_"+treeNode.id).unbind().remove();
+          }
+        });
+        // 验证
+        $.validate.init("permissionForm",{
+          fields: {
+            description:{validators:{notEmpty: {message:'请输入权限描述'}}},
+            permissionName: {
+              validators: {
+                notEmpty: {message: '请输入角色名'},
+                remote: {
+                  url:"/sys/permission/checkPermissionNameUnique",
+                  message: '角色已存在',
+                  delay: 200,
+                  type: 'POST',
+                  data: {
+                    id: function () {
+                      return $("#id").val();
+                    }
+                  }
                 }
-                return html.join('');
               }
             }
-          ],
-          // 表格绘制完成处理回调， 删除无权限按钮
-          drawCallback: function () {
-            if ($.inArray('*:*:*', permissions) === 0) {
-              return;
-            }
-            if ($.inArray('permission:create', permissions) === -1) {
-              $(".permission-create").remove();
-            }
-            if ($.inArray('permission:update', permissions) === -1) {
-              $(".permission-update").remove();
-            }
-            if ($.inArray('permission:delete', permissions) === -1) {
-              $(".permission-delete").remove();
-            }
           }
         });
-        // 搜索
-        $("#btn_search").click(function () {
-          $.table.search({
-            permissionName: $("#permissionName").val()
-          });
-        });
-        // 展开折叠
-        $('#permissionDataTable tbody').on('click', 'td.details-control', function () {
-          var tr = $(this).closest('tr');
-          var row = $.table._table.row(tr);
-          if ( row.child.isShown() ) {
-            row.child.hide();
-            tr.removeClass('shown');
-          }
-          else {
-            row.child(buildChildren(row.data())).show();
-            tr.addClass('shown');
+        // 修改权限
+        $("#btn_edit").click(function () {
+          if ($.validate.isValid()) {
+            $.operate.post(ctx + "sys/permission/update",$("#permissionForm").serialize(),function () {
+              $.tree.refresh();
+            });
+            $.validate.reset();
           }
         });
+
       });
 
     </script>

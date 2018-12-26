@@ -5,6 +5,7 @@ import com.zw.design.base.BaseValidResponse;
 import com.zw.design.modules.system.permission.entity.SysPermission;
 import com.zw.design.modules.system.role.entity.SysRole;
 import com.zw.design.modules.system.role.service.RoleService;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -134,7 +135,7 @@ public class RoleController {
      */
     @ResponseBody
     @GetMapping("/all")
-    @RequiresPermissions({"user:create"})
+    @RequiresPermissions(value = {"user:create","role:list"},logical = Logical.OR)
     public List<SysRole> findAllRole() {
         return roleService.findAllByStatus();
     }
