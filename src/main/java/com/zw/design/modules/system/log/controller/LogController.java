@@ -5,6 +5,7 @@ import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.modules.system.log.entity.LogInfo;
 import com.zw.design.modules.system.log.query.LogQuery;
 import com.zw.design.modules.system.log.service.LogService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +23,14 @@ public class LogController {
     private LogService logService;
 
     @GetMapping("/page")
+    @RequiresPermissions({"log:list"})
     public String logPage() {
         return prefix + "/list";
     }
 
     @PostMapping("/list")
     @ResponseBody
+    @RequiresPermissions({"log:list"})
     public BaseResponse logList(LogQuery query) {
         BaseDataTableModel<LogInfo> dto = logService.findLogByQuery(query);
         BaseResponse baseResponse = new BaseResponse();
