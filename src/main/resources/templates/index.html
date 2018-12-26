@@ -140,17 +140,17 @@
           </ul>
         </li>
 
-        <li shiro:hasPermission="bulid:menu" class="treeview">
+        <li shiro:hasPermission="build:menu" class="treeview">
           <a href="#">
             <i class="fa fa-folder-open text-yellow"></i>
             <span>立项管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu">
-            <li><a th:href="@{/build/intent/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-red"></i> 项目意向</a></li>
-            <li><a th:href="@{/build/check/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 意向审核</a></li>
-            <li><a th:href="@{/build/create/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 创建项目</a></li>
+            <li><a th:href="@{/build/intent/page}" shiro:hasPermission="intent:list" target="content"><i class="fa fa-circle-o text-red"></i> 项目意向</a></li>
+            <li><a th:href="@{/build/check/page}" shiro:hasPermission="check:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 意向审核</a></li>
+            <li><a th:href="@{/build/create/page}" shiro:hasPermission="create:create" target="content"><i class="fa fa-circle-o text-blue"></i> 创建项目</a></li>
             <li><a th:href="@{/build/ddt/page}" shiro:hasPermission="ddt:list" target="content"><i class="fa fa-circle-o text-green"></i> 下达设计任务</a></li>
-            <li><a th:href="@{/build/dpt/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-orange"></i> 下达生产任务</a></li>
+            <li><a th:href="@{/build/dpt/page}" shiro:hasPermission="dpt:list" target="content"><i class="fa fa-circle-o text-orange"></i> 下达生产任务</a></li>
             <!--<li><a th:href="@{/board/single/update/code}" shiro:hasPermission="single:update" target="content"><i class="fa fa-circle-o text-aqua"></i> 修改项目</a></li>-->
           </ul>
         </li>
@@ -174,9 +174,9 @@
             <span>采购管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu">
-            <li><a th:href="@{/overview/calendar/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-red"></i> 外购件计划单</a></li>
-            <li><a th:href="@{/overview/calendar/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 提报计划</a></li>
-            <li><a th:href="@{/overview/calendar/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 采购进度反馈</a></li>
+            <li><a th:href="@{/overview/calendar/page}" shiro:hasPermission="plan:list" target="content"><i class="fa fa-circle-o text-red"></i> 外购件计划单</a></li>
+            <li><a th:href="@{/overview/calendar/page}" shiro:hasPermission="report:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 提报计划</a></li>
+            <li><a th:href="@{/overview/calendar/page}" shiro:hasPermission="feedback:list" target="content"><i class="fa fa-circle-o text-blue"></i> 采购进度反馈</a></li>
           </ul>
         </li>
 
@@ -186,17 +186,17 @@
             <span>项目综合管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
           </a>
           <ul class="treeview-menu">
-            <li><a th:href="@{/integrate/user/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-red"></i> 物料清单</a></li>
+            <li><a th:href="@{/integrate/user/page}" shiro:hasPermission="materials:list" target="content"><i class="fa fa-circle-o text-red"></i> 物料清单</a></li>
             <li><a th:href="@{/integrate/work/page}" shiro:hasPermission="work:list" target="content"><i class="fa fa-circle-o text-blue"></i> 项目人工统计</a></li>
             <li><a th:href="@{/integrate/performance/page}" shiro:hasPermission="performance:list" target="content"><i class="fa fa-circle-o text-blue"></i> 员工业绩查询</a></li>
             <li><a th:href="@{/integrate/interactive/page}" shiro:hasPermission="interactive:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 互动专区</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-aqua"></i> 邮件</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-yellow"></i> 外购件查询</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-blue"></i> 任务单查询</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-green"></i> 技术协议查询</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-orange"></i> 合同查询</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-aqua"></i> 验收归档查询</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="aaa" target="content"><i class="fa fa-circle-o text-purple"></i> 存档文件</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="email:list" target="content"><i class="fa fa-circle-o text-aqua"></i> 邮件</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="purpart:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 外购件查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="tasksheet:list" target="content"><i class="fa fa-circle-o text-blue"></i> 任务单查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="protocol:list" target="content"><i class="fa fa-circle-o text-green"></i> 技术协议查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="contract:list" target="content"><i class="fa fa-circle-o text-orange"></i> 合同查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="accept:list" target="content"><i class="fa fa-circle-o text-aqua"></i> 验收归档查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="archive:list" target="content"><i class="fa fa-circle-o text-purple"></i> 存档文件</a></li>
           </ul>
         </li>
 
