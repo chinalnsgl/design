@@ -639,6 +639,13 @@
       // 指定随机数返回
       random: function (min, max) {
         return Math.floor((Math.random() * max) + min);
+      },
+      diffDay: function (startDate, endDate) {
+        var s = new Date(Date.parse(startDate.replace(/-/g, "/")));
+        var e = new Date(Date.parse(endDate.replace(/-/g, "/")));
+        var diffMilli = e.getTime() - s.getTime();//时间差的毫秒数
+        var diffDay = diffMilli / (24 * 3600 * 1000);//计算出相差天数
+        return diffDay + 1;
       }
     }
   });

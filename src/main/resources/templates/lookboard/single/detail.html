@@ -851,6 +851,18 @@
       }
     });
 
+    // 计算天数差
+    $("#empStartTime").change(function () {
+      if($("#empEndTime").val() != ''){
+        $("#empDuration").val($.common.diffDay($("#empStartTime").val(), $("#empEndTime").val()));
+      }
+    });
+    $("#empEndTime").change(function () {
+      if($("#empStartTime").val() != ''){
+        $("#empDuration").val($.common.diffDay($("#empStartTime").val(), $("#empEndTime").val()));
+      }
+    });
+
     // 添加联系人信息
     $("#btn-employee-create").click(function () {
       if ($.validate.isValid()) {
