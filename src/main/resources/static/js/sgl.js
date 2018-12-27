@@ -466,7 +466,7 @@
           check: {
             enable: !options.check,                                                                     // 是否显示多选框
             chkStyle: options.chkStyle ? options.chkStyle : 'checkbox',
-            chkboxType: { "Y": "p", "N": "" },                                                 // 父子节点的关联关系   Y 属性定义 checkbox 被勾选后的情况；N 属性定义 checkbox 取消勾选后的情况； "p" 表示操作会影响父级节点； "s" 表示操作会影响子级节点。
+            chkboxType: { "Y": "", "N": "" },                                                 // 父子节点的关联关系   Y 属性定义 checkbox 被勾选后的情况；N 属性定义 checkbox 取消勾选后的情况； "p" 表示操作会影响父级节点； "s" 表示操作会影响子级节点。
             radioType: "all"
           },
           callback: {
@@ -554,7 +554,7 @@
           },
           check: {
             enable: true,                                                                     // 是否显示多选框
-            chkboxType: { "Y": "p", "N": "" }                                                 // 父子节点的关联关系   Y 属性定义 checkbox 被勾选后的情况；N 属性定义 checkbox 取消勾选后的情况； "p" 表示操作会影响父级节点； "s" 表示操作会影响子级节点。
+            chkboxType: { "Y": "", "N": "" }                                                 // 父子节点的关联关系   Y 属性定义 checkbox 被勾选后的情况；N 属性定义 checkbox 取消勾选后的情况； "p" 表示操作会影响父级节点； "s" 表示操作会影响子级节点。
           },
           callback: {
             beforeClick: function () {                                                       // 节点不可选择
