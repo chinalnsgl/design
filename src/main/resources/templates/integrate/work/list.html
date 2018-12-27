@@ -55,7 +55,7 @@
                       <th>项目号</th>
                       <th>项目名称</th>
                       <th>员工</th>
-                      <th>历时</th>
+                      <th>历时（天）</th>
                       <th>任务类型</th>
                       <th>参与任务</th>
                     </tr>
@@ -68,6 +68,7 @@
         </div>
       </div>
     </section>
+    <div id="goToTop" th:style="|position:fixed; right:0px; bottom:10px; width:20px; height:75px; background-image: url(@{/img/gototop.gif}); cursor:pointer|"></div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
 
@@ -112,9 +113,9 @@
             { data: "code", width: "120px"},
             { data: "name"},
             { data: "empName", width: "80px"},
-            { data: "duration", width: "60px"},
+            { data: "duration", width: "80px"},
             { data: "typeName", width: "90px"},
-            { data: "alias", width: "350"}
+            { data: "alias", width: "500"}
           ],
           pageCallBack: function () {
             temp = null;

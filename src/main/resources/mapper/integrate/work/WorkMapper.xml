@@ -43,7 +43,7 @@
   <select id="findWorkModelByQuery" resultType="com.zw.design.modules.integrate.work.model.WorkModel" parameterType="com.zw.design.modules.integrate.work.query.WorkQuery">
     select * from
     (
-    select ROW_NUMBER() OVER(Order by pager.orderNo desc, pager.code) as rowId, * from
+    select ROW_NUMBER() OVER(Order by pager.orderNo desc, pager.code, pager.id) as rowId, * from
     (
     select
     a.code,
@@ -51,6 +51,7 @@
     a.empName,
     a.orderNo,
     sum(a.duration) as duration,
+    a.id,
     a.typeName,
     alias = (STUFF((select ',' + alias from vw_emp
     where empName = a.empName
@@ -78,7 +79,7 @@
     <if test="endTimeQuery != null">
       <![CDATA[ and a.createTime <= #{endTimeQuery} ]]>
     </if>
-    group by a.code, a.name, a.orderNo, a.empName, a.typeName
+    group by a.code, a.name, a.orderNo, a.empName, a.id, a.typeName
     ) as pager ) as pagetable
     where pagetable.rowid BETWEEN #{start} and #{length}
 
