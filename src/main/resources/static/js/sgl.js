@@ -437,7 +437,7 @@
         $.validate._form.data('bootstrapValidator').resetForm();
       }
     },
-    // 回索
+    // 回车搜索
     enter: {
       // 回车搜索
       keydown: function (id) {
@@ -640,6 +640,7 @@
       random: function (min, max) {
         return Math.floor((Math.random() * max) + min);
       },
+      // 时间天数差
       diffDay: function (startDate, endDate) {
         var s = new Date(Date.parse(startDate.replace(/-/g, "/")));
         var e = new Date(Date.parse(endDate.replace(/-/g, "/")));
