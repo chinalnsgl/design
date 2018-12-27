@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.integrate.work.mapper.WorkMapper">
+
+  <select id="findWorkModelCountByQuery" resultType="java.lang.Integer" parameterType="com.zw.design.modules.integrate.work.query.WorkQuery">
+    select count(0) from (
+    select
+    a.code,
+    a.name,
+    a.empName,
+    sum(a.duration) as duration,
+    a.typeName,
+    alias = (STUFF((select ',' + alias from vw_emp
+    where empName = a.empName
+    and code = a.code
+    and typeName = a.typeName
+    order by task_name_id
+    for xml path('') ), 1, 1, ''))
+    from vw_emp as a
+    where 1 = 1
+    <if test="codeQuery != null and codeQuery != ''">
+      and a.code like #{codeQuery}
+    </if>
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.name like #{nameQuery}
+    </if>
+    <if test="sectionQuery != null and sectionQuery != ''">
+      and a.designSection like  #{sectionQuery}
+    </if>
+    <if test="typeQuery != null and typeQuery != ''">
+      and a.typeName = #{typeQuery}
+    </if>
+    <if test="startTimeQuery != null">
+      <![CDATA[ and a.createTime >= #{startTimeQuery} ]]>
+    </if>
+    <if test="endTimeQuery != null">
+      <![CDATA[ and a.createTime <= #{endTimeQuery} ]]>
+    </if>
+    group by a.code, a.name, a.orderNo, a.empName, a.typeName
+    ) as t
+  </select>
+
+  <select id="findWorkModelByQuery" resultType="com.zw.design.modules.integrate.work.model.WorkModel" parameterType="com.zw.design.modules.integrate.work.query.WorkQuery">
+    select * from
+    (
+    select ROW_NUMBER() OVER(Order by pager.orderNo desc, pager.code) as rowId, * from
+    (
+    select
+    a.code,
+    a.name,
+    a.empName,
+    a.orderNo,
+    sum(a.duration) as duration,
+    a.typeName,
+    alias = (STUFF((select ',' + alias from vw_emp
+    where empName = a.empName
+    and code = a.code
+    and typeName = a.typeName
+    order by task_name_id
+    for xml path('') ), 1, 1, ''))
+    from vw_emp as a
+    where 1 = 1
+    <if test="codeQuery != null and codeQuery != ''">
+      and a.code like #{codeQuery}
+    </if>
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.name like #{nameQuery}
+    </if>
+    <if test="sectionQuery != null and sectionQuery != ''">
+      and a.designSection like #{sectionQuery}
+    </if>
+    <if test="typeQuery != null and typeQuery != ''">
+      and a.typeName = #{typeQuery}
+    </if>
+    <if test="startTimeQuery != null">
+      <![CDATA[ and a.createTime >= #{startTimeQuery} ]]>
+    </if>
+    <if test="endTimeQuery != null">
+      <![CDATA[ and a.createTime <= #{endTimeQuery} ]]>
+    </if>
+    group by a.code, a.name, a.orderNo, a.empName, a.typeName
+    ) as pager ) as pagetable
+    where pagetable.rowid BETWEEN #{start} and #{length}
+
+  </select>
+
+</mapper>

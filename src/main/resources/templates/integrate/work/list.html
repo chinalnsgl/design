@@ -18,6 +18,30 @@
                     <label>项目号</label>
                     <input type="text" id="codeQuery" name="codeQuery" class="form-control" placeholder="请输入项目号">
                   </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>项目名</label>
+                    <input type="text" id="nameQuery" name="nameQuery" class="form-control" placeholder="请输入项目名">
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>设计科室</label>
+                    <select id="sectionQuery" name="sectionQuery" class="form-control select2" >
+                      <option value="" selected="selected">请选择</option>
+                      <option th:each="section:${sections}" th:value="${section.name}" th:text="${section.name}"></option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>任务类型</label>
+                    <select id="typeQuery" name="typeQuery" class="form-control select2" >
+                      <option value="" selected="selected">请选择</option>
+                      <option th:each="type:${taskType}" th:value="${type.name}" th:text="${type.name}"></option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>时间</label>
+                    <input type="text" class="form-control datepicker" id="startTimeQuery" readonly="readonly" />
+                    <span>至</span>
+                    <input type="text" class="form-control datepicker" id="endTimeQuery" readonly="readonly" />
+                  </div>
                   <button class="btn btn-default" id="btn_search">搜索</button>
                 </div>
               </div>
@@ -28,13 +52,12 @@
                   <table id="employeeTable" class="table table-bordered table-hover" width="100%">
                     <thead>
                     <tr>
-                      <th>序号</th>
+                      <th>项目号</th>
+                      <th>项目名称</th>
                       <th>员工</th>
-                      <th>任务名称</th>
-                      <th>工作内容</th>
-                      <th>开始时间</th>
-                      <th>结束时间</th>
                       <th>历时</th>
+                      <th>任务类型</th>
+                      <th>参与任务</th>
                     </tr>
                     </thead>
                   </table>
@@ -48,36 +71,80 @@
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
 
+      var temp;
+
+      // 合并单元格
+      function merge(rowSpanTr, currentRow, rowSpan, arr) {
+        $.each(arr, function (index, value) {
+          $('td', rowSpanTr).eq(value).attr("rowSpan", rowSpan);
+          $('td', currentRow).eq(value).hide();
+        })
+      }
+
       $(function () {
         // 加载项目表格
         $.table.init({
+          buttons: [
+            {
+              extend: 'excel',
+              text: '导出Excel',
+              className: 'btn btn-success pull-right',
+              filename: '设计进度看板',
+              exportOptions: {
+                columns: [ 0,1,2,3,4,5]
+              }
+            }
+          ],
           id: "employeeTable",
-          info: true,
           url: ctx + "integrate/work/list",
-          pageLength: 15,
+          fixedHeader: true,
+          scrollX: true,
+          dom: "Tf<'row'<'col-sm-5 col-sm-offset-6'p><'col-sm-1'B>>t<'row DTTTFooter'<'col-sm-6'i><'col-sm-5'p><'col-sm-1'B>>",
           data : {
-            codeQuery: $("#codeQuery").val()
+            codeQuery: $("#codeQuery").val(),
+            nameQuery: $("#nameQuery").val(),
+            sectionQuery : $("#sectionQuery").val(),
+            typeQuery : $("#typeQuery").val(),
+            startTimeQuery: $("#startTimeQuery").val(),
+            endTimeQuery: $("#endTimeQuery").val(),
           },
           columns: [
-            {
-              data: null,
-              render : function (data, type, row, meta) {
-                return meta.row + 1;
+            { data: "code", width: "120px"},
+            { data: "name"},
+            { data: "empName", width: "80px"},
+            { data: "duration", width: "60px"},
+            { data: "typeName", width: "90px"},
+            { data: "alias", width: "350"}
+          ],
+          pageCallBack: function () {
+            temp = null;
+          },
+          createdRow: function (row, data, index) {
+            if (temp != null && data.code === $('td', temp).eq(0).html()) {
+              var rowSpan = $('td', temp).eq(0).attr("rowSpan");
+              if (rowSpan === undefined) {
+                $('td', temp).eq(0).attr("rowSpan", 1);
+                rowSpan = $('td', temp).eq(0).attr("rowSpan");
               }
-            },
-            { data: "empName"},
-            { data: "task.alias"},
-            { data: "content"},
-            { data: "startTime"},
-            { data: "endTime"},
-            { data: "duration"}
-          ]
+              rowSpan = Number(rowSpan) + 1;
+              merge(temp, row, rowSpan, [0, 1]);
+            } else {
+              temp = row;
+              $('td', row).css("border-top", '1px solid black');
+            }
+          }
         });
 
         // 搜索
         $("#btn_search").click(function () {
+          temp = null;
           $.table.search({
-            codeQuery: $("#codeQuery").val()
+            codeQuery: $("#codeQuery").val(),
+            nameQuery: $("#nameQuery").val(),
+            sectionQuery : $("#sectionQuery").val(),
+            typeQuery : $("#typeQuery").val(),
+            startTimeQuery: $("#startTimeQuery").val(),
+            endTimeQuery: $("#endTimeQuery").val(),
           });
         });
       });

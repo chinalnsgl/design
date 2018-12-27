@@ -1,43 +1,61 @@
 package com.zw.design.modules.integrate.work.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zw.design.base.BaseDataTableModel;
+import com.zw.design.modules.baseinfosetting.section.entity.Section;
+import com.zw.design.modules.baseinfosetting.section.repository.SectionRepository;
+import com.zw.design.modules.baseinfosetting.tasktype.entity.TaskType;
+import com.zw.design.modules.baseinfosetting.tasktype.repository.TaskTypeRepository;
+import com.zw.design.modules.integrate.work.mapper.WorkMapper;
+import com.zw.design.modules.integrate.work.model.WorkModel;
 import com.zw.design.modules.integrate.work.query.WorkQuery;
-import com.zw.design.modules.lookboard.single.entity.TaskEmployee;
-import com.zw.design.modules.lookboard.single.repository.TaskEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class WorkServiceImpl implements WorkService {
 
     @Autowired
-    private TaskEmployeeRepository taskEmployeeRepository;
+    private WorkMapper workMapper;
+    @Autowired
+    private TaskTypeRepository taskTypeRepository;
+    @Autowired
+    private SectionRepository sectionRepository;
 
-    // 按条件查询项目
     @Override
-    public BaseDataTableModel<TaskEmployee> findEmployeeByQuery(WorkQuery query) {
-        Pageable pageable = PageRequest.of(query.getStart()/query.getLength(), query.getLength(), Sort.by(Sort.Direction.DESC,"id"));
-        Page<TaskEmployee> taskEmployeePage = taskEmployeeRepository.findAll((Specification<TaskEmployee>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> list = new ArrayList<Predicate>();
-            list.add(criteriaBuilder.equal(root.get("status"), 1));
-            list.add(criteriaBuilder.equal(root.get("task").get("project").get("code"), query.getCodeQuery().trim()));
-            Predicate[] p = new Predicate[list.size()];
-            return criteriaBuilder.and(list.toArray(p));
-        }, pageable);
-        BaseDataTableModel<TaskEmployee> baseDataTableModel = new BaseDataTableModel<>();
+    public List<TaskType> findTaskTypeByStatus(Integer status) {
+        return taskTypeRepository.findByStatus(1);
+    }
+
+    @Override
+    public List<Section> findSectionByStatus(Integer status) {
+        return sectionRepository.findByStatus(1);
+    }
+
+    // 按条件查询项目工时模型
+    @Override
+    public BaseDataTableModel<WorkModel> findEmployeeByQuery(WorkQuery query) {
+        if (query.getCodeQuery() != null && !"".equals(query.getCodeQuery().trim())) {
+            query.setCodeQuery("%" + query.getCodeQuery().trim() + "%");
+        }
+        if (query.getNameQuery() != null && !"".equals(query.getNameQuery().trim())) {
+            query.setNameQuery("%" + query.getNameQuery().trim() + "%");
+        }
+        if (query.getSectionQuery() != null && !"".equals(query.getSectionQuery().trim())) {
+            query.setSectionQuery("%" + query.getSectionQuery().trim() + "%");
+        }
+        query.setLength(query.getStart() + query.getLength());
+        query.setStart(query.getStart() + 1);
+        Integer count = workMapper.findWorkModelCountByQuery(query);
+        List<WorkModel> model = workMapper.findWorkModelByQuery(query);
+        BaseDataTableModel<WorkModel> baseDataTableModel = new BaseDataTableModel<>();
         baseDataTableModel.setDraw(query.getDraw());
-        baseDataTableModel.setData(taskEmployeePage.getContent());
-        baseDataTableModel.setRecordsTotal((int)taskEmployeePage.getTotalElements());
-        baseDataTableModel.setRecordsFiltered((int)taskEmployeePage.getTotalElements());
+        baseDataTableModel.setData(model);
+        baseDataTableModel.setRecordsTotal(count);
+        baseDataTableModel.setRecordsFiltered(count);
         return baseDataTableModel;
     }
 
