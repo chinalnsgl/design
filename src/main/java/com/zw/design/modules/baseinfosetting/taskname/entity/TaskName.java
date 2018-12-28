@@ -42,6 +42,6 @@ public class TaskName implements Serializable {
     @ManyToOne
     @JoinColumn(name = "sectionTypeId")
     @JsonIgnoreProperties("taskNames")
-    private SectionType sectionType; // 所属任务类型
+    private SectionType sectionType; // 所属科室类型
 
 }
