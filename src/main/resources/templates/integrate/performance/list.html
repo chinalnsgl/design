@@ -22,7 +22,7 @@
                     <label>设计科室</label>
                     <select id="sectionQuery" name="sectionQuery" class="form-control select2" >
                       <option value="" selected="selected">请选择</option>
-                      <option th:each="section:${sections}" th:value="${section.id}" th:text="${section.name}"></option>
+                      <option th:each="section:${sections}" th:value="${section.name}" th:text="${section.name}"></option>
                     </select>
                   </div>
                   <div class="form-group" style="margin-right: 10px;">

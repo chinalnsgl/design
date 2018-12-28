@@ -37,6 +37,8 @@ public class Task {
 
     private String alias; // 任务别名
 
+    private String designDepts; // 参与科室
+
     @OneToMany(mappedBy = "task",fetch = FetchType.EAGER)
     @OrderBy("orderNo")
     @Where(clause = "status = 1")

@@ -108,6 +108,9 @@ public class DistributeDesignTaskServiceImpl implements DistributeDesignTaskServ
                     task.setEndTime(new Date());
                     task.setCompStatus(2);
                 }
+                if (taskName.getId() == 2 || taskName.getId() == 4) {
+                    task.setDesignDepts(project.getDesignDepts());
+                }
                 taskRepository.save(task);
             }
         }

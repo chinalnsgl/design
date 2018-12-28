@@ -22,8 +22,11 @@ public class PerformanceServiceImpl implements PerformanceService {
     // 按条件查询项目
     @Override
     public BaseDataTableModel<PerformanceModel> findProjectByQuery(PerformanceQuery query) {
-        if (query.getNameQuery() != null && "".equals(query.getNameQuery().trim())) {
+        if (query.getNameQuery() != null && !"".equals(query.getNameQuery().trim())) {
             query.setNameQuery("%" + query.getNameQuery().trim() + "%");
+        }
+        if (query.getSectionQuery() != null && !"".equals(query.getSectionQuery().trim())) {
+            query.setSectionQuery("%" + query.getSectionQuery().trim() + "%");
         }
         query.setLength(query.getStart() + query.getLength());
         query.setStart(query.getStart() + 1);

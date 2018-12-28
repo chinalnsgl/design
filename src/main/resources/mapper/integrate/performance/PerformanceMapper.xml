@@ -11,8 +11,8 @@
     <if test="nameQuery != null and nameQuery != ''">
       and a.empName like #{nameQuery}
     </if>
-    <if test="sectionQuery != null">
-      and (a.sectionId = #{sectionQuery} or a.task_name_id in (2, 4))
+    <if test="sectionQuery != null and sectionQuery != ''">
+      and (a.sectionName like #{sectionQuery} or a.taskDesignSection like #{sectionQuery})
     </if>
     <if test="startTimeQuery != null">
       <![CDATA[ and a.createTime >= #{startTimeQuery} ]]>
@@ -45,8 +45,8 @@
     <if test="nameQuery != null and nameQuery != ''">
       and a.empName like #{nameQuery}
     </if>
-    <if test="sectionQuery != null">
-      and (a.sectionId = #{sectionQuery})
+    <if test="sectionQuery != null and sectionQuery != ''">
+      and (a.sectionName like #{sectionQuery} or a.taskDesignSection like #{sectionQuery})
     </if>
     <if test="startTimeQuery != null">
       <![CDATA[ and a.createTime >= #{startTimeQuery} ]]>

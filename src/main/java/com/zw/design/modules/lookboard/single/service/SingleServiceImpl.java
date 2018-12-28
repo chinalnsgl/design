@@ -162,6 +162,12 @@ public class SingleServiceImpl implements SingleService {
         // 修改前后科室字符串不同才需要处理
         if (!newSectionNames.equals(p.getDesignDepts())) {
             p.setDesignDepts(newSectionNames);
+            for (Task task : p.getTasks()) {
+                if (task.getTaskName().getId() == 2 || task.getTaskName().getId() == 4) {
+                    task.setDesignDepts(p.getDesignDepts());
+                    taskRepository.save(task);
+                }
+            }
             // 求新科室集合
             List<Section> newSection = new ArrayList<>();
             for (String str : newSectionNames.split(",")) {
