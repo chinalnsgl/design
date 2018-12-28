@@ -18,6 +18,19 @@
                     <label>员工</label>
                     <input type="text" id="nameQuery" name="nameQuery" class="form-control" placeholder="请输入名称">
                   </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>设计科室</label>
+                    <select id="sectionQuery" name="sectionQuery" class="form-control select2" >
+                      <option value="" selected="selected">请选择</option>
+                      <option th:each="section:${sections}" th:value="${section.id}" th:text="${section.name}"></option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>时间</label>
+                    <input type="text" class="form-control datepicker" id="startTimeQuery" readonly="readonly" />
+                    <span>至</span>
+                    <input type="text" class="form-control datepicker" id="endTimeQuery" readonly="readonly" />
+                  </div>
                   <button class="btn btn-default" id="btn_search">搜索</button>
                 </div>
               </div>
@@ -28,13 +41,11 @@
                   <table id="projectTable" class="table table-bordered table-hover" width="100%">
                     <thead>
                     <tr>
-                      <th>序号</th>
-                      <th>项目名称</th>
-                      <th>需方</th>
-                      <th>安装地点</th>
+                      <th>员工</th>
                       <th>项目号</th>
-                      <th>任务单号</th>
-                      <th>数量</th>
+                      <th>项目名称</th>
+                      <th>参与任务</th>
+                      <th>历时</th>
                     </tr>
                     </thead>
                   </table>
@@ -45,39 +56,77 @@
         </div>
       </div>
     </section>
+    <div id="goToTop" th:style="|position:fixed; right:0px; bottom:10px; width:20px; height:75px; background-image: url(@{/img/gototop.gif}); cursor:pointer|"></div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
+
+      var temp;
+      // 合并单元格
+      function merge(rowSpanTr, currentRow, rowSpan, arr) {
+        $.each(arr, function (index, value) {
+          $('td', rowSpanTr).eq(value).attr("rowSpan", rowSpan);
+          $('td', currentRow).eq(value).hide();
+        })
+      }
 
       $(function () {
         // 加载项目表格
         $.table.init({
+          buttons: [
+            {
+              extend: 'excel',
+              text: '导出Excel',
+              className: 'btn btn-success pull-right',
+              filename: '设计进度看板',
+              exportOptions: {
+                columns: [ 0,1,2,3,4]
+              }
+            }
+          ],
           id: "projectTable",
-          info: true,
           url: ctx + "integrate/performance/list",
-          pageLength: 15,
+          fixedHeader: true,
+          scrollX: true,
+          dom: "Tf<'row'<'col-sm-5 col-sm-offset-6'p><'col-sm-1'B>>t<'row DTTTFooter'<'col-sm-6'i><'col-sm-5'p><'col-sm-1'B>>",
           data : {
-            nameQuery: $("#nameQuery").val()
+            nameQuery: $("#nameQuery").val(),
+            sectionQuery : $("#sectionQuery").val(),
+            startTimeQuery: $("#startTimeQuery").val(),
+            endTimeQuery: $("#endTimeQuery").val()
           },
           columns: [
-            {
-              data: null,
-              render : function (data, type, row, meta) {
-                return meta.row + 1;
-              }
-            },
+            { data: "empName", width: "80px"},
+            { data: "code", width: "120px"},
             { data: "name"},
-            { data: "demander"},
-            { data: "address"},
-            { data: "code"},
-            { data: "codeSpecial"},
-            { data: "num"}
-          ]
+            { data: "alias", width: "500"},
+            { data: "duration", width: "80px"}
+          ],
+          pageCallBack: function () {
+            temp = null;
+          },
+          createdRow: function (row, data, index) {
+            if (temp != null && data.empName === $('td', temp).eq(0).html()) {
+              var rowSpan = $('td', temp).eq(0).attr("rowSpan");
+              if (rowSpan === undefined) {
+                $('td', temp).eq(0).attr("rowSpan", 1);
+                rowSpan = $('td', temp).eq(0).attr("rowSpan");
+              }
+              rowSpan = Number(rowSpan) + 1;
+              merge(temp, row, rowSpan, [0]);
+            } else {
+              temp = row;
+              $('td', row).css("border-top", '1px solid black');
+            }
+          }
         });
 
         // 搜索
         $("#btn_search").click(function () {
           $.table.search({
-            nameQuery: $("#nameQuery").val()
+            nameQuery: $("#nameQuery").val(),
+            sectionQuery : $("#sectionQuery").val(),
+            startTimeQuery: $("#startTimeQuery").val(),
+            endTimeQuery: $("#endTimeQuery").val()
           });
         });
       });

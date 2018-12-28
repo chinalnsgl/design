@@ -1,10 +1,10 @@
 package com.zw.design.modules.integrate.performance.service;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.zw.design.base.BaseDataTableModel;
-import com.zw.design.modules.build.create.entity.Project;
+import com.zw.design.modules.baseinfosetting.section.entity.Section;
+import com.zw.design.modules.baseinfosetting.section.repository.SectionRepository;
 import com.zw.design.modules.integrate.performance.mapper.PerformanceMapper;
+import com.zw.design.modules.integrate.performance.model.PerformanceModel;
 import com.zw.design.modules.integrate.performance.query.PerformanceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,20 +16,29 @@ public class PerformanceServiceImpl implements PerformanceService {
 
     @Autowired
     private PerformanceMapper performanceMapper;
-
+    @Autowired
+    private SectionRepository sectionRepository;
 
     // 按条件查询项目
     @Override
-    public BaseDataTableModel<Project> findProjectByQuery(PerformanceQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getLength());
-        List<Project> model = performanceMapper.findProjectByQuery(query);
-        PageInfo<Project> pageInfo = new PageInfo(model);
-        BaseDataTableModel<Project> baseDataTableModel = new BaseDataTableModel<>();
+    public BaseDataTableModel<PerformanceModel> findProjectByQuery(PerformanceQuery query) {
+        if (query.getNameQuery() != null && "".equals(query.getNameQuery().trim())) {
+            query.setNameQuery("%" + query.getNameQuery().trim() + "%");
+        }
+        query.setLength(query.getStart() + query.getLength());
+        query.setStart(query.getStart() + 1);
+        Integer count = performanceMapper.findPerformanceCountByQuery(query);
+        List<PerformanceModel> model = performanceMapper.findPerformanceByQuery(query);
+        BaseDataTableModel<PerformanceModel> baseDataTableModel = new BaseDataTableModel<>();
         baseDataTableModel.setDraw(query.getDraw());
         baseDataTableModel.setData(model);
-        baseDataTableModel.setRecordsTotal((int)pageInfo.getTotal());
-        baseDataTableModel.setRecordsFiltered((int)pageInfo.getTotal());
+        baseDataTableModel.setRecordsTotal(count);
+        baseDataTableModel.setRecordsFiltered(count);
         return baseDataTableModel;
     }
 
+    @Override
+    public List<Section> findSectionByStatus(Integer status) {
+        return sectionRepository.findByStatus(status);
+    }
 }

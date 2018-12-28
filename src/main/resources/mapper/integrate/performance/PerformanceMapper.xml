@@ -2,16 +2,61 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zw.design.modules.integrate.performance.mapper.PerformanceMapper">
 
-  <select id="findProjectByQuery" resultType="com.zw.design.modules.build.create.entity.Project" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
-    select a.* from project a
-    right join (
-    select distinct p.id from project as p
-    left join task t on p.id = t.project_id
-    left join task_employee e on t.id = e.task_id
-    where e.emp_name = #{nameQuery}
-    ) b on a.id = b.id
-    order by a.order_no desc, a.code
+  <select id="findPerformanceCountByQuery" resultType="java.lang.Integer" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
+    select count(0) from (
+    select
+    a.empName
+    from vw_emp as a
+    where 1 = 1
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.empName like #{nameQuery}
+    </if>
+    <if test="sectionQuery != null">
+      and (a.sectionId = #{sectionQuery} or a.task_name_id in (2, 4))
+    </if>
+    <if test="startTimeQuery != null">
+      <![CDATA[ and a.createTime >= #{startTimeQuery} ]]>
+    </if>
+    <if test="endTimeQuery != null">
+      <![CDATA[ and a.createTime <= #{endTimeQuery} ]]>
+    </if>
+    group by a.empName, a.code, a.name, a.orderNo
+    ) as t
   </select>
 
+  <select id="findPerformanceByQuery" resultType="com.zw.design.modules.integrate.performance.model.PerformanceModel" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
+    select * from
+    (
+    select ROW_NUMBER() OVER(Order by pager.empName,pager.orderNo desc, pager.code) as rowId, * from
+    (
+    select
+    a.empName,
+    a.code,
+    a.name,
+    a.orderNo,
+    alias = (STUFF((select ',' + alias from vw_emp
+    where empName = a.empName
+    and code = a.code
+    order by task_name_id
+    for xml path('') ), 1, 1, '')),
+    sum(a.duration) as duration
+    from vw_emp as a
+    where 1 = 1
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.empName like #{nameQuery}
+    </if>
+    <if test="sectionQuery != null">
+      and (a.sectionId = #{sectionQuery} or a.task_name_id in (2, 4))
+    </if>
+    <if test="startTimeQuery != null">
+      <![CDATA[ and a.createTime >= #{startTimeQuery} ]]>
+    </if>
+    <if test="endTimeQuery != null">
+      <![CDATA[ and a.createTime <= #{endTimeQuery} ]]>
+    </if>
+    group by a.empName, a.code, a.name, a.orderNo
+    ) as pager ) as pagetable
+    where pagetable.rowid BETWEEN #{start} and #{length}
+  </select>
 
 </mapper>
