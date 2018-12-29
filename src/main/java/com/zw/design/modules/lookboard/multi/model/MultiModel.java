@@ -17,7 +17,7 @@ public class MultiModel implements Serializable {
     private String designDepts;                     // 设计科室
     private Integer signStatus;                     // 技术协议
     private Integer contractStatus;                 // 合同
-    private Integer designTaskStatus;               // 设计
+    private Integer sectionTaskStatus;               // 设计
     private Integer processTaskStatus;              // 工艺
     private Integer produceTaskStatus;              // 生产
     private Integer debugStatus;                    // 调试运行

@@ -14,6 +14,12 @@
           group by project_id
   </select>
 
+  <select id="findSectionTasksCompleteStatus" resultType="java.lang.Float">
+    select round(avg(CONVERT(float,comp_status)),2) from task
+    where status = 1 and section_id is not null and project_id = #{id}
+    group by project_id
+  </select>
+
   <select id="findProcessTasksCompleteStatus" resultType="java.lang.Float">
     select round(avg(CONVERT(float,comp_status)),2) from task
           where status = 1 and task_name_id in (7,8,9) and project_id = #{id}

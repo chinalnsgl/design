@@ -351,6 +351,15 @@ public class SingleServiceImpl implements SingleService {
         } else {
             project.setDesignTaskStatus(1);
         }
+        float sectionTasksCompleteStatus = singleMapper.findSectionTasksCompleteStatus(project.getId());
+        if (sectionTasksCompleteStatus == 0) {
+            project.setSectionTaskStatus(0);
+        } else if (sectionTasksCompleteStatus == 2) {
+            project.setSectionTaskStatus(2);
+            project.setSectionCompleteTime(new Date());
+        } else {
+            project.setSectionTaskStatus(1);
+        }
         float processTasksCompleteStatus = singleMapper.findProcessTasksCompleteStatus(project.getId());
         if (processTasksCompleteStatus == 0) {
             project.setProcessTaskStatus(0);

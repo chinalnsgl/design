@@ -57,6 +57,8 @@ public class Project implements Serializable {
 
     private Integer designTaskStatus = 0; // 设计任务状态  0：未开始  1：执行中   2：已完成
 
+    private Integer sectionTaskStatus = 0; // 科室任务状态  0：未开始  1：执行中   2：已完成
+
     private Integer processTaskStatus = 0; // 工艺任务状态  0：未开始  1：执行中   2：已完成
 
     private Integer produceTaskStatus = 0; // 生产任务状态  0：未开始  1：执行中   2：已完成
@@ -89,6 +91,9 @@ public class Project implements Serializable {
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date designCompleteTime; // 设计任务完成时间
+
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date sectionCompleteTime; // 设计任务完成时间
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date produceCompleteTime; // 生产任务完成时间

@@ -12,7 +12,7 @@
     a.code_special,
     a.num,
     a.design_depts,
-    a.design_task_status,
+    a.section_task_status,
     a.process_task_status,
     a.produce_task_status,
     a.comment,
