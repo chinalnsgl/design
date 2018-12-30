@@ -124,7 +124,7 @@ public class SingleServiceImpl implements SingleService {
     @Override
     public Task updateTaskStatus(Integer id, Integer status) {
         Task task = taskRepository.findById(id).get();
-        logService.saveLog(( status == 2 ? "不需要" : "需要："),  "【项目：" + task.getProject().getName() + "】【任务：" + task.getAlias() + "】");
+        logService.saveLog(( status == 0 ? "不需要" : "需要："),  "【项目：" + task.getProject().getName() + "】【任务：" + task.getAlias() + "】");
         task.setStatus(status);
         task = taskRepository.save(task);
         updateProject(task.getProject());

@@ -193,7 +193,7 @@
             var html = [];
             if(row.project.status !== 0){
               if (row.status === 1) {
-                html.push('<a class="btn btn-danger btn-xs" style="margin-left: 5px" href="javascript:void(0);" onclick="updateTaskStatus(' + data + ', 2)">不需要</a>');
+                html.push('<a class="btn btn-danger btn-xs" style="margin-left: 5px" href="javascript:void(0);" onclick="updateTaskStatus(' + data + ', 0)">不需要</a>');
               } else {
                 html.push('<a class="btn btn-warning btn-xs" style="margin-left: 5px" href="javascript:void(0);" onclick="updateTaskStatus(' + data + ', 1)">需要</a>');
               }

@@ -3,33 +3,28 @@
 <mapper namespace="com.zw.design.modules.lookboard.single.mapper.SingleMapper">
 
   <select id="findProjectTasksCompleteStatus" resultType="java.lang.Float">
-    select round(avg(CONVERT(float,comp_status)),2) from task
+    select isnull(round(avg(CONVERT(float,comp_status)),2),0) from task
           where status = 1 and task_name_id in (1,3,5,6) and project_id = #{id}
-          group by project_id
   </select>
 
   <select id="findDesignTasksCompleteStatus" resultType="java.lang.Float">
-    select round(avg(CONVERT(float,comp_status)),2) from task
+    select isnull(round(avg(CONVERT(float,comp_status)),2),0) from task
           where status = 1 and (task_name_id in (2,4) or section_id is not null) and project_id = #{id}
-          group by project_id
   </select>
 
   <select id="findSectionTasksCompleteStatus" resultType="java.lang.Float">
-    select round(avg(CONVERT(float,comp_status)),2) from task
+    select isnull(round(avg(CONVERT(float,comp_status)),2),0) from task
     where status = 1 and section_id is not null and project_id = #{id}
-    group by project_id
   </select>
 
   <select id="findProcessTasksCompleteStatus" resultType="java.lang.Float">
-    select round(avg(CONVERT(float,comp_status)),2) from task
+    select isnull(round(avg(CONVERT(float,comp_status)),2),0) from task
           where status = 1 and task_name_id in (7,8,9) and project_id = #{id}
-          group by project_id
   </select>
 
   <select id="findProduceTasksCompleteStatus" resultType="java.lang.Float">
-    select round(avg(CONVERT(float,comp_status)),2) from task
+    select isnull(round(avg(CONVERT(float,comp_status)),2),0) from task
           where status = 1 and task_name_id in (10,11,12,13) and project_id = #{id}
-          group by project_id
   </select>
 
 </mapper>
