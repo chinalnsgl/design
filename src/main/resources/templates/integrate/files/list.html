@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <section class="content-header">
+      <h1>
+        项目文件查询
+      </h1>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="row" id="queryHiddenDiv" hidden style="margin-bottom: 10px">
+                <div class="form-inline">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>任务单</label>
+                    <select id="taskSheetQuery" name="taskSheetQuery" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="1">有</option>
+                      <option value="2">没有</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>技术协议</label>
+                    <select id="protocolQuery" name="protocolQuery" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="1">有</option>
+                      <option value="2">没有</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>合同</label>
+                    <select id="contractQuery" name="contractQuery" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="1">有</option>
+                      <option value="2">没有</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>验收</label>
+                    <select id="acceptQuery" name="acceptQuery" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="1">有</option>
+                      <option value="2">没有</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-inline">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>项目号</label>
+                    <input type="text" id="codeQuery" name="code" class="form-control" placeholder="请输入项目号">
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>年度</label>
+                    <select id="yearQuery" name="yearQuery" class="form-control select2" >
+                      <option value="" selected="selected">请选择</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>状态</label>
+                    <select id="statusQuery" name="statusQuery" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="1">未完成</option>
+                      <option value="2">已完成</option>
+                    </select>
+                  </div>
+                  <span class="btn btn-default" id="down" onclick="showQuery()">显示更多条件</span>
+                  <span class="btn btn-default" id="up" style="display: none" onclick="hiddenQuery()">隐藏更多条件</span>
+                  <button class="btn btn-vk" id="btn_search">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </div>
+              </div>
+            </div>
+            <div class="box-body">
+              <table id="processTable" class="table table-bordered" width="100%">
+                <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>项目名称</th>
+                  <th>需方</th>
+                  <th>安装地点</th>
+                  <th>项目号</th>
+                  <th>任务单号</th>
+                  <th>产品数量</th>
+                  <th>任务单数量</th>
+                  <th>技术协议数量</th>
+                  <th>合同数量</th>
+                  <th>验收数量</th>
+                  <th>操作</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div id="goToTop" th:style="|position:fixed; right:0px; bottom:10px; width:20px; height:75px; background-image: url(@{/img/gototop.gif}); cursor:pointer|"></div>
+    <!-- /.content -->
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+
+      function showQuery() {
+        $("#queryHiddenDiv").show();
+        $("#up").show();
+        $("#down").hide();
+      }
+
+      function hiddenQuery() {
+        $("#queryHiddenDiv").hide();
+        $("#up").hide();
+        $("#down").show();
+      }
+
+      function yearSelectCreate() {
+        var myDate= new Date();
+        var endYear=myDate.getFullYear();//结束年份
+        for (var i=2016;i<=endYear;i++)
+        {
+          if(i === 2016)
+            $("#yearQuery").append("<option value='"+ i +"'>"+ i + "年及以前" +"</option>");
+          else
+            $("#yearQuery").append("<option value='"+ i +"'>"+ i + "年" +"</option>");
+        }
+      }
+
+      $(function () {
+        yearSelectCreate();
+        // 加载列表
+        $.table.init({
+          id: "processTable",
+          info: true,
+          fixedHeader: true,
+          scrollX: true,
+          dom: "Tf<'row'<'col-sm-6 col-sm-offset-6'p>>t<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
+          url: ctx + "integrate/files/list",
+          data : {
+            codeQuery: $("#codeQuery").val(),
+            yearQuery : $("#yearQuery").val(),
+            statusQuery : $("#statusQuery").val(),
+            taskSheetQuery: $("#taskSheetQuery").val(),
+            protocolQuery: $("#protocolQuery").val(),
+            contractQuery: $("#contractQuery").val(),
+            acceptQuery: $("#acceptQuery").val()
+          },
+          fixedColumns: {
+            rightColumns: 1
+          },
+          columns: [
+            {
+              data: null,
+              width: "8px",
+              render : function (data, type, row, meta) {
+                return meta.row + 1;
+              }
+            },
+            { data: "name",
+              width: "80px"
+            },
+            { data: "demander",
+              width: "80px"
+            },
+            { data: "address",
+              width: "80px"
+            },
+            { data: "code",
+              width: "100px"
+            },
+            { data: "codeSpecial",
+              width: "100px"
+            },
+            { data: "num",
+              width: "80px"
+            },
+            { data: "taskSheetCount",
+              width: "80px"},
+            { data: "protocolCount",
+              width: "80px"},
+            { data: "contractCount",
+              width: "80px"},
+            { data: "acceptCount",
+              width: "80px"},
+            { data: "id",
+              "width": "40px",
+              render : function(data, type, row, meta) {
+                return '<a target="_blank" style="margin-right: 5px" class="btn btn-info btn-xs many-view" href="' + ctx + 'board/single/' + data + '">查看</a>';
+              }
+            }
+          ]
+        });
+        // 搜索
+        $("#btn_search").click(function () {
+          $.table.search({
+            codeQuery: $("#codeQuery").val(),
+            yearQuery : $("#yearQuery").val(),
+            statusQuery : $("#statusQuery").val(),
+            taskSheetQuery: $("#taskSheetQuery").val(),
+            protocolQuery: $("#protocolQuery").val(),
+            contractQuery: $("#contractQuery").val(),
+            acceptQuery: $("#acceptQuery").val()
+          });
+        });
+      });
+
+    </script>
+</body>
+</html>

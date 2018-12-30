@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.integrate.files.mapper.FilesMapper">
+
+  <select id="findProjectByQuery" resultType="com.zw.design.modules.integrate.files.model.FilesModel" parameterType="com.zw.design.modules.integrate.files.query.FilesQuery">
+    select
+    p.id,
+    p.name,
+    p.demander,
+    p.address,
+    p.code,
+    p.code_special,
+    p.num,
+    isnull(c1.num,0) as taskSheetCount,
+    isnull(c2.num,0) as protocolCount,
+    isnull(c3.num,0) as contractCount,
+    isnull(c4.num,0) as acceptCount
+    from project p
+    LEFT JOIN task t1 ON t1.project_id = p.id and t1.task_name_id = 1
+    LEFT JOIN(
+    select count(id) as num, task_id from image GROUP BY task_id
+    ) c1 ON c1.task_id = t1.id
+    LEFT JOIN task t2 ON t2.project_id = p.id and t2.task_name_id = 2
+    LEFT JOIN(
+    select count(id) as num, task_id from image GROUP BY task_id
+    ) c2 ON c2.task_id = t2.id
+    LEFT JOIN task t3 ON t3.project_id = p.id and t3.task_name_id = 3
+    LEFT JOIN(
+    select count(id) as num, task_id from image GROUP BY task_id
+    ) c3 ON c3.task_id = t3.id
+    LEFT JOIN task t4 ON t4.project_id = p.id and t4.task_name_id = 5
+    LEFT JOIN(
+    select count(id) as num, task_id from image GROUP BY task_id
+    ) c4 ON c4.task_id = t4.id
+    where 1 = 1
+    <if test="codeQuery != null and codeQuery != ''">
+      and p.code like #{codeQuery}
+    </if>
+    <if test="yearQuery != null">
+      and year (p.create_time) = #{yearQuery}
+    </if>
+    <if test="statusQuery == 1">
+      and (p.status = 2 or p.status = 0)
+    </if>
+    <if test="statusQuery == 2">
+      and p.status = 4
+    </if>
+    <if test="taskSheetQuery == 1">
+      and isnull(c1.num,0) != 0
+    </if>
+    <if test="taskSheetQuery == 2">
+      and isnull(c1.num,0) = 0
+    </if>
+    <if test="protocolQuery == 1">
+      and isnull(c2.num,0) != 0
+    </if>
+    <if test="protocolQuery == 2">
+      and isnull(c2.num,0) = 0
+    </if>
+    <if test="contractQuery == 1">
+      and isnull(c3.num,0) != 0
+    </if>
+    <if test="contractQuery == 2">
+      and isnull(c3.num,0) = 0
+    </if>
+    <if test="acceptQuery == 1">
+      and isnull(c4.num,0) != 0
+    </if>
+    <if test="acceptQuery == 2">
+      and isnull(c4.num,0) = 0
+    </if>
+    order by p.order_no desc, p.code
+	</select>
+
+</mapper>
