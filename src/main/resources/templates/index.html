@@ -115,6 +115,9 @@
           <li>
             <a th:href="@{/logout}" ><i class="fa fa-sign-out">&nbsp;退出</i></a>
           </li>
+          <li>
+            <a th:href="@{/help}" ><i class="fa fa-file-word-o">&nbsp;帮助</i></a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -192,11 +195,11 @@
             <li><a th:href="@{/integrate/interactive/page}" shiro:hasPermission="interactive:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 互动专区</a></li>
             <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="email:list" target="content"><i class="fa fa-circle-o text-aqua"></i> 邮件</a></li>
             <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="purpart:list" target="content"><i class="fa fa-circle-o text-yellow"></i> 外购件查询</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="tasksheet:list" target="content"><i class="fa fa-circle-o text-blue"></i> 任务单查询</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="protocol:list" target="content"><i class="fa fa-circle-o text-green"></i> 技术协议查询</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="tasksheet:list" target="content"><i class="fa fa-circle-o text-blue"></i> 项目文件查询</a></li>
+            <!--<li><a th:href="@{/integrate/role/page}" shiro:hasPermission="protocol:list" target="content"><i class="fa fa-circle-o text-green"></i> 技术协议查询</a></li>
             <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="contract:list" target="content"><i class="fa fa-circle-o text-orange"></i> 合同查询</a></li>
             <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="accept:list" target="content"><i class="fa fa-circle-o text-aqua"></i> 验收归档查询</a></li>
-            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="archive:list" target="content"><i class="fa fa-circle-o text-purple"></i> 存档文件</a></li>
+            <li><a th:href="@{/integrate/role/page}" shiro:hasPermission="archive:list" target="content"><i class="fa fa-circle-o text-purple"></i> 存档文件</a></li>-->
           </ul>
         </li>
 
