@@ -12,7 +12,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <div class="row" id="queryHiddenDiv" hidden style="margin-bottom: 10px">
+              <div class="row" id="queryHiddenDiv" style="margin-bottom: 10px">
                 <div class="form-inline">
                   <div class="form-group" style="margin-right: 10px;">
                     <label>项目名称</label>
@@ -27,18 +27,23 @@
                     <input type="text" id="addressQuery" name="addressQuery" class="form-control" placeholder="请输入需方">
                   </div>
                   <div class="form-group" style="margin-right: 10px;">
-                    <label>时间</label>
-                    <input type="text" class="form-control datepicker" id="startTimeQuery" readonly="readonly" />
-                    <span>至</span>
-                    <input type="text" class="form-control datepicker" id="endTimeQuery" readonly="readonly" />
+                    <label>项目号</label>
+                    <input type="text" id="codeQuery" name="codeQuery" class="form-control" placeholder="请输入项目号">
                   </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>数量</label>
+                    <input type="number" id="numQuery" name="numQuery" class="form-control" placeholder="请输入数量">
+                  </div>
+
                 </div>
               </div>
               <div class="row">
                 <div class="form-inline">
                   <div class="form-group" style="margin-right: 10px;">
-                    <label>项目号</label>
-                    <input type="text" id="codeQuery" name="code" class="form-control" placeholder="请输入项目号">
+                    <label>时间</label>
+                    <input type="text" class="form-control datepicker" id="startTimeQuery" readonly="readonly" />
+                    <span>至</span>
+                    <input type="text" class="form-control datepicker" id="endTimeQuery" readonly="readonly" />
                   </div>
                   <div class="form-group" style="margin-right: 10px;">
                     <label>年度</label>
@@ -63,8 +68,6 @@
                       <option th:each="section:${sections}" th:value="${section.id}" th:text="${section.name}"></option>
                     </select>
                   </div>
-                  <span class="btn btn-default" id="down" onclick="showQuery()">显示更多条件</span>
-                  <span class="btn btn-default" id="up" style="display: none" onclick="hiddenQuery()">隐藏更多条件</span>
                   <button class="btn btn-vk" id="btn_search">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </div>
               </div>
@@ -104,18 +107,6 @@
       var ctx = ctx + 'board', temp;
       var statusName = ["未开始","执行中","已完成","已取消"];
       var statusColor = ["", "#f39c12", "#00a65a"];
-
-      function showQuery() {
-        $("#queryHiddenDiv").show();
-        $("#up").show();
-        $("#down").hide();
-      }
-
-      function hiddenQuery() {
-        $("#queryHiddenDiv").hide();
-        $("#up").hide();
-        $("#down").show();
-      }
 
       function yearSelectCreate() {
         var myDate= new Date();
@@ -321,7 +312,8 @@
             demanderQuery: $("#demanderQuery").val(),
             addressQuery: $("#addressQuery").val(),
             startTimeQuery: $("#startTimeQuery").val(),
-            endTimeQuery: $("#endTimeQuery").val()
+            endTimeQuery: $("#endTimeQuery").val(),
+            numQuery: $("#numQuery").val()
           });
         });
       });

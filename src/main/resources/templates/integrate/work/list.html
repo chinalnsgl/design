@@ -13,20 +13,7 @@
           <div class="box">
             <div class="box-header">
 
-              <div class="row" id="queryHiddenDiv" hidden style="margin-bottom: 10px">
-                <div class="form-inline">
-                  <div class="form-group" style="margin-right: 10px;">
-                    <label>项目名</label>
-                    <input type="text" id="nameQuery" name="nameQuery" class="form-control" placeholder="请输入项目名">
-                  </div>
-                  <div class="form-group" style="margin-right: 10px;">
-                    <label>时间</label>
-                    <input type="text" class="form-control datepicker" id="startTimeQuery" readonly="readonly" />
-                    <span>至</span>
-                    <input type="text" class="form-control datepicker" id="endTimeQuery" readonly="readonly" />
-                  </div>
-                </div>
-              </div>
+
 
               <div class="row">
                 <div class="form-inline">
@@ -34,7 +21,10 @@
                     <label>项目号</label>
                     <input type="text" id="codeQuery" name="codeQuery" class="form-control" placeholder="请输入项目号">
                   </div>
-
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>项目名</label>
+                    <input type="text" id="nameQuery" name="nameQuery" class="form-control" placeholder="请输入项目名">
+                  </div>
                   <div class="form-group" style="margin-right: 10px;">
                     <label>设计科室</label>
                     <select id="sectionQuery" name="sectionQuery" class="form-control select2" >
@@ -49,8 +39,18 @@
                       <option th:each="type:${taskType}" th:value="${type.name}" th:text="${type.name}"></option>
                     </select>
                   </div>
-                  <span class="btn btn-default" id="down" onclick="showQuery()">显示更多条件</span>
-                  <span class="btn btn-default" id="up" style="display: none" onclick="hiddenQuery()">隐藏更多条件</span>
+
+
+                </div>
+              </div>
+              <div class="row" id="queryHiddenDiv" style="margin-top: 10px">
+                <div class="form-inline">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>时间</label>
+                    <input type="text" class="form-control datepicker" id="startTimeQuery" readonly="readonly" />
+                    <span>至</span>
+                    <input type="text" class="form-control datepicker" id="endTimeQuery" readonly="readonly" />
+                  </div>
                   <button class="btn btn-vk" id="btn_search">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </div>
               </div>
@@ -82,18 +82,6 @@
     <script th:inline="javascript">
 
       var temp;
-
-      function showQuery() {
-        $("#queryHiddenDiv").show();
-        $("#up").show();
-        $("#down").hide();
-      }
-
-      function hiddenQuery() {
-        $("#queryHiddenDiv").hide();
-        $("#up").hide();
-        $("#down").show();
-      }
 
       // 合并单元格
       function merge(rowSpanTr, currentRow, rowSpan, arr) {

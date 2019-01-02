@@ -19,6 +19,7 @@ public class ProduceQuery implements Serializable {
     private Date endTimeQuery;
     private String demanderQuery;
     private String addressQuery;
+    private Integer numQuery;
 
     public int getPageNum() {
         return start / length + 1;

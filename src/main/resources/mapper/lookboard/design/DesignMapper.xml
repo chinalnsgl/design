@@ -66,6 +66,9 @@
     <if test="yearQuery != null">
       and year (x.create_time) = #{yearQuery}
     </if>
+    <if test="numQuery != null">
+      and x.num = #{numQuery}
+    </if>
     <if test="demanderQuery != null and demanderQuery != ''">
       and x.demander like #{demanderQuery}
     </if>
@@ -103,6 +106,9 @@
     </if>
     <if test="yearQuery != null">
       and year (a.create_time) = #{yearQuery}
+    </if>
+    <if test="numQuery != null">
+      and a.num = #{numQuery}
     </if>
     <if test="demanderQuery != null and demanderQuery != ''">
       and a.demander like #{demanderQuery}

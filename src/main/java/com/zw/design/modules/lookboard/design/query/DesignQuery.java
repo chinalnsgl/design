@@ -21,6 +21,7 @@ public class DesignQuery implements Serializable {
     private String demanderQuery;
     private Integer yearQuery;
     private String addressQuery;
+    private Integer numQuery;
 
     public int getPageNum() {
         return start / length + 1;

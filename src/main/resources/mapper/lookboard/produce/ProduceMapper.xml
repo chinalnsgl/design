@@ -41,6 +41,9 @@
     <if test="demanderQuery != null and demanderQuery != ''">
       and a.demander like #{demanderQuery}
     </if>
+    <if test="numQuery != null">
+      and a.num = #{numQuery}
+    </if>
     <if test="addressQuery != null and addressQuery != ''">
       and a.address like #{addressQuery}
     </if>
