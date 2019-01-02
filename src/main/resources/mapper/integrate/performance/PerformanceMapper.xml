@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zw.design.modules.integrate.performance.mapper.PerformanceMapper">
 
-  <select id="findPerformanceCountByQuery" resultType="java.lang.Integer" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
+  <!--<select id="findPerformanceCountByQuery" resultType="java.lang.Integer" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
     select count(0) from (
     select
     a.empName
@@ -22,9 +22,9 @@
     </if>
     group by a.empName, a.code, a.name, a.orderNo
     ) as t
-  </select>
+  </select>-->
 
-  <select id="findPerformanceByQuery" resultType="com.zw.design.modules.integrate.performance.model.PerformanceModel" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
+  <!--<select id="findPerformanceByQuery" resultType="com.zw.design.modules.integrate.performance.model.PerformanceModel" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
     select * from
     (
     select ROW_NUMBER() OVER(Order by pager.empName,pager.orderNo desc, pager.code) as rowId, * from
@@ -55,6 +55,59 @@
       <![CDATA[ and a.createTime <= #{endTimeQuery} ]]>
     </if>
     group by a.empName, a.code, a.name, a.orderNo
+    ) as pager ) as pagetable
+    where pagetable.rowid BETWEEN #{start} and #{length}
+  </select>-->
+
+  <select id="findPerformanceCountByQuery" resultType="java.lang.Integer" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
+    select count(0) from (
+    select
+    a.empName
+    from vw_emp as a
+    where a.task_name_id not in (1,3,5,6)
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.empName like #{nameQuery}
+    </if>
+    <if test="sectionQuery != null and sectionQuery != ''">
+      and (a.sectionName like #{sectionQuery} or a.taskDesignSection like #{sectionQuery})
+    </if>
+    <if test="startTimeQuery != null">
+      <![CDATA[ and a.createTime >= #{startTimeQuery} ]]>
+    </if>
+    <if test="endTimeQuery != null">
+      <![CDATA[ and a.createTime <= #{endTimeQuery} ]]>
+    </if>
+    ) as t
+  </select>
+
+  <select id="findPerformanceByQuery" resultType="com.zw.design.modules.integrate.performance.model.PerformanceModel" parameterType="com.zw.design.modules.integrate.performance.query.PerformanceQuery">
+    select * from
+    (
+    select ROW_NUMBER() OVER(Order by pager.empName,pager.orderNo desc, pager.code, pager.task_name_id) as rowId, * from
+    (
+    select
+    a.empName,
+    a.code,
+    a.name,
+    a.orderNo,
+    a.alias,
+    a.content,
+    a.duration,
+    a.task_name_id
+    from vw_emp as a
+    where a.task_name_id not in (1,3,5,6)
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.empName like #{nameQuery}
+    </if>
+    <if test="sectionQuery != null and sectionQuery != ''">
+      and (a.sectionName like #{sectionQuery} or a.taskDesignSection like #{sectionQuery})
+    </if>
+    <if test="startTimeQuery != null">
+      <![CDATA[ and a.createTime >= #{startTimeQuery} ]]>
+    </if>
+    <if test="endTimeQuery != null">
+      <![CDATA[ and a.createTime <= #{endTimeQuery} ]]>
+    </if>
     ) as pager ) as pagetable
     where pagetable.rowid BETWEEN #{start} and #{length}
   </select>

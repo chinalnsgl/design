@@ -12,7 +12,7 @@
         $.table._selector = $("#" + options.id);
         $.table._table = $.table._selector
             .on( 'preXhr.dt', function () {                                                           // ajax 请求之前处理
-              $.modal.loading("处理中，请稍假...");
+              $.modal.loading("处理中，请稍候...");
             })
             .on( 'xhr.dt', function () {                                                              // ajax 请求之后处理
               $.modal.closeLoading();
@@ -114,7 +114,7 @@
         $.doubleTable._selector = $("#" + options.id);
         $.doubleTable._table = $.doubleTable._selector
             .on( 'preXhr.dt', function () {                                                           // ajax 请求之前处理
-              $.modal.loading("处理中，请稍假...");
+              $.modal.loading("处理中，请稍候...");
             })
             .on( 'xhr.dt', function () {                                                              // ajax 请求之后处理
               $.modal.closeLoading();
@@ -160,7 +160,7 @@
               columns: options.columns,                                                                  // 列配置
               createdRow: options.createdRow ? options.createdRow : function (node) {  },               // 创建行事件
               language : {                                                                               // 国际化配置
-                "sProcessing" : "正在获取数据，请稍后...",
+                "sProcessing" : "正在获取数据，请稍候...",
                 "sLengthMenu" : "显示 _MENU_ 条",
                 "sZeroRecords" : "没有找到数据",
                 "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
@@ -305,7 +305,7 @@
     operate: {
       // 提交数据
       submit: function(url, type, dataType, data, callBack, topic) {
-        $.modal.loading("处理中，请稍后...");
+        $.modal.loading("处理中，请稍候...");
         var config = {
           url: url,
           type: type,
@@ -377,7 +377,7 @@
       },
       // 保存信息
       save: function(url, data, modalId) {
-        $.modal.loading("处理中，请稍后...");
+        $.modal.loading("处理中，请稍候...");
         var config = {
           url: url,
           type: "post",

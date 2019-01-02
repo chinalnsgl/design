@@ -53,6 +53,7 @@
                       <th>项目号</th>
                       <th>项目名称</th>
                       <th>参与任务</th>
+                      <th>负责内容</th>
                       <th>历时（天）</th>
                     </tr>
                     </thead>
@@ -68,7 +69,7 @@
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
 
-      var temp;
+      var temp, _temp;
 
       function showQuery() {
         $("#queryHiddenDiv").show();
@@ -119,7 +120,8 @@
             { data: "empName", width: "80px"},
             { data: "code", width: "120px"},
             { data: "name"},
-            { data: "alias", width: "500"},
+            { data: "alias", width: "140"},
+            { data: "content", width: "500"},
             { data: "duration", width: "80px"}
           ],
           pageCallBack: function () {
@@ -127,6 +129,20 @@
           },
           createdRow: function (row, data, index) {
             if (temp != null && data.empName === $('td', temp).eq(0).html()) {
+
+              if (_temp != null && $('td', _temp).eq(1).html() === data.code) {
+
+                var codeSpan = $('td', _temp).eq(1).attr('rowSpan');
+                if (codeSpan === undefined) {
+                  $('td', _temp).eq(1).attr("rowSpan", 1);
+                  codeSpan = $('td', _temp).eq(1).attr("rowSpan");
+                }
+                codeSpan = Number(codeSpan) + 1;
+                merge(_temp, row, codeSpan, [1, 2]);
+              } else {
+                _temp = row;
+                $('td', row).css("border-top", '1px solid black');
+              }
               var rowSpan = $('td', temp).eq(0).attr("rowSpan");
               if (rowSpan === undefined) {
                 $('td', temp).eq(0).attr("rowSpan", 1);
@@ -136,6 +152,7 @@
               merge(temp, row, rowSpan, [0]);
             } else {
               temp = row;
+              _temp = row;
               $('td', row).css("border-top", '1px solid black');
             }
           }

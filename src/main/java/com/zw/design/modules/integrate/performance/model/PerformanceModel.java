@@ -12,5 +12,6 @@ public class PerformanceModel implements Serializable {
     private String name;                            // 项目名称
     private Integer duration;                       // 历时
     private String alias;                           // 任务名称
+    private String content;                         // 内容
 
 }
