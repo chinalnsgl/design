@@ -14,7 +14,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer>, JpaS
 
     Integer countByStatus(Integer status);
 
-    Integer countByStatusNotAndDesignTaskStatus(Integer status, Integer designStatus);
+    Integer countByStatusNotAndSectionTaskStatus(Integer status, Integer designStatus);
 
     Integer countByStatusNotAndProcessTaskStatus(Integer status, Integer processStatus);
 

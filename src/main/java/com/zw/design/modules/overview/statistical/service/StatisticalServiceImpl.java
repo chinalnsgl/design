@@ -40,7 +40,7 @@ public class StatisticalServiceImpl implements StatisticalService {
     // 已完成设计数
     @Override
     public Integer findFinishedDesignCount() {
-        return projectRepository.countByStatusNotAndDesignTaskStatus(1, 2);
+        return projectRepository.countByStatusNotAndSectionTaskStatus(1, 2);
     }
 
     // 未完成设计数

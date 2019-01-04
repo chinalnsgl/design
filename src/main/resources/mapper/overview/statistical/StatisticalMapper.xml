@@ -32,12 +32,12 @@
   </select>
 
   <select id="countDesignFinishedProjectByYear" resultType="java.lang.Integer">
-    select count(0) from project where status != 0 and year(design_complete_time) = #{year} and design_task_status = 2
+    select count(0) from project where status != 0 and year(section_complete_time) = #{year} and section_task_status = 2
   </select>
 
   <select id="countDesignUnFinishedProjectByYear" resultType="java.lang.Integer">
     select count(0) from project where status != 0 and year(create_time) = #{year} and
-    <![CDATA[ design_task_status < 2 ]]>
+    <![CDATA[ section_task_status < 2 ]]>
   </select>
 
   <select id="countProcessFinishedProjectByYear" resultType="java.lang.Integer">
@@ -77,12 +77,12 @@
   </select>
 
   <select id="countDesignFinishedProjectByMonth" resultType="java.lang.Integer">
-    select count(0) from project where status != 0 and month(design_complete_time) = #{month} and design_task_status = 2
+    select count(0) from project where status != 0 and month(section_complete_time) = #{month} and section_task_status = 2
   </select>
 
   <select id="countDesignUnFinishedProjectByMonth" resultType="java.lang.Integer">
     select count(0) from project where status != 0 and month(create_time) = #{month} and
-    <![CDATA[ design_task_status < 2 ]]>
+    <![CDATA[ section_task_status < 2 ]]>
   </select>
 
   <select id="countProcessFinishedProjectByMonth" resultType="java.lang.Integer">

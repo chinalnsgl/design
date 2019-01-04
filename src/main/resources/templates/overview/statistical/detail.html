@@ -191,7 +191,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-clipboard"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b>2018年项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="project-year" th:text="${year}"></span>年项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
           <span class="info-box-number">完成：<span th:text="${finishedProjectCountByYear}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -203,7 +203,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-clipboard"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b>12月项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="project-month" th:text="${month}"></span>月项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
           <span class="info-box-number">完成：<span th:text="${finishedProjectCountByMonth}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -231,24 +231,24 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-pencil"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b>2018年设计项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
-          <span class="info-box-number">完成：<span th:text="${finishedDesignCountByYear}"></span></span>
+          <span class="info-box-text"><a id="design-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="design-year" th:text="${year}"></span>年设计项目统计</b>&nbsp;&nbsp;<a id="design-year-next" href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-number">完成：<span id="design-year-finished" th:text="${finishedDesignCountByYear}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
           </div>
-          <span class="progress-description">总数：<span th:text="${projectCountByYear}">16</span>&nbsp;未完成：<span th:text="${unFinishedDesignCountByYear}">527</span>&nbsp;取消：<span th:text="${cancelProjectCountByYear}">33</span></span>
+          <span class="progress-description">总数：<span id="design-year-total" th:text="${projectCountByYear}">16</span>&nbsp;未完成：<span id="design-year-unfinished" th:text="${unFinishedDesignCountByYear}">527</span>&nbsp;取消：<span id="design-year-cancel" th:text="${cancelProjectCountByYear}">33</span></span>
         </div>
       </div>
 
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-pencil"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b>12月设计项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
-          <span class="info-box-number">完成：<span th:text="${finishedDesignCountByMonth}"></span></span>
+          <span class="info-box-text"><a id="design-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="design-month" th:text="${month}"></span>月设计项目统计</b>&nbsp;&nbsp;<a id="design-month-next" href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-number">完成：<span id="design-month-finished" th:text="${finishedDesignCountByMonth}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
           </div>
-          <span class="progress-description">总数：<span th:text="${projectCountByMonth}">16</span>&nbsp;未完成：<span th:text="${unFinishedDesignCountByMonth}">527</span>&nbsp;取消：<span th:text="${cancelProjectCountByMonth}">33</span></span>
+          <span class="progress-description">总数：<span id="design-month-total" th:text="${projectCountByMonth}">16</span>&nbsp;未完成：<span id="design-month-unfinished" th:text="${unFinishedDesignCountByMonth}">527</span>&nbsp;取消：<span id="design-month-cancel" th:text="${cancelProjectCountByMonth}">33</span></span>
         </div>
       </div>
     </div>
@@ -270,24 +270,24 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b>2018年工艺项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
-          <span class="info-box-number">完成：<span th:text="${finishedProcessCountByYear}"></span></span>
+          <span class="info-box-text"><a id="process-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="process-year" th:text="${year}"></span>年工艺项目统计</b>&nbsp;&nbsp;<a id="process-year-next" href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-number">完成：<span id="process-year-finished" th:text="${finishedProcessCountByYear}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
           </div>
-          <span class="progress-description">总数：<span th:text="${projectCountByYear}">16</span>&nbsp;未完成：<span th:text="${unFinishedProcessCountByYear}">527</span>&nbsp;取消：<span th:text="${cancelProjectCountByYear}">33</span></span>
+          <span class="progress-description">总数：<span id="process-year-total" th:text="${projectCountByYear}">16</span>&nbsp;未完成：<span id="process-year-unfinished" th:text="${unFinishedProcessCountByYear}">527</span>&nbsp;取消：<span id="process-year-cancel" th:text="${cancelProjectCountByYear}">33</span></span>
         </div>
       </div>
 
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b>12月工艺项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
-          <span class="info-box-number">完成：<span th:text="${finishedProcessCountByMonth}"></span></span>
+          <span class="info-box-text"><a id="process-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="process-month" th:text="${month}"></span>月工艺项目统计</b>&nbsp;&nbsp;<a id="process-month-next" href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-number">完成：<span id="process-month-finished" th:text="${finishedProcessCountByMonth}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
           </div>
-          <span class="progress-description">总数：<span th:text="${projectCountByMonth}">16</span>&nbsp;未完成：<span th:text="${unFinishedProcessCountByMonth}">527</span>&nbsp;取消：<span th:text="${cancelProjectCountByMonth}">33</span></span>
+          <span class="progress-description">总数：<span id="process-month-total" th:text="${projectCountByMonth}"></span>&nbsp;未完成：<span id="process-month-unfinished" th:text="${unFinishedProcessCountByMonth}"></span>&nbsp;取消：<span id="process-month-cancel" th:text="${cancelProjectCountByMonth}">33</span></span>
         </div>
       </div>
     </div>
@@ -302,31 +302,31 @@
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
           </div>
-          <span class="progress-description">总数：<span th:text="${projectCount}">86</span>&nbsp;完成：<span th:text="${finishedProduceCount}">1052</span>&nbsp;取消：<span th:text="${cancelProjectCount}">93</span></span>
+          <span class="progress-description">总数：<span th:text="${projectCount}"></span>&nbsp;完成：<span th:text="${finishedProduceCount}"></span>&nbsp;取消：<span th:text="${cancelProjectCount}"></span></span>
         </div>
       </div>
 
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-truck"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b>2018年生产项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
-          <span class="info-box-number">完成：<span th:text="${finishedProduceCountByYear}"></span></span>
+          <span class="info-box-text"><a id="produce-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="produce-year" th:text="${year}"></span>年生产项目统计</b>&nbsp;&nbsp;<a id="produce-year-next" href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-number">完成：<span id="produce-year-finished" th:text="${finishedProduceCountByYear}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
           </div>
-          <span class="progress-description">总数：<span th:text="${projectCountByYear}">16</span>&nbsp;未完成：<span th:text="${unFinishedProduceCountByYear}">527</span>&nbsp;取消：<span th:text="${cancelProjectCountByYear}">33</span></span>
+          <span class="progress-description">总数：<span id="produce-year-total" th:text="${projectCountByYear}"></span>&nbsp;未完成：<span id="produce-year-unfinished" th:text="${unFinishedProduceCountByYear}"></span>&nbsp;取消：<span id="produce-year-cancel" th:text="${cancelProjectCountByYear}"></span></span>
         </div>
       </div>
 
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-truck"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b>12月生产项目统计</b>&nbsp;&nbsp;<a href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
-          <span class="info-box-number">完成：<span th:text="${finishedProduceCountByMonth}"></span></span>
+          <span class="info-box-text"><a id="produce-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="produce-month" th:text="${month}"></span>月生产项目统计</b>&nbsp;&nbsp;<a id="produce-month-next" href="" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-number">完成：<span id="produce-month-finished" th:text="${finishedProduceCountByMonth}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
           </div>
-          <span class="progress-description">总数：<span th:text="${projectCountByMonth}">16</span>&nbsp;未完成：<span th:text="${unFinishedProduceCountByMonth}">527</span>&nbsp;取消：<span th:text="${cancelProjectCountByMonth}">33</span></span>
+          <span class="progress-description">总数：<span id="produce-month-total" th:text="${projectCountByMonth}"></span>&nbsp;未完成：<span id="produce-month-unfinished" th:text="${unFinishedProduceCountByMonth}"></span>&nbsp;取消：<span id="produce-month-cancel" th:text="${cancelProjectCountByMonth}">33</span></span>
         </div>
       </div>
     </div>

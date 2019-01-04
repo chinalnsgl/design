@@ -101,6 +101,8 @@ public class StatisticalController {
         model.addAttribute("unFinishedProcessCountByMonth", unFinishedProcessCountByMonth);
         model.addAttribute("finishedProduceCountByMonth", finishedProduceCountByMonth);
         model.addAttribute("unFinishedProduceCountByMonth", unFinishedProduceCountByMonth);
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
 
         List<Section> sections = statisticalService.findSectionAll();
         List<Integer> sectionExecutingProjectCount = new ArrayList<>();
