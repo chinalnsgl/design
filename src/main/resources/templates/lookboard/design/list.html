@@ -179,7 +179,12 @@
               width: "30px"
             },
             { data: "sectionName",
-              width: "140px"
+              width: "140px",
+              createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData.projectStatus !== 0 && $("#sectionQuery").find("option:selected").text() === cellData) {
+                  $(td).css("background-color", '#e0e0e0');
+                }
+              }
             },
             { data: "signStatus",
               width: "70px",
@@ -202,7 +207,11 @@
                   if (rowData.firstStatus === 0) {
                     $(td).css("background-color",'#FF0000');
                   } else {
-                    $(td).css("background-color", statusColor[cellData]);
+                    if ($("#sectionQuery").find("option:selected").text() === rowData.sectionName && cellData == 0) {
+                      $(td).css("background-color", '#e0e0e0');
+                    } else {
+                      $(td).css("background-color", statusColor[cellData]);
+                    }
                   }
                 }
               }
@@ -217,7 +226,11 @@
                   if (rowData.secondStatus === 0) {
                     $(td).css("background-color",'#FF0000');
                   } else {
-                    $(td).css("background-color", statusColor[cellData]);
+                    if ($("#sectionQuery").find("option:selected").text() === rowData.sectionName && cellData == 0) {
+                      $(td).css("background-color", '#e0e0e0');
+                    } else {
+                      $(td).css("background-color", statusColor[cellData]);
+                    }
                   }
                 }
               }
@@ -232,7 +245,11 @@
                   if (rowData.thirdStatus === 0) {
                     $(td).css("background-color",'#FF0000');
                   } else {
-                    $(td).css("background-color", statusColor[cellData]);
+                    if ($("#sectionQuery").find("option:selected").text() === rowData.sectionName && cellData == 0) {
+                      $(td).css("background-color", '#e0e0e0');
+                    } else {
+                      $(td).css("background-color", statusColor[cellData]);
+                    }
                   }
                 }
               }
@@ -247,7 +264,11 @@
                   if (rowData.fourthStatus === 0) {
                     $(td).css("background-color",'#FF0000');
                   } else {
-                    $(td).css("background-color", statusColor[cellData]);
+                    if ($("#sectionQuery").find("option:selected").text() === rowData.sectionName && cellData == 0) {
+                      $(td).css("background-color", '#e0e0e0');
+                    } else {
+                      $(td).css("background-color", statusColor[cellData]);
+                    }
                   }
                 }
               }

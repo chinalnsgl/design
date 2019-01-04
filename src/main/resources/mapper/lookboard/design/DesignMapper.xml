@@ -122,7 +122,7 @@
     <if test="endTimeQuery != null">
       <![CDATA[ and a.create_time <= #{endTimeQuery} ]]>
     </if>
-    order by a.order_no desc , a.code
+    order by a.order_no desc , a.code, b.section_id
 	</select>
 
 </mapper>
