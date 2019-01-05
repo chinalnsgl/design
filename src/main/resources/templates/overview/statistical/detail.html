@@ -179,7 +179,7 @@
       <div class="info-box bg-yellow">
         <span class="info-box-icon"><i class="fa fa-clipboard"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">总项目统计</span>
+          <span class="info-box-text"><b>总项目统计</b></span>
           <span class="info-box-number">未完成：<span th:text="${unFinishedProjectCount}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -191,7 +191,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-clipboard"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a id="project-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="project-year" th:text="${year}"></span>年项目统计</b>&nbsp;&nbsp;<a id="project-year-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><a id="project-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="project-year" class="year" th:text="${year}"></span>年项目统计</b>&nbsp;&nbsp;<a id="project-year-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
           <span id="project-year-title" class="info-box-number" th:title="${finishedProjectGroupByYear}">完成：<span id="project-year-finished" th:text="${finishedProjectCountByYear}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -203,7 +203,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-clipboard"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a id="project-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="project-month" th:text="${month}"></span>月项目统计</b>&nbsp;&nbsp;<a id="project-month-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><a id="project-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="project-month" class="month" th:text="${month}"></span>月项目统计</b>&nbsp;&nbsp;<a id="project-month-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
           <span class="info-box-number">完成：<span id="project-month-finished" th:text="${finishedProjectCountByMonth}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -219,7 +219,7 @@
       <div class="info-box bg-yellow">
         <span class="info-box-icon"><i class="fa fa-pencil"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">设计项目统计</span>
+          <span class="info-box-text"><b>设计项目统计</b></span>
           <span class="info-box-number">未完成：<span th:text="${unFinishedDesignCount}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -231,7 +231,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-pencil"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a id="design-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="design-year" th:text="${year}"></span>年设计项目统计</b>&nbsp;&nbsp;<a id="design-year-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><!--<a id="design-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;--><b><span id="design-year" class="year" th:text="${year}"></span>年设计项目统计</b><!--&nbsp;&nbsp;<a id="design-year-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a>--></span>
           <span id="design-year-title" class="info-box-number" th:title="${finishedDesignProjectGroupByYear}">完成：<span id="design-year-finished" th:text="${finishedDesignCountByYear}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -243,7 +243,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-pencil"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a id="design-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="design-month" th:text="${month}"></span>月设计项目统计</b>&nbsp;&nbsp;<a id="design-month-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><!--<a id="design-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;--><b><span id="design-month" class="month" th:text="${month}"></span>月设计项目统计</b><!--&nbsp;&nbsp;<a id="design-month-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a>--></span>
           <span class="info-box-number">完成：<span id="design-month-finished" th:text="${finishedDesignCountByMonth}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -258,7 +258,7 @@
       <div class="info-box bg-yellow">
         <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">工艺项目统计</span>
+          <span class="info-box-text"><b>工艺项目统计</b></span>
           <span class="info-box-number">未完成：<span th:text="${unFinishedProcessCount}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -270,7 +270,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a id="process-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="process-year" th:text="${year}"></span>年工艺项目统计</b>&nbsp;&nbsp;<a id="process-year-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><!--<a id="process-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;--><b><span id="process-year" class="year" th:text="${year}"></span>年工艺项目统计</b><!--&nbsp;&nbsp;<a id="process-year-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a>--></span>
           <span id="process-year-title" class="info-box-number" th:title="${finishedProcessProjectGroupByYear}">完成：<span id="process-year-finished" th:text="${finishedProcessCountByYear}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -282,7 +282,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a id="process-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="process-month" th:text="${month}"></span>月工艺项目统计</b>&nbsp;&nbsp;<a id="process-month-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><!--<a id="process-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;--><b><span id="process-month" class="month" th:text="${month}"></span>月工艺项目统计</b><!--&nbsp;&nbsp;<a id="process-month-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a>--></span>
           <span class="info-box-number">完成：<span id="process-month-finished" th:text="${finishedProcessCountByMonth}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -297,7 +297,7 @@
       <div class="info-box bg-yellow">
         <span class="info-box-icon"><i class="fa fa-truck"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">生产项目统计</span>
+          <span class="info-box-text"><b>生产项目统计</b></span>
           <span class="info-box-number">未完成：<span th:text="${unFinishedProduceCount}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -309,7 +309,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-truck"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a id="produce-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="produce-year" th:text="${year}"></span>年生产项目统计</b>&nbsp;&nbsp;<a id="produce-year-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><!--<a id="produce-year-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;--><b><span id="produce-year" class="year" th:text="${year}"></span>年生产项目统计</b><!--&nbsp;&nbsp;<a id="produce-year-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a>--></span>
           <span id="produce-year-title" class="info-box-number" th:title="${finishedProduceProjectGroupByYear}">完成：<span id="produce-year-finished" th:text="${finishedProduceCountByYear}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -321,7 +321,7 @@
       <div class="info-box bg-green">
         <span class="info-box-icon"><i class="fa fa-truck"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text"><a id="produce-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;<b><span id="produce-month" th:text="${month}"></span>月生产项目统计</b>&nbsp;&nbsp;<a id="produce-month-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a></span>
+          <span class="info-box-text"><!--<a id="produce-month-pre" href="#" class="fa fa-arrow-left" style="color: #FFF"></a>&nbsp;&nbsp;--><b><span id="produce-month" class="month" th:text="${month}"></span>月生产项目统计</b><!--&nbsp;&nbsp;<a id="produce-month-next" href="#" style="color: #FFF" class="fa fa-arrow-right"></a>--></span>
           <span class="info-box-number">完成：<span id="produce-month-finished" th:text="${finishedProduceCountByMonth}"></span></span>
           <div class="progress">
             <div class="progress-bar" style="width: 70%"></div>
@@ -358,34 +358,6 @@
   };
 
   var statistical = {
-    preYear: function (year) {
-      if (year === 2016) {
-        return year;
-      } else {
-        return year - 1;
-      }
-    },
-    nextYear: function (year) {
-      if (year === new Date().getFullYear()) {
-        return year;
-      } else {
-        return year + 1;
-      }
-    },
-    preMonth: function (month) {
-      if (month === 1) {
-        return month;
-      } else {
-        return month - 1;
-      }
-    },
-    nextMonth: function (month) {
-      if (month === 12) {
-        return month;
-      } else {
-        return month + 1;
-      }
-    },
     updateProjectYear: function (data, year) {
       $("#project-year-total").text(data.content.totalCount);
       $("#project-year-cancel").text(data.content.cancelCount);
@@ -446,6 +418,35 @@
       $("#produce-month-unfinished").text(data.content.unFinishedCount);
       $("#produce-month").text(month);
     },
+    update: function (year, month) {
+      $.operate.get(context + "/year/project", {year: year}, function (data) {
+        statistical.updateProjectYear(data, year);
+      });
+      $.operate.get(context + "/year/design", {year: year}, function (data) {
+        statistical.updateDesignYear(data, year);
+      });
+      $.operate.get(context + "/year/process", {year: year}, function (data) {
+        statistical.updateProcessYear(data, year);
+      });
+      $.operate.get(context + "/year/produce", {year: year}, function (data) {
+        statistical.updateProduceYear(data, year);
+      });
+      statistical.updateMonth(month);
+    },
+    updateMonth: function (month) {
+      $.operate.get(context + "/month/project", {month: month}, function (data) {
+        statistical.updateProjectMonth(data, month);
+      });
+      $.operate.get(context + "/month/design", {month: month}, function (data) {
+        statistical.updateDesignMonth(data, month);
+      });
+      $.operate.get(context + "/month/process", {month: month}, function (data) {
+        statistical.updateProcessMonth(data, month);
+      });
+      $.operate.get(context + "/month/produce", {month: month}, function (data) {
+        statistical.updateProduceMonth(data, month);
+      });
+    }
   };
 
 
@@ -453,35 +454,55 @@
 
     // 项目箭头
     /*$("#project-year-pre").click(function () {
-      var year = statistical.preYear(parseInt($("#project-year").text()));
-      $.operate.get(context + "/year/project", {year: year}, function (data) {
-        statistical.updateProjectYear(data, year);
-      })
+      var year = parseInt($("#project-year").text());
+      if (year > 2016) {
+        year -= 1;
+      }
+      var month = parseInt($("#project-month").text());
+      statistical.update(year, month);
     });
 
     $("#project-year-next").click(function () {
-      var year = statistical.nextYear(parseInt($("#project-year").text()));
-      $.operate.get(context + "/year/project", {year: year}, function (data) {
-        statistical.updateProjectYear(data, year);
-      })
+      var year = parseInt($("#project-year").text());
+      var month = parseInt($("#project-month").text());
+      if (year < new Date().getFullYear()) {
+        year += 1;
+        if (month > new Date().getMonth() + 1) {
+          month = new Date().getMonth() + 1;
+        }
+      }
+      statistical.update(year, month);
     });
 
     $("#project-month-pre").click(function () {
-      var month = statistical.preMonth(parseInt($("#project-month").text()));
-      $.operate.get(context + "/month/project", {month: month}, function (data) {
-        statistical.updateProjectMonth(data, month);
-      })
+      var month = parseInt($("#project-month").text());
+      if (month === 1) {
+        var year = parseInt($("#project-year").text());
+        if (year !== 2016) {
+          statistical.update(year - 1, 12);
+        }
+      } else {
+        statistical.updateMonth(month - 1);
+      }
     });
 
     $("#project-month-next").click(function () {
-      var month = statistical.nextMonth(parseInt($("#project-month").text()));
-      $.operate.get(context + "/month/project", {month: month}, function (data) {
-        statistical.updateProjectMonth(data, month);
-      })
+      var month = parseInt($("#project-month").text());
+      var year = parseInt($("#project-year").text());
+      if (month === new Date().getMonth() + 1 && year === new Date().getFullYear()) {
+        return;
+      }
+      if (month === 12) {
+        if (year !== new Date().getFullYear()) {
+          statistical.update(year + 1, 1);
+        }
+      } else {
+        statistical.updateMonth(month + 1);
+      }
     });*/
 
     // 设计箭头
-    $("#design-year-pre").click();
+    /*$("#design-year-pre").click();
 
     $("#design-year-next").click();
 
@@ -505,7 +526,7 @@
 
     $("#produce-month-pre").click();
 
-    $("#produce-month-next").click();
+    $("#produce-month-next").click();*/
 
     var ctx = document.getElementById('barChart').getContext('2d');
     window.myBar = new Chart(ctx, {
@@ -537,6 +558,32 @@
           yAxes: [{
             stacked: true
           }]
+        },
+        hover: {
+          animationDuration: 0  // 防止鼠标移上去，数字闪烁
+        },
+        animation: {           // 这部分是数值显示的功能实现
+          onComplete: function () {
+            var chartInstance = this.chart,
+            ctx = chartInstance.ctx;
+            // 以下属于canvas的属性（font、fillStyle、textAlign...）
+            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+            ctx.fillStyle = "black";
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            var total = [];
+            this.data.datasets.forEach(function (dataset, i) {
+              var meta = chartInstance.controller.getDatasetMeta(i);
+              meta.data.forEach(function (bar, index) {
+                if (dataset.label === '未开始') {
+                  var n = total[index] + dataset.data[index];
+                  ctx.fillText(n, bar._model.x, bar._model.y - 5);
+                } else {
+                  total.push(dataset.data[index]);
+                }
+              });
+            });
+          }
         }
       }
     });

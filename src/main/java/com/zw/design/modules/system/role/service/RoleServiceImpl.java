@@ -15,7 +15,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +71,7 @@ public class RoleServiceImpl implements RoleService {
     // 按状态查询所有角色
     @Override
     public List<SysRole> findAllByStatus() {
-        return sysRoleRepository.findAllByStatus(1);
+        return sysRoleRepository.findAll((Specification<SysRole>) (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status"), 1), Sort.by("orderNo"));
     }
 
     // 按ID查询角色
@@ -121,6 +124,7 @@ public class RoleServiceImpl implements RoleService {
         logService.saveLog("修改角色", sysRole, role);
         sysRole.setRoleName(role.getRoleName());
         sysRole.getPermissions().removeAll(sysRole.getPermissions());
+        sysRole.setOrderNo(role.getOrderNo());
         sysRole.setPermissions(createPermissions(permissions));
         return sysRoleRepository.save(sysRole);
     }
