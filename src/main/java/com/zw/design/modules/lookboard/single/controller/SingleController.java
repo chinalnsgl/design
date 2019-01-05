@@ -159,7 +159,7 @@ public class SingleController {
     // 负责人列表
     @ResponseBody
     @PostMapping("/editTask/employee/list")
-    @RequiresPermissions(value = {"single:sign:edit", "single:contract:edit", "single:dept:edit", "single:process:edit", "single:produce:edit","single:debug:edit","single:accept:edit","single:save:edit"},logical = Logical.OR)
+    @RequiresAuthentication
     public BaseResponse empList(SingleQuery singleQuery) {
         BaseDataTableModel<TaskEmployee> tasks = singleService.findTaskEmployeeByTaskId(singleQuery);
         BaseResponse baseResponse = new BaseResponse();
