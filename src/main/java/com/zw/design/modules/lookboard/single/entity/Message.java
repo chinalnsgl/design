@@ -33,6 +33,6 @@ public class Message implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "projectId")
-    @JsonIgnoreProperties("messages")
+    @JsonIgnoreProperties(value = {"messages","tasks","images"})
     private Project project;
 }

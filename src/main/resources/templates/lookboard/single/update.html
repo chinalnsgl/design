@@ -110,9 +110,15 @@
               </div>
             </div>
             <div class="form-group">
+              <label for="createTime" class="col-sm-2 control-label no-padding-right">创建时间</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control datepicker" id="createTime" name="createTime" th:value="${#dates.format(project.createTime,'yyyy-MM-dd')}" readonly >
+              </div>
+            </div>
+            <div class="form-group">
               <label for="planTime" class="col-sm-2 control-label no-padding-right">预计时间</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control datepicker" id="planTime" name="planTime" th:value="${#dates.format(project.planTime,'yyyy-MM-dd')}" readonly >
+                <input type="text" class="form-control datepicker" id="planTime" name="planTime" th:value="${#dates.format(project.designPlanTime,'yyyy-MM-dd')}" readonly >
               </div>
             </div>
             <div class="form-group">

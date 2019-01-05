@@ -81,7 +81,6 @@
                   <th>需方</th>
                   <th>安装地点</th>
                   <th>项目号</th>
-                  <th>任务单号</th>
                   <th>数量</th>
                   <th>科室</th>
                   <th>签技术协议</th>
@@ -139,7 +138,7 @@
               className: 'btn btn-success pull-right',
               filename: '设计进度看板',
               exportOptions: {
-                columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+                columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13]
               }
             }
           ],
@@ -172,8 +171,6 @@
               width: "100px"
             },
             { data: "code"
-            },
-            { data: "codeSpecial"
             },
             { data: "num",
               width: "30px"
@@ -314,7 +311,7 @@
                 rowSpan = $('td', temp).eq(4).attr("rowSpan");
               }
               rowSpan = Number(rowSpan) + 1;
-              merge(temp, row, rowSpan, [0, 1, 2, 3, 4, 5, 6, 8, 13, 14, 15]);
+              merge(temp, row, rowSpan, [0, 1, 2, 3, 4, 5, 7, 12, 13, 14]);
             } else {
               temp = row;
               $('td', row).css("border-top", '1px solid black');
