@@ -348,8 +348,10 @@ public class SingleServiceImpl implements SingleService {
         if (designTasksCompleteStatus == 0) {
             project.setDesignTaskStatus(0);
         } else if (designTasksCompleteStatus == 2) {
+            if (project.getDesignTaskStatus() != 2) {
+                project.setDesignCompleteTime(new Date());
+            }
             project.setDesignTaskStatus(2);
-            project.setDesignCompleteTime(new Date());
         } else {
             project.setDesignTaskStatus(1);
         }
@@ -357,8 +359,10 @@ public class SingleServiceImpl implements SingleService {
         if (sectionTasksCompleteStatus == 0) {
             project.setSectionTaskStatus(0);
         } else if (sectionTasksCompleteStatus == 2) {
+            if (project.getSectionTaskStatus() != 2) {
+                project.setSectionCompleteTime(new Date());
+            }
             project.setSectionTaskStatus(2);
-            project.setSectionCompleteTime(new Date());
         } else {
             project.setSectionTaskStatus(1);
         }
@@ -366,8 +370,10 @@ public class SingleServiceImpl implements SingleService {
         if (processTasksCompleteStatus == 0) {
             project.setProcessTaskStatus(0);
         } else if (processTasksCompleteStatus == 2) {
+            if (project.getProcessTaskStatus() != 2) {
+                project.setProcessCompleteTime(new Date());
+            }
             project.setProcessTaskStatus(2);
-            project.setProcessCompleteTime(new Date());
         } else {
             project.setProcessTaskStatus(1);
         }
@@ -375,14 +381,18 @@ public class SingleServiceImpl implements SingleService {
         if (produceTasksCompleteStatus == 0) {
             project.setProduceTaskStatus(0);
         } else if (produceTasksCompleteStatus == 2) {
+            if (project.getProduceTaskStatus() != 2) {
+                project.setProduceCompleteTime(new Date());
+            }
             project.setProduceTaskStatus(2);
-            project.setProduceCompleteTime(new Date());
         } else {
             project.setProduceTaskStatus(1);
         }
         if (projectTasksCompleteStatus == 2 && designTasksCompleteStatus == 2 && processTasksCompleteStatus == 2 && produceTasksCompleteStatus == 2) {
+            if (project.getStatus() != 4) {
+                project.setCompleteTime(new Date());
+            }
             project.setStatus(4);
-            project.setCompleteTime(new Date());
         } else {
             project.setStatus(2);
             project.setCompleteTime(null);

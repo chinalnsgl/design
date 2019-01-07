@@ -1,16 +1,16 @@
 spring:
   datasource:
     username: sa
-#    url: jdbc:sqlserver://192.168.50.1:1433;DatabaseName=DB_DESIGN
-#    password: zw1234aA#
+    url: jdbc:sqlserver://192.168.50.1:1433;DatabaseName=DB_DESIGN
+    password: zw1234aA#
 #    url: jdbc:sqlserver://192.168.72.229:1433;DatabaseName=DB_DESIGN
 #    password: 123
-    url: jdbc:sqlserver://192.168.72.155:1433;DatabaseName=DB_DESIGN
-    password: zw1234aA#
+#    url: jdbc:sqlserver://192.168.72.155:1433;DatabaseName=DB_DESIGN
+#    password: zw1234aA#
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+#    show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServer2008Dialect
@@ -21,8 +21,8 @@ spring:
   cache:
     type: redis
   redis:
-#    host: 192.168.50.1
-    host: 192.168.72.158
+    host: 192.168.50.1
+#    host: 192.168.72.158
   mvc:
     favicon:
       enabled: false
@@ -35,7 +35,7 @@ mybatis:
   type-aliases-package: com.zw.design.entity.dbo
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 pagehelper:
   reasonable: true
 logging:
