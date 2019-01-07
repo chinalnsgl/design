@@ -1,5 +1,6 @@
 package com.zw.design.modules.system.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.zw.design.modules.system.role.entity.SysRole;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +38,7 @@ public class SysUser implements Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Where(clause = "status > 0")
+    @JsonBackReference
     private List<SysRole> roles; // 包含角色
 
 }

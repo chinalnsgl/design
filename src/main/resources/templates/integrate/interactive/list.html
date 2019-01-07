@@ -44,17 +44,6 @@
                   </table>
                 </div>
                 <div class="col-md-6">
-                  <!--<table id="messageTable" class="table table-bordered table-hover" width="100%">
-                    <thead>
-                    <tr>
-                      <th>序号</th>
-                      <th>接收者</th>
-                      <th>内容</th>
-                      <th>发送者</th>
-                      <th>发送时间</th>
-                    </tr>
-                    </thead>
-                  </table>-->
                   <div class="box direct-chat direct-chat-primary">
                     <div class="box-body" id="message-box-body">
                       <div class="direct-chat-messages" id="message-box" style="height: 700px">
@@ -62,7 +51,6 @@
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -107,39 +95,37 @@
         $.table.rowClick(function (data) {
           $.operate.postTopic(ctx + "integrate/interactive/message/list",{id: data.id},function (data) {
             var img = ctx + "img/person.png";
-            if (sessionUser.img != null) {
-              var html = [];
-              $.each(data.content, function (idx, obj) {
-                if (obj.user.id == sessionUser.id) {
-                  html.push('<div class="direct-chat-msg right">');
-                  html.push('<div class="direct-chat-info clearfix">');
-                  html.push('<span class="direct-chat-name pull-right">');
-                  html.push(obj.user.name);
-                  html.push('</span>');
-                  html.push('<span class="direct-chat-timestamp pull-left">');
-                  html.push(obj.createTime);
-                  html.push('</span>');
-                } else {
-                  html.push('<div class="direct-chat-msg">');
-                  html.push('<div class="direct-chat-info clearfix">');
-                  html.push('<span class="direct-chat-name pull-left">');
-                  html.push(obj.user.name);
-                  html.push('</span>');
-                  html.push('<span class="direct-chat-timestamp pull-right">');
-                  html.push(obj.createTime);
-                  html.push('</span>');
-                }
-                html.push('</div>');
-                html.push('<img class="direct-chat-img" alt="Message User Image" src="' + (obj.user.img ? obj.user.img : img) + '">');
+            var html = [];
+            $.each(data.content, function (idx, obj) {
+              if (obj.user.id == sessionUser.id) {
+                html.push('<div class="direct-chat-msg right">');
+                html.push('<div class="direct-chat-info clearfix">');
+                html.push('<span class="direct-chat-name pull-right">');
+                html.push(obj.user.name);
+                html.push('</span>');
+                html.push('<span class="direct-chat-timestamp pull-left">');
+                html.push(obj.createTime);
+                html.push('</span>');
+              } else {
+                html.push('<div class="direct-chat-msg">');
+                html.push('<div class="direct-chat-info clearfix">');
+                html.push('<span class="direct-chat-name pull-left">');
+                html.push(obj.user.name);
+                html.push('</span>');
+                html.push('<span class="direct-chat-timestamp pull-right">');
+                html.push(obj.createTime);
+                html.push('</span>');
+              }
+              html.push('</div>');
+              html.push('<img class="direct-chat-img" alt="Message User Image" src="' + (obj.user.img ? obj.user.img : img) + '">');
 
-                html.push('<div class="direct-chat-text">');
-                html.push(obj.content);
-                html.push('</div>');
-                html.push('</div>');
-              });
-              $("#message-box").empty().append(html.join(''));
-              $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;
-            }
+              html.push('<div class="direct-chat-text">');
+              html.push(obj.content);
+              html.push('</div>');
+              html.push('</div>');
+            });
+            $("#message-box").empty().append(html.join(''));
+            $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;
           });
         });
 

@@ -249,7 +249,7 @@
                 <input type="hidden" name="projectId" th:value="${project.id}">
                 <input type="text" name="content" id="message" autocomplete="off" data-provide="typeahead" placeholder="请输入内容" class="form-control">
                 <span class="input-group-btn">
-                  <button shiro:hasPermission="single:sendMessage" type="button" class="btn btn-primary btn-flat" id="btn-send">发送</button>
+                  <button type="button" class="btn btn-primary btn-flat" id="btn-send">发送</button>
                 </span>
               </div>
             </form>
@@ -348,7 +348,6 @@
     [[${project.demander}]]&nbsp;&nbsp;&nbsp;&nbsp;
     [[${project.address}]]&nbsp;&nbsp;&nbsp;&nbsp;
     [[${project.code}]]&nbsp;&nbsp;&nbsp;&nbsp;
-    [[${project.codeSpecial}]]&nbsp;&nbsp;&nbsp;&nbsp;
     [[${#strings.abbreviate(project.comment,50)}]]&nbsp;&nbsp;&nbsp;&nbsp;
   </h7>
 </section>
@@ -980,17 +979,17 @@
         var img = ctx + "img/person.png";
         if (sessionUser.img != null) {
           img = sessionUser.img;
-          $("#message-box").append('<div class="direct-chat-msg right">' +
-              '<div class="direct-chat-info clearfix">' +
-              '<span class="direct-chat-name pull-right">' + sessionUser.name +
-              '</span><span class="direct-chat-timestamp pull-left">' + new Date().format("yyyy-MM-dd hh:mm:ss") +
-              '</span></div>' +
-              '<img class="direct-chat-img" alt="Message User Image" src="' + img
-              + '"><div class="direct-chat-text">' + $("#message").val() +
-              '</div></div>');
-          $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;
-          $("#message").val('');
         }
+        $("#message-box").append('<div class="direct-chat-msg right">' +
+            '<div class="direct-chat-info clearfix">' +
+            '<span class="direct-chat-name pull-right">' + sessionUser.name +
+            '</span><span class="direct-chat-timestamp pull-left">' + new Date().format("yyyy-MM-dd hh:mm:ss") +
+            '</span></div>' +
+            '<img class="direct-chat-img" alt="Message User Image" src="' + img
+            + '"><div class="direct-chat-text">' + $("#message").val() +
+            '</div></div>');
+        $("#message-box")[0].scrollTop = $("#message-box")[0].scrollHeight;
+        $("#message").val('');
       });
     });
 

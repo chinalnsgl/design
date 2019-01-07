@@ -203,7 +203,7 @@ public class SingleController {
     // 发消息
     @ResponseBody
     @PostMapping("/sendMessage")
-    @RequiresPermissions({"single:sendMessage"})
+    @RequiresAuthentication
     public BaseResponse sendMessage(Message message, Integer projectId) {
         // 获取@用户名集合
         List<String> users = new ArrayList<>();

@@ -162,7 +162,8 @@
               data: null,
               width: "8px",
               render : function (data, type, row, meta) {
-                return meta.row + 1;
+                // debugger;
+                return meta.row + 1 + meta.settings._iDisplayStart;
               }
             },
             { data: "name",
