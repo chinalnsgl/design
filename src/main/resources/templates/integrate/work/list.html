@@ -36,7 +36,7 @@
                     <label>任务类型</label>
                     <select id="typeQuery" name="typeQuery" class="form-control select2" >
                       <option value="" selected="selected">请选择</option>
-                      <option th:each="type:${taskType}" th:value="${type.name}" th:text="${type.name}"></option>
+                      <option th:each="type:${taskType}" th:selected="${type.id == 2}" th:value="${type.name}" th:text="${type.name}"></option>
                     </select>
                   </div>
 
