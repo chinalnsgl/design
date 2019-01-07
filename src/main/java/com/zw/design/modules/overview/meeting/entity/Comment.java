@@ -28,6 +28,7 @@ public class Comment implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "userId")
+    @JsonIgnoreProperties({"roles"})
     private SysUser user;
 
     @ManyToOne

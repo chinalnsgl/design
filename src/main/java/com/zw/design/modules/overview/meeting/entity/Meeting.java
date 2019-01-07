@@ -44,6 +44,7 @@ public class Meeting implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "userId")
+    @JsonIgnoreProperties({"roles"})
     private SysUser user; // 发布人
 
 }
