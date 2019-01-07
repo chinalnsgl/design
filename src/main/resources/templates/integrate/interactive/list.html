@@ -106,10 +106,8 @@
         // 点击行
         $.table.rowClick(function (data) {
           $.operate.postTopic(ctx + "integrate/interactive/message/list",{id: data.id},function (data) {
-            console.info(data);
             var img = ctx + "img/person.png";
             if (sessionUser.img != null) {
-              img = sessionUser.img;
               var html = [];
               $.each(data.content, function (idx, obj) {
                 if (obj.user.id == sessionUser.id) {
@@ -132,7 +130,8 @@
                   html.push('</span>');
                 }
                 html.push('</div>');
-                html.push('<img class="direct-chat-img" alt="Message User Image" src="' + img + '">');
+                html.push('<img class="direct-chat-img" alt="Message User Image" src="' + (obj.user.img ? obj.user.img : img) + '">');
+
                 html.push('<div class="direct-chat-text">');
                 html.push(obj.content);
                 html.push('</div>');

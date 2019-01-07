@@ -141,6 +141,7 @@ public class SingleServiceImpl implements SingleService {
         p.setAddress(project.getAddress());
         p.setCodeSpecial(project.getCodeSpecial());
         p.setComment(project.getComment());
+        p.setCreateTime(project.getCreateTime());
         /*if (p.getOrderNo() != 2) {
             if (project.getOrderNo() == null) {
                 p.setOrderNo(0);
@@ -294,6 +295,7 @@ public class SingleServiceImpl implements SingleService {
         TaskEmployee emp = taskEmployeeRepository.findById(taskEmployee.getId()).get();
         logService.saveLog("修改负责人", emp, taskEmployee);
         emp.setEmpName(taskEmployee.getEmpName());
+        emp.setComment(taskEmployee.getComment());
         emp.setContent(taskEmployee.getContent());
         emp.setStartTime(taskEmployee.getStartTime());
         emp.setEndTime(taskEmployee.getEndTime());

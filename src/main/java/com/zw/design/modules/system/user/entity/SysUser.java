@@ -35,7 +35,7 @@ public class SysUser implements Serializable {
 
     private String img; // 头像URI
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @Where(clause = "status > 0")
     private List<SysRole> roles; // 包含角色
 

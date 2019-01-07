@@ -280,6 +280,7 @@
                 <th>开始时间</th>
                 <th>结束时间</th>
                 <th>历时</th>
+                <th>备注</th>
                 <th>操作</th>
               </tr>
               </thead>
@@ -316,6 +317,12 @@
                 <label for="empDuration" class="col-sm-4 control-label">历时</label>
                 <div class="col-sm-8">
                   <input type="number" class="form-control" id="empDuration" name="duration" placeholder="请输入天数">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="comment" class="col-sm-4 control-label">备注</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="employees_comment" name="comment" placeholder="">
                 </div>
               </div>
               <button type="button" style="margin-left: 10px" class="btn btn-warning pull-right" disabled id="btn-employee-update">修改</button>
@@ -915,6 +922,7 @@
         { data: "startTime"},
         { data: "endTime"},
         { data: "duration"},
+        { data: "comment"},
         { data: "id",
           render : function(data, type, row, meta) {
             return '<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="delEmployee(' + data + ')">删除</a>';
@@ -931,6 +939,7 @@
       $("#empEndTime").val(data.endTime);
       $("#empDuration").val(data.duration);
       $("#empTaskId").val(data.task.id);
+      $("#employees_comment").val(data.comment);
       $("#btn-employee-update").removeAttr("disabled");
     });
 

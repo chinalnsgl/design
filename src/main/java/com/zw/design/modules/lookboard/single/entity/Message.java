@@ -21,7 +21,7 @@ public class Message implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    @JsonIgnoreProperties("messages")
+    @JsonIgnoreProperties("roles")
     private SysUser user; // 消息发送用户
 
     private Integer status = 1; // 状态
@@ -33,6 +33,6 @@ public class Message implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "projectId")
-    @JsonIgnoreProperties(value = {"messages","tasks","images"})
+    @JsonIgnoreProperties({"messages","tasks","projectTaskLists","projectType","images"})
     private Project project;
 }

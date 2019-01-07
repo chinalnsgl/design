@@ -11,7 +11,7 @@
 
   <select id="countNotStartedProjectBySection" resultType="java.lang.Integer">
     select count(0) from (
-                         select project_id from task where section_id = #{sectionId} and status = 1 group by project_id having sum(comp_status) = 0
+                         select project_id from task t left join project p on t.project_id = p.id where t.section_id = #{sectionId} and t.status = 1 and p.status != 0 group by project_id having sum(comp_status) = 0
                          ) a
   </select>
 
