@@ -13,5 +13,7 @@ public class WorkModel implements Serializable {
     private Integer duration;                       // 历时
     private String typeName;                        // 任务类型
     private String alias;                           // 任务名称
+    private String content;                           // 任务名称
+    private String comment;                           // 备注
 
 }

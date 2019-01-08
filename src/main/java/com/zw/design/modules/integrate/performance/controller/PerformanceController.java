@@ -28,6 +28,7 @@ public class PerformanceController {
     @GetMapping("/page")
     @RequiresPermissions({"performance:list"})
     public String performancePage(Model model) {
+        model.addAttribute("taskType", performanceService.findTaskTypeByStatus(1));
         model.addAttribute("sections", performanceService.findSectionByStatus(1));
         return prefix + "/list";
     }

@@ -93,7 +93,9 @@
     a.alias,
     a.content,
     a.duration,
-    a.task_name_id
+    a.task_name_id,
+    a.typeName,
+    a.comment
     from vw_emp as a
     where a.task_name_id not in (1,3,5,6)
     <if test="nameQuery != null and nameQuery != ''">
@@ -101,6 +103,9 @@
     </if>
     <if test="sectionQuery != null and sectionQuery != ''">
       and (a.sectionName like #{sectionQuery} or a.taskDesignSection like #{sectionQuery})
+    </if>
+    <if test="typeQuery != null and typeQuery != ''">
+      and a.typeName = #{typeQuery}
     </if>
     <if test="startTimeQuery != null">
       <![CDATA[ and a.createTime >= #{startTimeQuery} ]]>

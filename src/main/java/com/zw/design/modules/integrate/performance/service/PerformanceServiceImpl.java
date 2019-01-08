@@ -3,6 +3,8 @@ package com.zw.design.modules.integrate.performance.service;
 import com.zw.design.base.BaseDataTableModel;
 import com.zw.design.modules.baseinfosetting.section.entity.Section;
 import com.zw.design.modules.baseinfosetting.section.repository.SectionRepository;
+import com.zw.design.modules.baseinfosetting.tasktype.entity.TaskType;
+import com.zw.design.modules.baseinfosetting.tasktype.repository.TaskTypeRepository;
 import com.zw.design.modules.integrate.performance.mapper.PerformanceMapper;
 import com.zw.design.modules.integrate.performance.model.PerformanceModel;
 import com.zw.design.modules.integrate.performance.query.PerformanceQuery;
@@ -18,6 +20,8 @@ public class PerformanceServiceImpl implements PerformanceService {
     private PerformanceMapper performanceMapper;
     @Autowired
     private SectionRepository sectionRepository;
+    @Autowired
+    private TaskTypeRepository taskTypeRepository;
 
     // 按条件查询项目
     @Override
@@ -43,5 +47,10 @@ public class PerformanceServiceImpl implements PerformanceService {
     @Override
     public List<Section> findSectionByStatus(Integer status) {
         return sectionRepository.findByStatus(status);
+    }
+
+    @Override
+    public List<TaskType> findTaskTypeByStatus(Integer status) {
+        return taskTypeRepository.findByStatus(1);
     }
 }

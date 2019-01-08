@@ -44,7 +44,7 @@
                   </table>
                 </div>
                 <div class="col-md-6">
-                  <div class="box direct-chat direct-chat-primary">
+                  <div class="box direct-chat direct-chat-primary message-div">
                     <div class="box-body" id="message-box-body">
                       <div class="direct-chat-messages" id="message-box" style="height: 700px">
 
@@ -136,6 +136,15 @@
             receiverQuery: $("#receiverQuery").val()
           });
         });
+
+        window.onscroll = function () {
+          var top = document.body.scrollTop || document.documentElement.scrollTop;
+          if (top > 100) {
+            $(".message-div").css('top', top - 100);
+          } else {
+            $(".message-div").css('top', 0);
+          }
+        }
       });
 
     </script>

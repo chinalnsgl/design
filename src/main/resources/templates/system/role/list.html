@@ -67,12 +67,12 @@
             if ($("#updBtn_" + treeNode.id).length > 0) { return; }
             if ($("#delBtn_" + treeNode.id).length > 0) { return; }
             //添加
-            if ($.inArray('role:create', permissions) === 0 || $.inArray('*:*:*', permissions) === 0) {
+            if ($.inArray('role:create', permissions) > -1 || $.inArray('*:*:*', permissions) > -1) {
               var addStr = "<button class='btn btn-info btn-xs' style='margin-left: 10px' id='addBtn_" + treeNode.id + "' onclick='location=\"" + ctx + "sys/role/create/"+ treeNode.id + "\"'>添加</button>";
               sObj.append(addStr);
             }
             //修改
-            if ($.inArray('role:edit', permissions) === 0 || $.inArray('*:*:*', permissions) === 0) {
+            if ($.inArray('role:edit', permissions) > -1 || $.inArray('*:*:*', permissions) > -1) {
               var updStr = "<button class='btn btn-warning btn-xs' style='margin-left: 10px' id='updBtn_" + treeNode.id + "'>修改</button>";
               sObj.append(updStr);
               $("#updBtn_" + treeNode.id).bind("click", function () {
@@ -89,7 +89,7 @@
               });
             }
             //删除
-            if (!treeNode.children.length > 0 && $.common.isEmpty(treeNode.roleCode) && ($.inArray('role:del', permissions) === 0 || $.inArray('*:*:*', permissions) === 0)) {
+            if (!treeNode.children.length > 0 && $.common.isEmpty(treeNode.roleCode) && ($.inArray('role:del', permissions) > -1 || $.inArray('*:*:*', permissions) > -1)) {
               var delStr = "<button class='btn btn-danger btn-xs' style='margin-left: 10px' id='delBtn_" + treeNode.id + "'>删除</button>";
               sObj.append(delStr);
               $("#delBtn_" + treeNode.id).bind("click", function () {

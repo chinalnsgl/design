@@ -13,6 +13,7 @@ public class PerformanceQuery implements Serializable {
     private Integer length = 10;
     private String nameQuery;       // 负责人
     private String sectionQuery;    // 科室
+    private String typeQuery;     // 任务类型
     private Date startTimeQuery;
     private Date endTimeQuery;
 
