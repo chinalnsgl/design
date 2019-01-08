@@ -25,10 +25,10 @@ public interface Const {
         put("content", "内容");
         put("address", "地址");
         put("personnel", "参与人员");
-        put("orderNo", "排序");
-        put("startTime", "开始时间");
-        put("endTime", "结束时间");
-        put("planFinishTime", "计划完成时间");
+//        put("orderNo", "排序");
+//        put("startTime", "开始时间");
+//        put("endTime", "结束时间");
+//        put("planFinishTime", "计划完成时间");
         put("compStatus", "完成状态");
         put("comment", "备注");
         put("contractNo", "合同号");
