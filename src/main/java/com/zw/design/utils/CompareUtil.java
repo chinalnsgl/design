@@ -18,20 +18,20 @@ public class CompareUtil {
                 Object obj2 = getMethod.invoke(o2);
                 String s1 = obj1 == null ? "" : obj1.toString();//避免空指针异常
                 String s2 = obj2 == null ? "" : obj2.toString();//避免空指针异常
-                if (!s1.equals(s2) && Const.FIELD_NAME.get(field.getName()) != null) {
+                if (obj1 != null && obj2 != null && !s1.equals(s2) && Const.FIELD_NAME.get(field.getName()) != null) {
                     sb.append(Const.FIELD_NAME.get(field.getName()))
                             .append("：【")
                             .append(s1)
                             .append("】 -> 【")
                             .append(s2)
-                            .append("】");
+                            .append("】,");
                 }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         if (sb.toString().length() == 0) {
-            sb.append("基本内容无变化，调整配置");
+            sb.append("属性无变化");
         }
         return sb.toString();
     }

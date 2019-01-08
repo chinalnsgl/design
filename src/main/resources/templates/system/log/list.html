@@ -65,7 +65,11 @@
             { data: "account"},
             { data: "name"},
             { data: "operationName"},
-            { data: "operationContent", width: "50%"},
+            { data: "operationContent", width: "50%", render: function (data) {
+                if (data != null) {
+                  return data.split(',').join('<br>');
+                }
+              }},
             { data: "operationTime"},
             { "data": "address"}
           ]

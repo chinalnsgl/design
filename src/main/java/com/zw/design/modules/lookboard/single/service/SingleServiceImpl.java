@@ -124,7 +124,7 @@ public class SingleServiceImpl implements SingleService {
     @Override
     public Task updateTaskStatus(Integer id, Integer status) {
         Task task = taskRepository.findById(id).get();
-        logService.saveLog(( status == 0 ? "不需要" : "需要："),  "【项目：" + task.getProject().getName() + "】【任务：" + task.getAlias() + "】");
+        logService.saveLog(( status == 0 ? "不需要" : "需要："),  "【项目：" + task.getProject().getName() + "，任务：" + task.getAlias() + "】");
         task.setStatus(status);
         task = taskRepository.save(task);
         updateProject(task.getProject());
@@ -135,7 +135,7 @@ public class SingleServiceImpl implements SingleService {
     @Override
     public Project updateProject(Project project, Integer[] sectionId) {
         Project p = projectRepository.findById(project.getId()).get();
-        logService.saveLog("修改项目", p, project);
+        logService.saveLog("修改项目：" + p.getName(), p, project);
         p.setName(project.getName());
         p.setDemander(project.getDemander());
         p.setAddress(project.getAddress());
@@ -233,7 +233,7 @@ public class SingleServiceImpl implements SingleService {
     @Override
     public Task editTask(Task task) {
         Task t = taskRepository.findById(task.getId()).get();
-        logService.saveLog("编辑任务", t, task);
+        logService.saveLog("编辑任务：项目名：" + t.getProject().getName() + "任务名：" + t.getAlias(), t, task);
         t.setComment(task.getComment());
         t.setContractNo(task.getContractNo());
 //        t.setPrincipal(task.getPrincipal());
@@ -285,7 +285,7 @@ public class SingleServiceImpl implements SingleService {
     public TaskEmployee saveEmployee(TaskEmployee taskEmployee) {
         Task task = taskRepository.findById(taskEmployee.getTask().getId()).get();
         Project project = projectRepository.findById(task.getProject().getId()).get();
-        logService.saveLog("添加负责人" , "【项目：" + project.getName() + "，任务名：" + task.getTaskName().getName() + "负责人：" + taskEmployee.getEmpName() + "】");
+        logService.saveLog("添加负责人" , "【项目：" + project.getName() + "，任务名：" + task.getAlias() + "，负责人：" + taskEmployee.getEmpName() + "】");
         return taskEmployeeRepository.save(taskEmployee);
     }
 
@@ -293,7 +293,7 @@ public class SingleServiceImpl implements SingleService {
     @Override
     public TaskEmployee updateEmployee(TaskEmployee taskEmployee) {
         TaskEmployee emp = taskEmployeeRepository.findById(taskEmployee.getId()).get();
-        logService.saveLog("修改负责人", emp, taskEmployee);
+        logService.saveLog("修改负责人---项目：" + emp.getTask().getProject().getName() + "，任务：" + emp.getTask().getAlias(), emp, taskEmployee);
         emp.setEmpName(taskEmployee.getEmpName());
         emp.setComment(taskEmployee.getComment());
         emp.setContent(taskEmployee.getContent());
@@ -307,7 +307,7 @@ public class SingleServiceImpl implements SingleService {
     @Override
     public TaskEmployee updateEmployeeStatus(Integer id, int status) {
         TaskEmployee taskEmployee = taskEmployeeRepository.findById(id).get();
-        logService.saveLog("删除负责人" , taskEmployee.getEmpName());
+        logService.saveLog("删除负责人：项目：" + taskEmployee.getTask().getProject().getName() + "，任务：" + taskEmployee.getTask().getAlias() , taskEmployee.getEmpName());
         taskEmployee.setStatus(status);
         return taskEmployeeRepository.save(taskEmployee);
     }
@@ -316,7 +316,7 @@ public class SingleServiceImpl implements SingleService {
     @Override
     public Task cancelTask(Integer id) {
         Task task = taskRepository.findById(id).get();
-        logService.saveLog("撤消任务进度", "任务名：" + task.getAlias() + " 】");
+        logService.saveLog("撤消任务进度", "项目名：" + task.getProject().getName() + "，任务名：" + task.getAlias() + " 】");
         if (task.getCompStatus() == 1) {
             task.setCompStatus(0);
             task.setStartTime(null);
@@ -418,7 +418,7 @@ public class SingleServiceImpl implements SingleService {
             receiver.setUser(u);
             receiverRepository.save(receiver);
         }
-        logService.saveLog("发消息", "【项目：" + project.getName() + "】 " + message.getContent());
+        logService.saveLog("发消息", "项目名：" + project.getName() + "，" + message.getContent());
         return message;
     }
 
@@ -443,7 +443,7 @@ public class SingleServiceImpl implements SingleService {
             return;
         }
         Project project = projectRepository.findById(projectId).get();
-        logService.saveLog("上传文件", "【项目名：" + project.getName() + "】");
+        logService.saveLog("上传文件", "项目名：" + project.getName());
         Image image = new Image();
         image.setName(fileName);
         image.setUrl(s);
@@ -457,7 +457,7 @@ public class SingleServiceImpl implements SingleService {
     // 下载文件
     @Override
     public void download(HttpServletResponse response, Integer[] id, String code) {
-        logService.saveLog("下载文件","数量" + id.length + "  【项目号：" + code + "】");
+        logService.saveLog("下载文件","数量" + id.length + "  项目号：" + code);
         if (id.length == 1) {
             Image image = imageRepository.findById(id[0]).get();
             File file = new File(image.getUrl());
@@ -497,7 +497,7 @@ public class SingleServiceImpl implements SingleService {
 
         for (Integer id : ids) {
             Image image = imageRepository.findById(id).get();
-            logService.saveLog("删除文件", "【项目：" + image.getProject().getName() + "】 【任务：" + image.getTask().getAlias() + "】");
+            logService.saveLog("删除文件", "项目：" + image.getProject().getName() + "，任务：" + image.getTask().getAlias());
             File file = new File(image.getUrl());
             if (file.exists()) {
                 file.delete();
