@@ -19,6 +19,7 @@
     a.code,
     a.code_special,
     a.num,
+    a.design_plan_time,
     a.comment,
     a.status as projectStatus,
     b.firstCompleteStatus,

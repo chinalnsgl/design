@@ -1,8 +1,10 @@
 package com.zw.design.modules.lookboard.design.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 public class DesignModel implements Serializable {
@@ -14,6 +16,8 @@ public class DesignModel implements Serializable {
     private String code;                            // 项目号
     private String codeSpecial;                     // 任务单号
     private Integer num;                            // 数量
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date designPlanTime;                    // 设计计划完成时间
     private String sectionName;                     // 设计科室
     private Integer signStatus;                     // 技术协议
     private Integer firstCompleteStatus;                    // 设计

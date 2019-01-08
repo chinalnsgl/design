@@ -122,9 +122,21 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-info" id="btn-upload">上传</button>
+        <!--<button type="button" class="btn btn-info" id="btn-upload">上传</button>
         <a href="" class="btn btn-success" id="btn-download">下载</a>
-        <button type="button" class="btn btn-danger" id="btn-del">删除</button>
+        <button type="button" class="btn btn-danger" id="btn-del">删除</button>-->
+        <button shiro:hasPermission="single:dt:upload" type="button" class="btn btn-info file-task btn-file" id="btn-upload-task">上传</button>
+        <a shiro:hasPermission="single:dt:download" href="" class="btn btn-success file-task btn-file" id="btn-download-task">下载</a>
+        <button shiro:hasPermission="single:dt:delFile" type="button" class="btn btn-danger file-task btn-file" id="btn-del-task">删除</button>
+        <button shiro:hasPermission="single:sign:upload" type="button" class="btn btn-info file-sign btn-file" id="btn-upload-sign">上传</button>
+        <a shiro:hasPermission="single:sign:download" href="" class="btn btn-success file-sign btn-file" id="btn-download-sign">下载</a>
+        <button shiro:hasPermission="single:sign:delFile" type="button" class="btn btn-danger file-sign btn-file" id="btn-del-sign">删除</button>
+        <button shiro:hasPermission="single:contract:upload" type="button" class="btn btn-info file-contract btn-file" id="btn-upload-contract">上传</button>
+        <a shiro:hasPermission="single:contract:download" href="" class="btn btn-success file-contract btn-file" id="btn-download-contract">下载</a>
+        <button shiro:hasPermission="single:contract:delFile" type="button" class="btn btn-danger file-contract btn-file" id="btn-del-contract">删除</button>
+        <button shiro:hasPermission="single:accept:upload" type="button" class="btn btn-info file-accept btn-file" id="btn-upload-accept">上传</button>
+        <a shiro:hasPermission="single:accept:download" href="" class="btn btn-success file-accept btn-file" id="btn-download-accept">下载</a>
+        <button shiro:hasPermission="single:accept:delFile" type="button" class="btn btn-danger file-accept btn-file" id="btn-del-accept">删除</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -374,7 +386,7 @@
           <br>
         </div>
         <div class="box-footer">
-          <button style="margin-right: 5px" shiro:hasAnyPermissions="single:dt:upload,single:dt:download,single:dt:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[0].id},'${project.code}','file_div_${project.tasks[0].id}')|">文件</button>
+          <button style="margin-right: 5px" shiro:hasAnyPermissions="single:dt:upload,single:dt:download,single:dt:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[0].id},'${project.code}','file_div_${project.tasks[0].id}',1)|">文件</button>
         </div>
       </div>
       <div class="box box-info box-solid">
@@ -422,7 +434,7 @@
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2 && project.tasks[1].status == 1}" shiro:hasPermission="single:sign:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[1].id},${project.tasks[1].taskName.id},'${project.name}','${project.tasks[1].alias}',${project.tasks[1].compStatus},'emp_${project.tasks[1].id}','${#dates.format(project.tasks[1].planFinishTime,'yyyy-MM-dd')}','${project.tasks[1].comment}','${project.tasks[1].contractNo}')|">编辑任务</button>
-          <button th:if="${project.tasks[1].status == 1}" style="margin-right: 5px" shiro:hasAnyPermissions="single:sign:upload,single:sign:download,single:sign:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[1].id},'${project.code}', 'file_div_${project.tasks[1].id}')|">文件</button>
+          <button th:if="${project.tasks[1].status == 1}" style="margin-right: 5px" shiro:hasAnyPermissions="single:sign:upload,single:sign:download,single:sign:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[1].id},'${project.code}', 'file_div_${project.tasks[1].id}',2)|">文件</button>
           <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[1].alias}',${project.tasks[1].compStatus},'emp_${project.tasks[1].id}','${#dates.format(project.tasks[1].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[1].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[1].endTime,'yyyy-MM-dd')}','${project.tasks[1].comment}')|">查看</button>
         </div>
       </div>
@@ -455,7 +467,7 @@
         <div class="box-footer">
           <!--<button th:if="${project.status == 2 and project.tasks[2].status == 2}" shiro:hasPermission="contract:cancel" type="button" class="btn btn-danger btn-xs pull-right" th:onclick="|cancelSignContractTaskSchedule(${project.tasks[2].id})|" id="btn-cancel-contract">撤消</button>-->
           <button th:if="${project.status == 2 && project.tasks[2].status == 1}" shiro:hasPermission="single:contract:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[2].id},${project.tasks[2].taskName.id},'${project.name}','${project.tasks[2].alias}',${project.tasks[2].compStatus},'emp_${project.tasks[2].id}','${#dates.format(project.tasks[2].planFinishTime,'yyyy-MM-dd')}','${project.tasks[2].comment}','${project.tasks[2].contractNo}')|">编辑任务</button>
-          <button th:if="${project.tasks[2].status == 1}" style="margin-right: 5px" shiro:hasAnyPermissions="single:contract:upload,single:contract:download,single:contract:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[2].id},'${project.code}', 'file_div_${project.tasks[2].id}')|">文件</button>
+          <button th:if="${project.tasks[2].status == 1}" style="margin-right: 5px" shiro:hasAnyPermissions="single:contract:upload,single:contract:download,single:contract:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[2].id},'${project.code}', 'file_div_${project.tasks[2].id}',3)|">文件</button>
           <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[2].alias}',${project.tasks[2].compStatus},'emp_${project.tasks[2].id}','${#dates.format(project.tasks[2].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[2].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[2].endTime,'yyyy-MM-dd')}','${project.tasks[2].comment}','${project.tasks[2].contractNo}')|">查看</button>
         </div>
       </div>
@@ -600,7 +612,7 @@
         </div>
         <div class="box-footer">
           <button th:if="${project.status == 2 && project.tasks[4].status == 1}" shiro:hasPermission="accept:edit" style="margin-right: 6px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[4].id},${project.tasks[4].taskName.id},'${project.name}','${project.tasks[4].alias}',${project.tasks[4].compStatus},'emp_${project.tasks[4].id}','${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}','${project.tasks[4].comment}','${project.tasks[4].contractNo}')|">编辑任务</button>
-          <button th:if="${project.tasks[4].status == 1}"style="margin-right: 5px" shiro:hasAnyPermissions="single:accept:upload,single:accept:download,single:accept:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[4].id},'${project.code}', 'file_div_${project.tasks[4].id}')|">文件</button>
+          <button th:if="${project.tasks[4].status == 1}"style="margin-right: 5px" shiro:hasAnyPermissions="single:accept:upload,single:accept:download,single:accept:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[4].id},'${project.code}', 'file_div_${project.tasks[4].id}',4)|">文件</button>
           <button style="margin-right: 6px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[4].alias}',${project.tasks[4].compStatus},'emp_${project.tasks[4].id}','${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[4].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[4].endTime,'yyyy-MM-dd')}','${project.tasks[4].comment}')|">查看</button>
         </div>
       </div>
@@ -775,7 +787,22 @@
   }
 
   // 上传模态框
-  function uploadModel(projectId, taskId, code, fileDiv) {
+  function uploadModel(projectId, taskId, code, fileDiv, type) {
+    $(".btn-file").hide();
+    switch (type) {
+      case 1:
+        $(".file-task").show();
+        break;
+      case 2:
+        $(".file-sign").show();
+        break;
+      case 3:
+        $(".file-contract").show();
+        break;
+      case 4:
+        $(".file-accept").show();
+        break;
+    }
     $("#file_group").empty().append($("#" + fileDiv).clone(true));
     $("#file_group").children(":first").show();
     $("#upload_projectId").val(projectId);
@@ -805,7 +832,7 @@
     $(window).resize();
 
     // 上传文件
-    $("#btn-upload").click(function(){
+    $("#btn-upload-task,#btn-upload-sign,#btn-upload-contract,#btn-upload-accept").click(function(){
       $("#uploadForm").ajaxSubmit({
         success: function (result) {
           if (result.status === 200) {
@@ -822,7 +849,7 @@
     });
 
     // 下载文件
-    $("#btn-download").click(function () {
+    $("#btn-download-task,#btn-download-sign,#btn-download-contract,#btn-download-accept").click(function () {
       if ($("input:checkbox:checked").length == 0) {
         $.modal.warning("请至少选择一个文件");
         return false;
@@ -836,7 +863,7 @@
     });
 
     // 删除文件
-    $("#btn-del").click(function () {
+    $("#btn-del-task,#btn-del-sign,#btn-del-contract,#btn-del-accept").click(function () {
       if ($("input:checkbox:checked").length == 0) {
         $.modal.warning("请至少选择一个文件");
       } else {

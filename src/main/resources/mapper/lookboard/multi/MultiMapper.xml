@@ -11,6 +11,7 @@
     a.code,
     a.code_special,
     a.num,
+    a.design_plan_time,
     a.design_depts,
     a.section_task_status,
     a.process_task_status,

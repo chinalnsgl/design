@@ -82,6 +82,7 @@
                   <th>安装地点</th>
                   <th>项目号</th>
                   <th>数量</th>
+                  <th>设计计划<br>完成时间</th>
                   <th>设计科室</th>
                   <th>技术<br>协议</th>
                   <th>合同</th>
@@ -132,7 +133,7 @@
               className: 'btn btn-success pull-right',
               filename: '多项目看板',
               exportOptions: {
-                columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+                columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
               }
             }
           ],
@@ -180,6 +181,9 @@
             },
             { data: "num",
               width: "30px"
+            },
+            { data: "designPlanTime",
+              width: "140px"
             },
             { data: "designDepts",
               width: "140px",
