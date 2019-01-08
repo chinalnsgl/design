@@ -111,6 +111,9 @@ public class DistributeDesignTaskServiceImpl implements DistributeDesignTaskServ
                 if (taskName.getId() == 2 || taskName.getId() == 4) {
                     task.setDesignDepts(project.getDesignDepts());
                 }
+                if (taskName.getId() == 4 || taskName.getId() == 5 || taskName.getId() == 6) {
+                    task.setOrderNo2(2);
+                }
                 taskRepository.save(task);
             }
         }

@@ -22,6 +22,12 @@
                     <label>接收者</label>
                     <input type="text" id="receiverQuery" name="receiverQuery" class="form-control" placeholder="请输入名称">
                   </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>时间</label>
+                    <input type="text" class="form-control datepicker" id="startTimeQuery" readonly="readonly" />
+                    <span>至</span>
+                    <input type="text" class="form-control datepicker" id="endTimeQuery" readonly="readonly" />
+                  </div>
                   <button class="btn btn-vk" id="btn_search">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </div>
               </div>
@@ -69,7 +75,9 @@
           url: ctx + "integrate/interactive/project/list",
           data : {
             senderQuery: $("#senderQuery").val(),
-            receiverQuery: $("#receiverQuery").val()
+            receiverQuery: $("#receiverQuery").val(),
+            startTimeQuery: $("#startTimeQuery").val(),
+            endTimeQuery: $("#endTimeQuery").val()
           },
           columns: [
             {
@@ -133,7 +141,9 @@
         $("#btn_search").click(function () {
           $.table.search({
             senderQuery: $("#senderQuery").val(),
-            receiverQuery: $("#receiverQuery").val()
+            receiverQuery: $("#receiverQuery").val(),
+            startTimeQuery: $("#startTimeQuery").val(),
+            endTimeQuery: $("#endTimeQuery").val()
           });
         });
 

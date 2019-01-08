@@ -21,6 +21,12 @@
     <if test="receiverQuery != null and receiverQuery != ''">
       and u2.name like #{receiverQuery}
     </if>
+    <if test="startTimeQuery != null">
+      <![CDATA[ and m.create_time >= #{startTimeQuery} ]]>
+    </if>
+    <if test="endTimeQuery != null">
+      <![CDATA[ and m.create_time <= #{endTimeQuery} ]]>
+    </if>
     ) b on a.id = b.id
     order by a.order_no desc, a.code
   </select>

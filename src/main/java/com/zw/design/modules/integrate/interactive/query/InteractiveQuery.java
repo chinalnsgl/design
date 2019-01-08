@@ -14,6 +14,8 @@ public class InteractiveQuery implements Serializable {
     private String senderQuery;     // 发起者
     private String receiverQuery;   // 接收者
     private Integer projectIdQuery; // 项目ID
+    private Date startTimeQuery;
+    private Date endTimeQuery;
 
     public int getPageNum() {
         return start / length + 1;

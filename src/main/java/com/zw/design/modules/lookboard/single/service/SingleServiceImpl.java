@@ -111,7 +111,7 @@ public class SingleServiceImpl implements SingleService {
             list.add(criteriaBuilder.isNull(root.get("section")));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
-        }, Sort.by("orderNo"));
+        }, Sort.by("orderNo2","orderNo"));
         BaseDataTableModel<Task> baseDataTableModel = new BaseDataTableModel<>();
         baseDataTableModel.setDraw(query.getDraw());
         baseDataTableModel.setData(tasks);

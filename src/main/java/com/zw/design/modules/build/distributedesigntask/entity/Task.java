@@ -48,6 +48,7 @@ public class Task {
     private Integer taskOrder; // 任务执行顺序（预留字段）
 
     private Integer orderNo = 1; // 排序 (预留字段)
+    private Integer orderNo2 = 1; // 排序 (预留字段)
 
     @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date startTime; // 开始时间

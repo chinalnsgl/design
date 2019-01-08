@@ -552,7 +552,7 @@
           <div>备注：<span th:text="${#strings.abbreviate(task.comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
-          <button th:if="${project.status == 2 && task.status == 1}" shiro:hasPermission="produce1:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${task.id},${task.taskName.id},'${project.name}','${task.alias}',${task.compStatus},'emp_${task.id}','${#dates.format(task.planFinishTime,'yyyy-MM-dd')}','${task.comment}','${task.contractNo}')|">编辑任务</button>
+          <button th:if="${project.status == 2 && task.status == 1}" shiro:hasPermission="single:produce:edit" style="margin-right: 5px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${task.id},${task.taskName.id},'${project.name}','${task.alias}',${task.compStatus},'emp_${task.id}','${#dates.format(task.planFinishTime,'yyyy-MM-dd')}','${task.comment}','${task.contractNo}')|">编辑任务</button>
           <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${task.alias}',${task.compStatus},'emp_${task.id}','${#dates.format(task.planFinishTime,'yyyy-MM-dd')}','${#dates.format(task.startTime,'yyyy-MM-dd')}','${#dates.format(task.endTime,'yyyy-MM-dd')}','${task.comment}')|">查看</button>
         </div>
       </div>
@@ -578,7 +578,7 @@
           <div>备注：<span th:text="${#strings.abbreviate(project.tasks[3].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
-          <button th:if="${project.status == 2 && project.tasks[3].status == 1}" shiro:hasPermission="debug:edit" style="margin-right: 10px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[3].id},${project.tasks[3].taskName.id},'${project.name}','${project.tasks[3].alias}',${project.tasks[3].compStatus},'emp_${project.tasks[3].id}','${#dates.format(project.tasks[3].planFinishTime,'yyyy-MM-dd')}','${project.tasks[3].comment}','${project.tasks[3].contractNo}')|">编辑任务</button>
+          <button th:if="${project.status == 2 && project.tasks[3].status == 1}" shiro:hasPermission="single:debug:edit" style="margin-right: 10px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[3].id},${project.tasks[3].taskName.id},'${project.name}','${project.tasks[3].alias}',${project.tasks[3].compStatus},'emp_${project.tasks[3].id}','${#dates.format(project.tasks[3].planFinishTime,'yyyy-MM-dd')}','${project.tasks[3].comment}','${project.tasks[3].contractNo}')|">编辑任务</button>
           <button style="margin-right: 5px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[3].alias}',${project.tasks[3].compStatus},'emp_${project.tasks[3].id}','${#dates.format(project.tasks[3].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[3].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[3].endTime,'yyyy-MM-dd')}','${project.tasks[3].comment}')|">查看</button>
         </div>
       </div>
@@ -611,7 +611,7 @@
           <div>备注：<span th:text="${#strings.abbreviate(project.tasks[4].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
-          <button th:if="${project.status == 2 && project.tasks[4].status == 1}" shiro:hasPermission="accept:edit" style="margin-right: 6px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[4].id},${project.tasks[4].taskName.id},'${project.name}','${project.tasks[4].alias}',${project.tasks[4].compStatus},'emp_${project.tasks[4].id}','${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}','${project.tasks[4].comment}','${project.tasks[4].contractNo}')|">编辑任务</button>
+          <button th:if="${project.status == 2 && project.tasks[4].status == 1}" shiro:hasPermission="single:accept:edit" style="margin-right: 6px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[4].id},${project.tasks[4].taskName.id},'${project.name}','${project.tasks[4].alias}',${project.tasks[4].compStatus},'emp_${project.tasks[4].id}','${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}','${project.tasks[4].comment}','${project.tasks[4].contractNo}')|">编辑任务</button>
           <button th:if="${project.tasks[4].status == 1}"style="margin-right: 5px" shiro:hasAnyPermissions="single:accept:upload,single:accept:download,single:accept:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[4].id},'${project.code}', 'file_div_${project.tasks[4].id}',4)|">文件</button>
           <button style="margin-right: 6px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[4].alias}',${project.tasks[4].compStatus},'emp_${project.tasks[4].id}','${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[4].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[4].endTime,'yyyy-MM-dd')}','${project.tasks[4].comment}')|">查看</button>
         </div>
@@ -638,7 +638,7 @@
           <div>备注：<span th:text="${#strings.abbreviate(project.tasks[5].comment,10)}">无</span></div>
         </div>
         <div class="box-footer">
-          <button th:if="${project.status == 2 or project.status == 4}" shiro:hasPermission="save:edit" style="margin-right: 6px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[5].id},${project.tasks[5].taskName.id},'${project.name}','${project.tasks[5].alias}',${project.tasks[5].compStatus},'emp_${project.tasks[5].id}','${#dates.format(project.tasks[5].planFinishTime,'yyyy-MM-dd')}','${project.tasks[5].comment}','${project.tasks[5].contractNo}')|">编辑任务</button>
+          <button th:if="${project.status == 2 or project.status == 4}" shiro:hasPermission="single:save:edit" style="margin-right: 6px" class="btn btn-warning btn-xs pull-right" th:onclick="|editTaskModel(${project.tasks[5].id},${project.tasks[5].taskName.id},'${project.name}','${project.tasks[5].alias}',${project.tasks[5].compStatus},'emp_${project.tasks[5].id}','${#dates.format(project.tasks[5].planFinishTime,'yyyy-MM-dd')}','${project.tasks[5].comment}','${project.tasks[5].contractNo}')|">编辑任务</button>
           <button style="margin-right: 6px" class="btn btn-info btn-xs pull-right" th:onclick="|info('${project.name}','${project.tasks[5].alias}',${project.tasks[5].compStatus},'emp_${project.tasks[5].id}','${#dates.format(project.tasks[5].planFinishTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[5].startTime,'yyyy-MM-dd')}','${#dates.format(project.tasks[5].endTime,'yyyy-MM-dd')}','${project.tasks[5].comment}')|">查看</button>
         </div>
       </div>
