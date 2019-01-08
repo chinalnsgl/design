@@ -285,7 +285,7 @@ public class SingleServiceImpl implements SingleService {
     public TaskEmployee saveEmployee(TaskEmployee taskEmployee) {
         Task task = taskRepository.findById(taskEmployee.getTask().getId()).get();
         Project project = projectRepository.findById(task.getProject().getId()).get();
-        logService.saveLog("添加负责人" , "【项目：" + project.getName() + "，任务名：" + task.getTaskName() + "负责人：" + taskEmployee.getEmpName() + "】");
+        logService.saveLog("添加负责人" , "【项目：" + project.getName() + "，任务名：" + task.getTaskName().getName() + "负责人：" + taskEmployee.getEmpName() + "】");
         return taskEmployeeRepository.save(taskEmployee);
     }
 
