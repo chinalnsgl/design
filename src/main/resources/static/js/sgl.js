@@ -715,3 +715,14 @@ Date.prototype.format = function (format) {
   }
   return format;
 };
+
+Array.prototype.distinct = function () {
+  var new_arr=[];
+  for(var i = 0; i < this.length; i++) {
+    var items=this[i];
+    if($.inArray(items,new_arr) === -1) {
+      new_arr.push(items);
+    }
+  }
+  return new_arr;
+};
