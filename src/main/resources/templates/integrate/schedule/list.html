@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <section class="content-header">
+      <h1>
+        项目执行进度查询
+      </h1>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="row">
+                <div class="form-inline">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>项目名</label>
+                    <input type="text" id="nameQuery" name="nameQuery" class="form-control" placeholder="请输入项目名">
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>项目号</label>
+                    <input type="text" id="codeQuery" name="codeQuery" class="form-control" placeholder="请输入项目号">
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>年度</label>
+                    <select id="yearQuery" name="yearQuery" class="form-control select2" >
+                      <option value="" selected="selected">请选择</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>类型</label>
+                    <select id="taskQuery" name="taskQuery" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="1">项目</option>
+                      <option value="2">设计</option>
+                      <option value="3">工艺</option>
+                      <option value="4">生产</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-vk" id="btn_search">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </div>
+              </div>
+            </div>
+            <div class="box-body">
+              <table id="projectTable" class="table table-bordered" width="100%">
+                <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>项目名称</th>
+                  <th>需方</th>
+                  <th>安装地点</th>
+                  <th>项目号</th>
+                  <th>产品数量</th>
+                  <th>任务单完成时间</th>
+                  <th>协议完成时间</th>
+                  <th>合同完成时间</th>
+                  <th>设计完成时间</th>
+                  <th>工艺完成时间</th>
+                  <th>生产完成时间</th>
+                  <th>调试完成时间</th>
+                  <th>验收完成时间</th>
+                  <th>存档完成时间</th>
+                  <th>项目完成时间</th>
+                  <th>操作</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div id="goToTop" th:style="|position:fixed; right:0px; bottom:10px; width:20px; height:75px; background-image: url(@{/img/gototop.gif}); cursor:pointer|"></div>
+    <!-- /.content -->
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+
+      function yearSelectCreate() {
+        var myDate= new Date();
+        var endYear=myDate.getFullYear();//结束年份
+        for (var i=2016;i<=endYear;i++)
+        {
+          if(i === 2016)
+            $("#yearQuery").append("<option value='"+ i +"'>"+ i + "年及以前" +"</option>");
+          else
+            $("#yearQuery").append("<option value='"+ i +"'>"+ i + "年" +"</option>");
+        }
+      }
+
+      $(function () {
+        yearSelectCreate();
+        // 加载列表
+        $.table.init({
+          id: "projectTable",
+          scrollX: true,
+          dom: "Tf<'row'<'col-sm-6 col-sm-offset-6'p>>t<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
+          url: ctx + "integrate/schedule/list",
+          data : {
+            codeQuery: $("#codeQuery").val(),
+            yearQuery : $("#yearQuery").val(),
+            taskQuery: $("#taskQuery").val(),
+            nameQuery: $("#nameQuery").val()
+          },
+          columns: [
+            {
+              data: null,
+              width: "8px",
+              render : function (data, type, row, meta) {
+                return meta.row + 1 + meta.settings._iDisplayStart;
+              }
+            },
+            { data: "name"
+            },
+            { data: "demander",
+              width: "80px"
+            },
+            { data: "address",
+              width: "80px"
+            },
+            { data: "code",
+              width: "100px"
+            },
+            { data: "num",
+              width: "80px"
+            },
+            { data: "taskListCompleteTime",
+              width: "120px"},
+            { data: "signCompleteTime",
+              width: "120px"},
+            { data: "contractCompleteTime",
+              width: "120px"},
+            { data: "sectionCompleteTime",
+              width: "120px"},
+            { data: "produceCompleteTime",
+              width: "120px"},
+            { data: "processCompleteTime",
+              width: "120px"},
+            { data: "debugCompleteTime",
+              width: "120px"},
+            { data: "acceptCompleteTime",
+              width: "120px"},
+            { data: "saveCompleteTime",
+              width: "120px"},
+            { data: "projectCompleteTime",
+              width: "120px"},
+            { data: "id",
+              "width": "40px",
+              render : function(data, type, row, meta) {
+                return '<a target="_blank" style="margin-right: 5px" class="btn btn-info btn-xs many-view" href="' + ctx + 'board/single/' + data + '">查看</a>';
+              }
+            }
+          ]
+        });
+        // 搜索
+        $("#btn_search").click(function () {
+          $.table.search({
+            codeQuery: $("#codeQuery").val(),
+            yearQuery : $("#yearQuery").val(),
+            taskQuery: $("#taskQuery").val(),
+            nameQuery: $("#nameQuery").val()
+          });
+        });
+      });
+
+    </script>
+</body>
+</html>

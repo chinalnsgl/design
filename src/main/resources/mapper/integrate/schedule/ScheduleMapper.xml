@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.integrate.schedule.mapper.ScheduleMapper">
+
+  <select id="findProjectByQuery" resultType="com.zw.design.modules.integrate.schedule.model.ScheduleModel" parameterType="com.zw.design.modules.integrate.schedule.query.ScheduleQuery">
+    select
+    a.id,
+    a.name,
+    a.demander,
+    a.address,
+    a.code,
+    a.num,
+    a.section_complete_time,
+    a.process_complete_time,
+    a.produce_complete_time,
+    a.complete_time as projectCompleteTime,
+    a.comment,
+    b.end_time as taskListCompleteTime,
+    c.end_time as signCompleteTime,
+    d.end_time as contractCompleteTime,
+    e.end_time as debugCompleteTime,
+    f.end_time as acceptCompleteTime,
+    g.end_time as saveCompleteTime
+    from project as a
+    left join task as b on a.id = b.project_id and b.task_name_id = 1
+    left join task as c on a.id = c.project_id and c.task_name_id = 2
+    left join task as d on a.id = d.project_id and d.task_name_id = 3
+    left join task as e on a.id = e.project_id and e.task_name_id = 4
+    left join task as f on a.id = f.project_id and f.task_name_id = 5
+    left join task as g on a.id = g.project_id and g.task_name_id = 6
+    where 1 = 1
+    <if test="codeQuery != null and codeQuery != ''">
+      and a.code like #{codeQuery}
+    </if>
+    <if test="nameQuery != null and nameQuery != ''">
+      and a.name like #{nameQuery}
+    </if>
+    <if test="taskQuery == 1 and yearQuery == null">
+      and a.status = 4
+    </if>
+    <if test="taskQuery == 1 and yearQuery != null">
+      and a.status = 4 and year (a.complete_time) = #{yearQuery}
+    </if>
+    <if test="taskQuery == 2 and yearQuery == null">
+      and a.section_task_status = 2
+    </if>
+    <if test="taskQuery == 2 and yearQuery != null">
+      and a.section_task_status = 2 and year (a.section_complete_time) = #{yearQuery}
+    </if>
+    <if test="taskQuery == 3 and yearQuery == null">
+      and a.process_task_status = 2
+    </if>
+    <if test="taskQuery == 3 and yearQuery != null">
+      and a.process_task_status = 2 and year (a.process_complete_time) = #{yearQuery}
+    </if>
+    <if test="taskQuery == 4 and yearQuery == null">
+      and a.produce_task_status = 2
+    </if>
+    <if test="taskQuery == 4 and yearQuery != null">
+      and a.produce_task_status = 2 and year (a.produce_complete_time) = #{yearQuery}
+    </if>
+    <if test="yearQuery != null and taskQuery == null">
+      and year (a.complete_time) = #{yearQuery}
+    </if>
+    order by a.order_no desc , a.code
+	</select>
+
+</mapper>

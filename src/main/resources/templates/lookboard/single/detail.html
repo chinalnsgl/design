@@ -511,7 +511,7 @@
   <div style="height: 3px; background-color: #1a2226; margin: 10px auto 30px 0;"></div>
   <div class="row">
     <!--生产令-->
-    <div class="col-md-2">
+    <!--<div class="col-md-2">
       <div class="box box-success box-solid">
         <div class="box-header with-border">
           <h3 class="box-title">生产令</h3>
@@ -527,9 +527,9 @@
           <button th:if="${project.tasks[3].status == 1}"style="margin-right: 5px" shiro:hasAnyPermissions="single:token:upload,single:token:download,single:token:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[3].id},'${project.code}', 'file_div_${project.tasks[3].id}',5)|">文件</button>
         </div>
       </div>
-    </div>
+    </div>-->
     <!--工艺任务-->
-    <div class="col-md-2">
+    <div class="col-md-2 col-md-offset-2">
       <div class="box box-solid" th:each="task: ${project.tasks}" th:if="${task.taskName.taskType.id == 3}" th:classappend="${task.status == 2 ? 'box-danger' : (task.compStatus == 0 ? 'box-default' : (task.compStatus == 1 ? 'box-warning' : 'box-success'))}">
         <div class="box-header with-border">
           <h3 class="box-title" th:text="${task.alias}" >原材料外协计划</h3>
