@@ -144,6 +144,15 @@ public class SingleController {
         return BaseResponse.toResponse(project);
     }
 
+    // 重点项目状态
+    @ResponseBody
+    @PostMapping("/focus")
+    @RequiresPermissions(value = {"single:unFocus","single:focus"},logical = Logical.OR)
+    public BaseResponse updateFocus(@RequestParam("id")Integer id, @RequestParam("focus") Integer focus) {
+        Project project = singleService.updateFocus(id, focus);
+        return BaseResponse.toResponse(project);
+    }
+
     // 编辑任务进度
     @ResponseBody
     @PostMapping("/editTask")

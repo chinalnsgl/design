@@ -58,6 +58,9 @@
     <if test="numQuery != null">
       and a.num = #{numQuery}
     </if>
+    <if test="focusQuery != null">
+      and a.focus = #{focusQuery}
+    </if>
     <if test="startTimeQuery != null">
       <![CDATA[ and a.create_time >= #{startTimeQuery} ]]>
     </if>

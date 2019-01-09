@@ -25,6 +25,9 @@ public interface SingleService {
     // 修改项目状态
     Project updateStatus(Integer id, Integer status, String comment);
 
+    // 修改重点项目状态
+    Project updateFocus(Integer id, Integer focus);
+
     // 项目任务列表
     BaseDataTableModel<Task> findTaskByQuery(SingleQuery query);
 
@@ -69,5 +72,4 @@ public interface SingleService {
 
     // 删除文件
     void delFile(Integer[] ids);
-
 }

@@ -39,6 +39,8 @@ public class Project implements Serializable {
 
     private Integer status = 1; // 状态 0：取消项目   1：未下达任务单   2：已下达任务单   3：暂停项目   4,已完成
 
+    private Integer focus = 0; // 重点项目 1， 非重点0
+
     private Integer projectClassify = 1; // 项目分类 1：设计类   2：非设计类
 
     private Integer preStatus; // 修改状态操作之前状态值

@@ -4,7 +4,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <section class="content-header">
       <h1>
-        多项目看板
+        重点项目
       </h1>
     </section>
     <section class="content">
@@ -19,66 +19,24 @@
                     <input type="text" id="nameQuery" name="nameQuery" class="form-control" placeholder="请输入项目名称">
                   </div>
                   <div class="form-group" style="margin-right: 10px;">
-                    <label>需方</label>
-                    <input type="text" id="demanderQuery" name="demanderQuery" class="form-control" placeholder="请输入需方">
-                  </div>
-                  <div class="form-group" style="margin-right: 10px;">
-                    <label>地点</label>
-                    <input type="text" id="addressQuery" name="addressQuery" class="form-control" placeholder="请输入地点">
-                  </div>
-                  <div class="form-group" style="margin-right: 10px;">
                     <label>项目号</label>
                     <input type="text" id="codeQuery" name="codeQuery" class="form-control" placeholder="请输入项目号">
                   </div>
-                  <div class="form-group" style="margin-right: 10px;">
-                    <label>数量</label>
-                    <input type="number" id="numQuery" name="numQuery" class="form-control" placeholder="请输入数量">
-                  </div>
-
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-inline ">
                   <div class="form-group" style="margin-right: 10px;">
                     <label>时间</label>
                     <input type="text" class="form-control datepicker" id="startTimeQuery" readonly="readonly" />
                     <span>至</span>
                     <input type="text" class="form-control datepicker" id="endTimeQuery" readonly="readonly" />
                   </div>
-                  <div class="form-group" style="margin-right: 10px;">
+                  <!--<div class="form-group" style="margin-right: 10px;">
                     <label>年度</label>
                     <select id="yearQuery" name="yearQuery" class="form-control select2" >
                       <option value="" selected="selected">请选择</option>
                     </select>
-                  </div>
-                  <div class="form-group" style="margin-right: 10px;">
-                    <label>状态</label>
-                    <select id="statusQuery" name="statusQuery" class="form-control select2" >
-                      <option value="2" selected="selected">未完成</option>
-                      <option value="4">已完成</option>
-                      <option value="0">取消</option>
-                      <option value="">全部</option>
-                    </select>
-                  </div>
-                  <div class="form-group" style="margin-right: 10px;">
-                    <label>设计科室</label>
-                    <select id="sectionQuery" name="sectionQuery" class="form-control select2" >
-                      <option value="" selected="selected">请选择</option>
-                      <option th:each="section:${sections}" th:value="${section.name}" th:text="${section.name}"></option>
-                    </select>
-                  </div>
-                  <div class="form-group" style="margin-right: 10px;">
-                    <label>重要度</label>
-                    <select id="focusQuery" name="focusQuery" class="form-control select2" >
-                      <option value="" selected="selected">请选择</option>
-                      <option value="1">重要</option>
-                      <option value="0">不重要</option>
-                    </select>
-                  </div>
+                  </div>-->
                   <button class="btn btn-vk" id="btn_search">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </div>
               </div>
-
             </div>
             <div class="box-body">
               <table id="projectTable" class="table table-bordered" width="100%">
@@ -152,16 +110,7 @@
           dom: "Tf<'row'<'col-sm-5 col-sm-offset-6'p><'col-sm-1'B>>t<'row DTTTFooter'<'col-sm-6'i><'col-sm-5'p><'col-sm-1'B>>",
           url: ctx + "/multi/list",
           data : {
-            codeQuery: $("#codeQuery").val(),
-            nameQuery: $("#nameQuery").val(),
-            sectionQuery : $("#sectionQuery").val(),
-            startTimeQuery: $("#startTimeQuery").val(),
-            endTimeQuery: $("#endTimeQuery").val(),
-            statusQuery : $("#statusQuery").val(),
-            demanderQuery: $("#demanderQuery").val(),
-            yearQuery : $("#yearQuery").val(),
-            addressQuery: $("#addressQuery").val(),
-            numQuery: $("#numQuery").val()
+            focusQuery: 1
           },
           fixedColumns: {
             rightColumns: 1
@@ -318,16 +267,16 @@
         $("#btn_search").click(function () {
           $.table.search({
             codeQuery: $("#codeQuery").val(),
-            yearQuery : $("#yearQuery").val(),
-            statusQuery : $("#statusQuery").val(),
-            sectionQuery : $("#sectionQuery").val(),
+            // yearQuery : $("#yearQuery").val(),
+            // statusQuery : $("#statusQuery").val(),
+            // sectionQuery : $("#sectionQuery").val(),
             nameQuery: $("#nameQuery").val(),
-            demanderQuery: $("#demanderQuery").val(),
-            addressQuery: $("#addressQuery").val(),
+            // demanderQuery: $("#demanderQuery").val(),
+            // addressQuery: $("#addressQuery").val(),
             startTimeQuery: $("#startTimeQuery").val(),
             endTimeQuery: $("#endTimeQuery").val(),
-            numQuery: $("#numQuery").val(),
-            focusQuery: $("#focusQuery").val()
+            // numQuery: $("#numQuery").val(),
+            focusQuery: 1
           });
         });
       });

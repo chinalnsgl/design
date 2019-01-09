@@ -21,6 +21,7 @@ public class MultiQuery implements Serializable {
     private Integer yearQuery;
     private String addressQuery;
     private Integer numQuery;
+    private Integer focusQuery;
 
     public int getPageNum() {
         return start / length + 1;

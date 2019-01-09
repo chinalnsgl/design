@@ -102,6 +102,15 @@ public class SingleServiceImpl implements SingleService {
         return project;
     }
 
+    // 修改重点项目状态
+    @Override
+    public Project updateFocus(Integer id, Integer focus) {
+        Project project = projectRepository.findById(id).get();
+        logService.saveLog(( focus == 0 ? "取消重点项目" : "重点项目："),  project.getName());
+        project.setFocus(focus);
+        return projectRepository.save(project);
+    }
+
     // 项目任务列表
     @Override
     public BaseDataTableModel<Task> findTaskByQuery(SingleQuery query) {

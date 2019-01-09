@@ -726,3 +726,5 @@ Array.prototype.distinct = function () {
   }
   return new_arr;
 };
+
+$.enter.keydown("btn_search");
