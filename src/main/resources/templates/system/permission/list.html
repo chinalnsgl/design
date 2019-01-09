@@ -18,38 +18,40 @@
                 <a shiro:hasPermission="permission:create" th:href="@{/sys/permission/create}" class="btn btn-info pull-right" >添加</a>
               </div>
               <div class="col-md-offset-1 col-md-4">
-                <form id="permissionForm" class="form-horizontal">
-                  <input type="hidden" id="id" name="id">
-                  <div class="box-body">
-                    <div class="form-group">
-                      <label for="description" class="col-sm-2 control-label">描述</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="description" name="description" placeholder="描述">
+                <div style="position:relative;" id="right_div">
+                  <form id="permissionForm" class="form-horizontal">
+                    <input type="hidden" id="id" name="id">
+                    <div class="box-body">
+                      <div class="form-group">
+                        <label for="description" class="col-sm-2 control-label">描述</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="description" name="description" placeholder="描述">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="permissionName" class="col-sm-2 control-label">权限名</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="permissionName" name="permissionName" placeholder="权限名" >
+                        </div>
+                      </div>
+                      <!--<div class="form-group">
+                        <label for="url" class="col-sm-2 control-label">Url</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="url" name="url" th:value="${permission.url}" placeholder="资源地址">
+                        </div>
+                      </div>-->
+                      <div class="form-group">
+                        <label for="orderNo" class="col-sm-2 control-label">排序</label>
+                        <div class="col-sm-10">
+                          <input type="number" class="form-control" id="orderNo" name="orderNo" placeholder="请输入分组排序">
+                        </div>
                       </div>
                     </div>
-                    <div class="form-group">
-                      <label for="permissionName" class="col-sm-2 control-label">权限名</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="permissionName" name="permissionName" placeholder="权限名" >
-                      </div>
+                    <div class="box-footer">
+                      <button shiro:hasPermission="permission:edit" type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
                     </div>
-                    <!--<div class="form-group">
-                      <label for="url" class="col-sm-2 control-label">Url</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="url" name="url" th:value="${permission.url}" placeholder="资源地址">
-                      </div>
-                    </div>-->
-                    <div class="form-group">
-                      <label for="orderNo" class="col-sm-2 control-label">排序</label>
-                      <div class="col-sm-10">
-                        <input type="number" class="form-control" id="orderNo" name="orderNo" placeholder="请输入分组排序">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="box-footer">
-                    <button shiro:hasPermission="permission:edit" type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -149,6 +151,14 @@
 
       });
 
+      window.onscroll = function () {
+        var top = document.body.scrollTop || document.documentElement.scrollTop;
+        if (top > 100) {
+          $("#right_div").css('top', top - 100);
+        } else {
+          $("#right_div").css('top', 0);
+        }
+      }
     </script>
 </body>
 </html>

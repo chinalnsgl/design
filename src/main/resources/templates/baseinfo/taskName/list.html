@@ -39,44 +39,46 @@
                   </thead>
                 </table></div>
                 <div class="col-md-5">
-                  <form id="taskNameForm" class="form-horizontal">
-                    <input type="hidden" id="id" name="id">
-                    <input type="hidden" id="code" name="code">
-                    <div class="box-body">
-                      <div class="form-group">
-                        <label for="name" class="col-sm-2 control-label">名称</label>
-                        <div class="col-sm-6">
-                          <input type="text" class="form-control" id="name" name="name" placeholder="请输入名称">
+                  <div style="position:relative;" id="right_div">
+                    <form id="taskNameForm" class="form-horizontal">
+                      <input type="hidden" id="id" name="id">
+                      <input type="hidden" id="code" name="code">
+                      <div class="box-body">
+                        <div class="form-group">
+                          <label for="name" class="col-sm-2 control-label">名称</label>
+                          <div class="col-sm-6">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="请输入名称">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="code" class="col-sm-2 control-label">任务类型</label>
+                          <div class="col-sm-6">
+                            <select id="taskType" class="form-control select2" name="taskType.id" style="width: 100%;">
+                              <option th:each="type:${taskType}" th:value="${type.id}" th:text="${type.name}"></option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="code" class="col-sm-2 control-label">科室类型</label>
+                          <div class="col-sm-6">
+                            <select id="sectionType" class="form-control select2" name="sectionType.id" style="width: 100%;">
+                              <option value="">请选择</option>
+                              <option th:each="type:${sectionType}" th:value="${type.id}" th:text="${type.name}"></option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="sectionType" class="col-sm-2 control-label">排序编号</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="orderNo" name="orderNo" placeholder="请输入任务编号">
+                          </div>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label for="code" class="col-sm-2 control-label">任务类型</label>
-                        <div class="col-sm-6">
-                          <select id="taskType" class="form-control select2" name="taskType.id" style="width: 100%;">
-                            <option th:each="type:${taskType}" th:value="${type.id}" th:text="${type.name}"></option>
-                          </select>
-                        </div>
+                      <div class="box-footer">
+                        <button type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
                       </div>
-                      <div class="form-group">
-                        <label for="code" class="col-sm-2 control-label">科室类型</label>
-                        <div class="col-sm-6">
-                          <select id="sectionType" class="form-control select2" name="sectionType.id" style="width: 100%;">
-                            <option value="">请选择</option>
-                            <option th:each="type:${sectionType}" th:value="${type.id}" th:text="${type.name}"></option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label for="sectionType" class="col-sm-2 control-label">排序编号</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="orderNo" name="orderNo" placeholder="请输入任务编号">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="box-footer">
-                      <button type="button" id="btn_edit" class="btn btn-info pull-right" disabled>修改</button>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -165,6 +167,15 @@
           }
         });
       });
+
+      window.onscroll = function () {
+        var top = document.body.scrollTop || document.documentElement.scrollTop;
+        if (top > 100) {
+          $("#right_div").css('top', top - 100);
+        } else {
+          $("#right_div").css('top', 0);
+        }
+      }
 
     </script>
 </body>
