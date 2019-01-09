@@ -394,7 +394,7 @@
           <h3 class="box-title">互动专区</h3>
         </div>
         <div class="box-body" style="display: block;">
-          <div th:each="message,stat:${project.messages}" th:if="${stat.index < 5}">
+          <div th:each="message,stat:${project.messages}" th:if="${stat.index < 3}">
             <span th:text="${message.user.name}"></span>：
             <span th:text="${#strings.abbreviate(message.content,10)}"></span>
           </div>
@@ -421,7 +421,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[1].startTime}">从<span th:text="${#dates.format(project.tasks[1].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[1].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${project.tasks[1].startTime}">时间</div>
-          <div>负责人：<span th:id="|emp_${project.tasks[1].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[1].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></span></div>
+          <div>负责人：<span th:id="|emp_${project.tasks[1].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[1].employees}" th:if="${stat.index < 3}" th:text="${employee.empName}"></span></span></div>
           <div>预计时间：<span th:text="${#dates.format(project.tasks[1].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${project.tasks[1].compStatus}">
@@ -452,7 +452,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[2].startTime}">从<span th:text="${#dates.format(project.tasks[2].startTime,'yyyy-MM-dd')}"></span>到<span th:text="${#dates.format(project.tasks[2].endTime,'yyyy-MM-dd')}"></span></div>
           <div th:unless="${project.tasks[2].startTime}">时间</div>
-          <div>负责人：<span th:id="|emp_${project.tasks[2].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[2].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></span></div>
+          <div>负责人：<span th:id="|emp_${project.tasks[2].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[2].employees}" th:if="${stat.index < 3}" th:text="${employee.empName}"></span></span></div>
           <div th:if="${project.tasks[2].contractNo}">合同号：<span th:text="${#strings.abbreviate(project.tasks[2].contractNo,10)}">合同号</span></div>
           <div th:unless="${project.tasks[2].contractNo}">合同号：</div>
           <div>状态：
@@ -483,7 +483,7 @@
             <div class="box-body" style="display: block;">
               <div th:if="${task.startTime}">从<span th:text="${#dates.format(task.startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(task.endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
               <div th:unless="${task.startTime}">时间</div>
-              <div>负责人：<span th:id="|emp_${task.id}|"><span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></span></div>
+              <div>负责人：<span th:id="|emp_${task.id}|"><span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 3}" th:text="${employee.empName}"></span></span></div>
               <div>预计时间：<span th:text="${#dates.format(task.planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
               <div>状态：
                 <span th:switch="${task.compStatus}">
@@ -514,7 +514,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${task.startTime}">从<span th:text="${#dates.format(task.startTime,'yyyy-MM-dd')}">3018-08-01</span>到<span th:text="${#dates.format(task.endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${task.startTime}">时间</div>
-          <div>负责人：<span th:id="|emp_${task.id}|"><span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></span></div>
+          <div>负责人：<span th:id="|emp_${task.id}|"><span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 3}" th:text="${employee.empName}"></span></span></div>
           <div>预计时间：<span th:text="${#dates.format(task.planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${task.compStatus}">
@@ -540,7 +540,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${task.startTime}">从<span th:text="${#dates.format(task.startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(task.endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${task.startTime}">时间</div>
-          <div>负责人：<span th:id="|emp_${task.id}|"><span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></span></div>
+          <div>负责人：<span th:id="|emp_${task.id}|"><span style="margin-left: 5px" th:each="employee,stat:${task.employees}" th:if="${stat.index < 3}" th:text="${employee.empName}"></span></span></div>
           <div>预计时间：<span th:text="${#dates.format(task.planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${task.compStatus}">
@@ -566,7 +566,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[3].startTime}">从<span th:text="${#dates.format(project.tasks[3].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[3].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${project.tasks[3].startTime}">时间</div>
-          <div>负责人：<span th:id="|emp_${project.tasks[3].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[3].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></span></div>
+          <div>负责人：<span th:id="|emp_${project.tasks[3].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[3].employees}" th:if="${stat.index < 3}" th:text="${employee.empName}"></span></span></div>
           <div>预计时间：<span th:text="${#dates.format(project.tasks[3].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${project.tasks[3].compStatus}">
@@ -599,7 +599,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[4].startTime}">从<span th:text="${#dates.format(project.tasks[4].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[4].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${project.tasks[4].startTime}">时间</div>
-          <div>负责人：<span th:id="|emp_${project.tasks[4].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[4].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></span></div>
+          <div>负责人：<span th:id="|emp_${project.tasks[4].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[4].employees}" th:if="${stat.index < 3}" th:text="${employee.empName}"></span></span></div>
           <div>预计时间：<span th:text="${#dates.format(project.tasks[4].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${project.tasks[4].compStatus}">
@@ -626,7 +626,7 @@
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[5].startTime}">从<span th:text="${#dates.format(project.tasks[5].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[5].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div th:unless="${project.tasks[5].startTime}">时间</div>
-          <div>负责人：<span th:id="|emp_${project.tasks[5].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[5].employees}" th:if="${stat.index < 5}" th:text="${employee.empName}"></span></span></div>
+          <div>负责人：<span th:id="|emp_${project.tasks[5].id}|"><span style="margin-left: 5px" th:each="employee,stat:${project.tasks[5].employees}" th:if="${stat.index < 3}" th:text="${employee.empName}"></span></span></div>
           <div>预计时间：<span th:text="${#dates.format(project.tasks[5].planFinishTime,'yyyy-MM-dd')}">2018-08-01</span></div>
           <div>状态：
             <span th:switch="${project.tasks[5].compStatus}">

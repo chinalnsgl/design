@@ -44,7 +44,7 @@
   </select>
 
   <select id="countDesignUnFinishedProjectByYear" resultType="java.lang.Integer">
-    select count(0) from project where status != 0 and year(create_time) = #{year} and
+    select count(0) from project where status != 0 and status != 1 and year(create_time) = #{year} and
     <![CDATA[ section_task_status < 2 ]]>
   </select>
 
@@ -57,7 +57,7 @@
   </select>
 
   <select id="countProcessUnFinishedProjectByYear" resultType="java.lang.Integer">
-    select count(0) from project where status != 0 and year(create_time) = #{year} and
+    select count(0) from project where status != 0 and status != 1 and year(create_time) = #{year} and
     <![CDATA[ process_task_status < 2 ]]>
   </select>
 
@@ -70,7 +70,7 @@
   </select>
 
   <select id="countProduceUnFinishedProjectByYear" resultType="java.lang.Integer">
-    select count(0) from project where status != 0 and year(create_time) = #{year} and
+    select count(0) from project where status != 0 and status != 1 and year(create_time) = #{year} and
     <![CDATA[ produce_task_status < 2 ]]>
   </select>
 
@@ -97,7 +97,7 @@
   </select>
 
   <select id="countDesignUnFinishedProjectByMonth" resultType="java.lang.Integer">
-    select count(0) from project where status != 0 and month(create_time) = #{month} and
+    select count(0) from project where status != 0 and status != 1 and month(create_time) = #{month} and
     <![CDATA[ section_task_status < 2 ]]>
   </select>
 
@@ -106,7 +106,7 @@
   </select>
 
   <select id="countProcessUnFinishedProjectByMonth" resultType="java.lang.Integer">
-    select count(0) from project where status != 0 and month(create_time) = #{month} and
+    select count(0) from project where status != 0 and status != 1 and month(create_time) = #{month} and
     <![CDATA[ process_task_status < 2 ]]>
   </select>
 
@@ -115,7 +115,7 @@
   </select>
 
   <select id="countProduceUnFinishedProjectByMonth" resultType="java.lang.Integer">
-    select count(0) from project where status != 0 and month(create_time) = #{month} and
+    select count(0) from project where status != 0 and status != 1 and month(create_time) = #{month} and
     <![CDATA[ produce_task_status < 2 ]]>
   </select>
 
