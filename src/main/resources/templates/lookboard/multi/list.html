@@ -67,14 +67,14 @@
                       <option th:each="section:${sections}" th:value="${section.name}" th:text="${section.name}"></option>
                     </select>
                   </div>
-                  <div class="form-group" style="margin-right: 10px;">
+                  <!--<div class="form-group" style="margin-right: 10px;">
                     <label>重要度</label>
                     <select id="focusQuery" name="focusQuery" class="form-control select2" >
                       <option value="" selected="selected">请选择</option>
                       <option value="1">重要</option>
                       <option value="0">不重要</option>
                     </select>
-                  </div>
+                  </div>-->
                   <button class="btn btn-vk" id="btn_search">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </div>
               </div>
@@ -326,8 +326,7 @@
             addressQuery: $("#addressQuery").val(),
             startTimeQuery: $("#startTimeQuery").val(),
             endTimeQuery: $("#endTimeQuery").val(),
-            numQuery: $("#numQuery").val(),
-            focusQuery: $("#focusQuery").val()
+            numQuery: $("#numQuery").val()
           });
         });
       });

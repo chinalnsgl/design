@@ -110,6 +110,7 @@
           dom: "Tf<'row'<'col-sm-5 col-sm-offset-6'p><'col-sm-1'B>>t<'row DTTTFooter'<'col-sm-6'i><'col-sm-5'p><'col-sm-1'B>>",
           url: ctx + "/multi/list",
           data : {
+            statusQuery : 2,
             focusQuery: 1
           },
           fixedColumns: {
@@ -268,7 +269,7 @@
           $.table.search({
             codeQuery: $("#codeQuery").val(),
             // yearQuery : $("#yearQuery").val(),
-            // statusQuery : $("#statusQuery").val(),
+            statusQuery : 2,
             // sectionQuery : $("#sectionQuery").val(),
             nameQuery: $("#nameQuery").val(),
             // demanderQuery: $("#demanderQuery").val(),
