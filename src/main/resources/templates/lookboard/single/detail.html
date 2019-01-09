@@ -126,16 +126,16 @@
         <a href="" class="btn btn-success" id="btn-download">下载</a>
         <button type="button" class="btn btn-danger" id="btn-del">删除</button>-->
         <button shiro:hasPermission="single:dt:upload" type="button" class="btn btn-info file-task btn-file" id="btn-upload-task">上传</button>
-        <a shiro:hasPermission="single:dt:download" href="" class="btn btn-success file-task btn-file" id="btn-download-task">下载</a>
+        <a shiro:hasPermission="single:dt:download" href="#" class="btn btn-success file-task btn-file" id="btn-download-task">下载</a>
         <button shiro:hasPermission="single:dt:delFile" type="button" class="btn btn-danger file-task btn-file" id="btn-del-task">删除</button>
         <button shiro:hasPermission="single:sign:upload" type="button" class="btn btn-info file-sign btn-file" id="btn-upload-sign">上传</button>
-        <a shiro:hasPermission="single:sign:download" href="" class="btn btn-success file-sign btn-file" id="btn-download-sign">下载</a>
+        <a shiro:hasPermission="single:sign:download" href="#" class="btn btn-success file-sign btn-file" id="btn-download-sign">下载</a>
         <button shiro:hasPermission="single:sign:delFile" type="button" class="btn btn-danger file-sign btn-file" id="btn-del-sign">删除</button>
         <button shiro:hasPermission="single:contract:upload" type="button" class="btn btn-info file-contract btn-file" id="btn-upload-contract">上传</button>
-        <a shiro:hasPermission="single:contract:download" href="" class="btn btn-success file-contract btn-file" id="btn-download-contract">下载</a>
+        <a shiro:hasPermission="single:contract:download" href="#" class="btn btn-success file-contract btn-file" id="btn-download-contract">下载</a>
         <button shiro:hasPermission="single:contract:delFile" type="button" class="btn btn-danger file-contract btn-file" id="btn-del-contract">删除</button>
         <button shiro:hasPermission="single:accept:upload" type="button" class="btn btn-info file-accept btn-file" id="btn-upload-accept">上传</button>
-        <a shiro:hasPermission="single:accept:download" href="" class="btn btn-success file-accept btn-file" id="btn-download-accept">下载</a>
+        <a shiro:hasPermission="single:accept:download" href="#" class="btn btn-success file-accept btn-file" id="btn-download-accept">下载</a>
         <button shiro:hasPermission="single:accept:delFile" type="button" class="btn btn-danger file-accept btn-file" id="btn-del-accept">删除</button>
       </div>
     </div>
@@ -858,7 +858,7 @@
         $("input:checkbox:checked").each(function () {
           temp_href += "&ids=" + $(this).val();
         });
-        $("#btn-download").attr("href",temp_href);
+        $(this).attr("href",temp_href);
       }
     });
 
