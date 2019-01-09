@@ -83,7 +83,7 @@
         if (callback) {
           $.table._selector.on('click', 'tbody tr', function () {
             if ($(this).hasClass("active")) {
-              return false;
+              return;
             } else {
               $.table._selector.find("tr").removeClass("active");
               $(this).addClass("active");
