@@ -241,7 +241,7 @@ public class SingleController {
     // 上传文件
     @ResponseBody
     @PostMapping("/upload")
-    @RequiresPermissions(value = {"single:dt:upload", "single:sign:upload", "single:contract:upload", "single:accept:upload"},logical = Logical.OR)
+    @RequiresPermissions(value = {"single:dt:upload", "single:sign:upload", "single:contract:upload", "single:accept:upload", "single:token:upload"},logical = Logical.OR)
     public BaseResponse upload(@RequestParam("file") MultipartFile[] file, @RequestParam("projectId") Integer projectId, @RequestParam("code") String code, @RequestParam("taskId") Integer taskId) {
         if (null != file && file.length > 0) {
             Task task = singleService.findTaskById(taskId);
@@ -275,7 +275,7 @@ public class SingleController {
 
     // 下载文件
     @GetMapping("/download")
-    @RequiresPermissions(value = {"single:dt:download", "single:sign:download", "single:contract:download", "single:accept:download"},logical = Logical.OR)
+    @RequiresPermissions(value = {"single:dt:download", "single:sign:download", "single:contract:download", "single:accept:download", "single:token:download"},logical = Logical.OR)
     public void download(HttpServletResponse response, @RequestParam("ids") Integer[] ids, @RequestParam("code")String code) {
         singleService.download(response, ids, code);
     }
@@ -283,7 +283,7 @@ public class SingleController {
     // 删除文件
     @ResponseBody
     @PostMapping("/delFile")
-    @RequiresPermissions(value = {"single:dt:delFile", "single:sign:delFile", "single:contract:delFile", "single:accept:delFile"},logical = Logical.OR)
+    @RequiresPermissions(value = {"single:dt:delFile", "single:sign:delFile", "single:contract:delFile", "single:accept:delFile", "single:token:delFile"},logical = Logical.OR)
     public BaseResponse delFile(@RequestParam("ids") Integer[] ids) {
         singleService.delFile(ids);
         return BaseResponse.STATUS_200;

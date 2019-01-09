@@ -137,6 +137,9 @@
         <button shiro:hasPermission="single:accept:upload" type="button" class="btn btn-info file-accept btn-file" id="btn-upload-accept">上传</button>
         <a shiro:hasPermission="single:accept:download" href="#" class="btn btn-success file-accept btn-file" id="btn-download-accept">下载</a>
         <button shiro:hasPermission="single:accept:delFile" type="button" class="btn btn-danger file-accept btn-file" id="btn-del-accept">删除</button>
+        <button shiro:hasPermission="single:token:upload" type="button" class="btn btn-info file-token btn-file" id="btn-upload-token">上传</button>
+        <a shiro:hasPermission="single:token:download" href="#" class="btn btn-success file-token btn-file" id="btn-download-token">下载</a>
+        <button shiro:hasPermission="single:token:delFile" type="button" class="btn btn-danger file-token btn-file" id="btn-del-token">删除</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -507,8 +510,26 @@
   </div>
   <div style="height: 3px; background-color: #1a2226; margin: 10px auto 30px 0;"></div>
   <div class="row">
+    <!--生产令-->
+    <div class="col-md-2">
+      <div class="box box-success box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">生产令</h3>
+        </div>
+        <div class="box-body" style="display: block;">
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+        </div>
+        <div class="box-footer">
+          <button th:if="${project.tasks[3].status == 1}"style="margin-right: 5px" shiro:hasAnyPermissions="single:token:upload,single:token:download,single:token:delFile" class="btn btn-success btn-xs pull-right" th:onclick="|uploadModel(${project.id},${project.tasks[3].id},'${project.code}', 'file_div_${project.tasks[3].id}',5)|">文件</button>
+        </div>
+      </div>
+    </div>
     <!--工艺任务-->
-    <div class="col-md-2 col-md-offset-2">
+    <div class="col-md-2">
       <div class="box box-solid" th:each="task: ${project.tasks}" th:if="${task.taskName.taskType.id == 3}" th:classappend="${task.status == 2 ? 'box-danger' : (task.compStatus == 0 ? 'box-default' : (task.compStatus == 1 ? 'box-warning' : 'box-success'))}">
         <div class="box-header with-border">
           <h3 class="box-title" th:text="${task.alias}" >原材料外协计划</h3>
@@ -564,6 +585,12 @@
       <div class="box box-solid" th:classappend="${project.tasks[3].status == 2 ? 'box-danger' : (project.tasks[3].compStatus == 0 ? 'box-default' : (project.tasks[3].compStatus == 1 ? 'box-warning' : 'box-success'))}">
         <div class="box-header with-border">
           <h3 class="box-title" th:text="${project.tasks[3].alias}" >技术协议</h3>
+          <div th:id="|file_div_${project.tasks[3].id}|" hidden>
+            <div class="row" th:each="image: ${project.tasks[3].images}">
+              <input style="margin-left: 20px" type="checkbox" name="ids" th:value="${image.id}" >
+              <label style="margin-left: 10px" th:text="${image.name}"></label>
+            </div>
+          </div>
         </div>
         <div class="box-body" style="display: block;">
           <div th:if="${project.tasks[3].startTime}">从<span th:text="${#dates.format(project.tasks[3].startTime,'yyyy-MM-dd')}">2018-08-01</span>到<span th:text="${#dates.format(project.tasks[3].endTime,'yyyy-MM-dd')}">2018-08-01</span></div>
@@ -811,6 +838,8 @@
       case 4:
         $(".file-accept").show();
         break;
+      case 5:
+        $(".file-token").show();
     }
     $("#file_group").empty().append($("#" + fileDiv).clone(true));
     $("#file_group").children(":first").show();
@@ -841,7 +870,7 @@
     $(window).resize();
 
     // 上传文件
-    $("#btn-upload-task,#btn-upload-sign,#btn-upload-contract,#btn-upload-accept").click(function(){
+    $("#btn-upload-task,#btn-upload-sign,#btn-upload-contract,#btn-upload-accept,#btn-upload-token").click(function(){
       $("#uploadForm").ajaxSubmit({
         success: function (result) {
           if (result.status === 200) {
@@ -858,7 +887,7 @@
     });
 
     // 下载文件
-    $("#btn-download-task,#btn-download-sign,#btn-download-contract,#btn-download-accept").click(function () {
+    $("#btn-download-task,#btn-download-sign,#btn-download-contract,#btn-download-accept,#btn-download-token").click(function () {
       if ($("input:checkbox:checked").length == 0) {
         $.modal.warning("请至少选择一个文件");
         return false;
@@ -872,7 +901,7 @@
     });
 
     // 删除文件
-    $("#btn-del-task,#btn-del-sign,#btn-del-contract,#btn-del-accept").click(function () {
+    $("#btn-del-task,#btn-del-sign,#btn-del-contract,#btn-del-accept,#btn-del-token").click(function () {
       if ($("input:checkbox:checked").length == 0) {
         $.modal.warning("请至少选择一个文件");
       } else {
