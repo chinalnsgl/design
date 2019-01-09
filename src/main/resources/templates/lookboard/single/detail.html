@@ -351,8 +351,8 @@
   <button style="margin-right: 10px" th:if="${project.status == 2}" shiro:hasPermission="single:cancel" type="button" class="btn btn-danger pull-right" th:onclick="|updateStatus( 0)|" >取消</button>
   <button style="margin-right: 10px" th:if="${project.status == 0}" shiro:hasPermission="single:regain" type="button" class="btn btn-success pull-right" th:onclick="|updateStatus(2)|" >恢复</button>
   <a style="margin-right: 10px" shiro:hasPermission="single:update" class="btn btn-warning pull-right" th:href="@{'/board/single/update/'+${project.id}}">修改项目</a>
-  <button style="margin-right: 10px" th:if="${project.focus == 1}" shiro:hasPermission="single:unFocus" type="button" class="btn btn-danger pull-right" th:onclick="|updateFocus($(project.id), 0)|" >取消重点</button>
-  <button style="margin-right: 10px" th:if="${project.focus == 0}" shiro:hasPermission="single:focus" type="button" class="btn btn-success pull-right" th:onclick="|updateFocus($(project.id), 1)|" >重点项目</button>
+  <button style="margin-right: 10px" th:if="${project.focus == 1}" shiro:hasPermission="single:unFocus" type="button" class="btn btn-danger pull-right" th:onclick="|updateFocus(${project.id}, 0)|" >取消重点</button>
+  <button style="margin-right: 10px" th:if="${project.focus == 0}" shiro:hasPermission="single:focus" type="button" class="btn btn-success pull-right" th:onclick="|updateFocus(${project.id}, 1)|" >重点项目</button>
   <h1>
     单项目看板
   </h1>
@@ -789,8 +789,10 @@
   }
 
   // 重点项目和取消
-  function updateFocus(focus) {
-    $.operate.post(ctx + "board/single/focus",{focus: focus});
+  function updateFocus(id, focus) {
+    $.operate.post(ctx + "board/single/focus",{id: id, focus: focus}, function () {
+      location.reload();
+    });
   }
 
   // 上传模态框
