@@ -93,6 +93,8 @@
         // 加载列表
         $.table.init({
           id: "projectTable",
+          info: true,
+          fixedHeader: true,
           scrollX: true,
           dom: "Tf<'row'<'col-sm-6 col-sm-offset-6'p>>t<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
           url: ctx + "integrate/schedule/list",

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.design.modules.integrate.status.mapper.StatusMapper">
+
+  <select id="findProjectByQuery" resultType="com.zw.design.modules.integrate.status.model.StatusModel" parameterType="com.zw.design.modules.integrate.status.query.StatusQuery">
+    select
+    a.id,
+    a.name,
+    a.demander,
+    a.address,
+    a.code,
+    a.code_special,
+    a.num,
+    a.design_plan_time,
+    a.design_depts,
+    a.section_task_status,
+    a.process_task_status,
+    a.produce_task_status,
+    a.comment,
+    a.status as projectStatus,
+    b.comp_status as signStatus,
+    c.comp_status as contractStatus,
+    d.comp_status as debugStatus,
+    e.comp_status as acceptStatus,
+    f.comp_status as saveStatus,
+    g.messageCount
+    from project as a
+    left join task as b on a.id = b.project_id and b.task_name_id = 2
+    left join task as c on a.id = c.project_id and c.task_name_id = 3
+    left join task as d on a.id = d.project_id and d.task_name_id = 4
+    left join task as e on a.id = e.project_id and e.task_name_id = 5
+    left join task as f on a.id = f.project_id and f.task_name_id = 6
+    left join (
+    select count(id) as messageCount ,project_id from message group by project_id
+    ) as g on a.id = g.project_id
+    where 1 = 1
+    <![CDATA[ and a.status > 1 ]]>
+    and a.status > 1
+    <if test="taskQuery == 1 and statusQuery == 0">
+      and b.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 1 and statusQuery == 1">
+      and b.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 1 and statusQuery == 2">
+      and b.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 2 and statusQuery == 0">
+      and c.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 2 and statusQuery == 1">
+      and c.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 2 and statusQuery == 2">
+      and c.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 3 and statusQuery == 0">
+      and d.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 3 and statusQuery == 1">
+      and d.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 3 and statusQuery == 2">
+      and d.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 4 and statusQuery == 0">
+      and e.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 4 and statusQuery == 1">
+      and e.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 4 and statusQuery == 2">
+      and e.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 5 and statusQuery == 0">
+      and f.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 5 and statusQuery == 1">
+      and f.comp_status = #{statusQuery}
+    </if>
+    <if test="taskQuery == 5 and statusQuery == 2">
+      and f.comp_status = #{statusQuery}
+    </if>
+    order by a.order_no desc , a.code
+	</select>
+
+</mapper>

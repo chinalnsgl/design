@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include :: header"></head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <section class="content-header">
+      <h1>
+        多项目看板
+      </h1>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="row">
+                <div class="form-inline ">
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>状态</label>
+                    <select id="taskQuery" name="taskQuery" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="1">技术协议</option>
+                      <option value="2">合同</option>
+                      <option value="3">调试运行</option>
+                      <option value="4">验收</option>
+                      <option value="5">图纸存档</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-right: 10px;">
+                    <label>状态</label>
+                    <select id="statusQuery" name="statusQuery" class="form-control select2" >
+                      <option value="" selected="selected">全部</option>
+                      <option value="0">未开始</option>
+                      <option value="1">执行中</option>
+                      <option value="2">已完成</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-vk" id="btn_search">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </div>
+              </div>
+
+            </div>
+            <div class="box-body">
+              <table id="projectTable" class="table table-bordered" width="100%">
+                <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>项目名称</th>
+                  <th>需方</th>
+                  <th>安装地点</th>
+                  <th>项目号</th>
+                  <th>数量</th>
+                  <th>设计计划<br>完成时间</th>
+                  <th>设计科室</th>
+                  <th>技术<br>协议</th>
+                  <th>合同</th>
+                  <th>设计</th>
+                  <th>工艺</th>
+                  <th>制造<br>及安装</th>
+                  <th>调试<br>运行</th>
+                  <th>验收</th>
+                  <th>图纸<br>存档</th>
+                  <th>备注</th>
+                  <th>操作</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div id="goToTop" th:style="|position:fixed; right:0px; bottom:10px; width:20px; height:75px; background-image: url(@{/img/gototop.gif}); cursor:pointer|"></div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+      var ctx = ctx + 'integrate'
+      var statusName = ["未开始","执行中","已完成","已取消"];
+      var statusColor = ["", "#f39c12", "#00a65a"];
+
+
+      $(function () {
+        // 加载列表
+        $.table.init({
+          buttons: [
+            {
+              extend: 'excel',
+              text: '导出Excel',
+              className: 'btn btn-success pull-right',
+              filename: '多项目看板',
+              exportOptions: {
+                columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+              }
+            }
+          ],
+          id: "projectTable",
+          info: true,
+          fixedHeader: true,
+          scrollX: true,
+          dom: "Tf<'row'<'col-sm-5 col-sm-offset-6'p><'col-sm-1'B>>t<'row DTTTFooter'<'col-sm-6'i><'col-sm-5'p><'col-sm-1'B>>",
+          url: ctx + "/status/list",
+          fixedColumns: {
+            rightColumns: 1
+          },
+          columns: [
+            {
+              data: null,
+              width: "8px",
+              render : function (data, type, row, meta) {
+                // debugger;
+                return meta.row + 1 + meta.settings._iDisplayStart;
+              }
+            },
+            { data: "name",
+              width: "80px"
+            },
+            { data: "demander",
+              width: "80px"
+            },
+            { data: "address",
+              width: "80px"
+            },
+            { data: "code",
+              width: "100px"
+            },
+            { data: "num",
+              width: "30px"
+            },
+            { data: "designPlanTime",
+              width: "120px"
+            },
+            { data: "designDepts",
+              width: "140px",
+              render : function(data, type, row, meta) {
+                return data.split(',').join('<br>');
+              }
+            },
+            { data: "signStatus",
+              width: "70px",
+              render: function (data, type, row, meta) {
+                return statusName[data];
+              },
+              createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData.projectStatus !== 0) {
+                  $(td).css("background-color", statusColor[cellData]);
+                }
+              }
+            },
+            { data: "contractStatus",
+              width: "70px",
+              render: function (data, type, row, meta) {
+                return statusName[data];
+              },
+              createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData.projectStatus !== 0) {
+                  $(td).css("background-color", statusColor[cellData]);
+                }
+              }
+            },
+
+            { data: "sectionTaskStatus",
+              width: "70px",
+              render: function (data, type, row, meta) {
+                return statusName[data];
+              },
+              createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData.projectStatus !== 0) {
+                  $(td).css("background-color", statusColor[cellData]);
+                }
+              }
+            },
+            { data: "processTaskStatus",
+              width: "70px",
+              render: function (data, type, row, meta) {
+                return statusName[data];
+              },
+              createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData.projectStatus !== 0) {
+                  $(td).css("background-color", statusColor[cellData]);
+                }
+              }
+            },
+            { data: "produceTaskStatus",
+              width: "70px",
+              render: function (data, type, row, meta) {
+                return statusName[data];
+              },
+              createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData.projectStatus !== 0) {
+                  $(td).css("background-color", statusColor[cellData]);
+                }
+              }
+            },
+            { data: "debugStatus",
+              width: "70px",
+              render: function (data, type, row, meta) {
+                return statusName[data];
+              },
+              createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData.projectStatus !== 0) {
+                  $(td).css("background-color", statusColor[cellData]);
+                }
+              }
+            },
+            { data: "acceptStatus",
+              width: "70px",
+              render: function (data, type, row, meta) {
+                return statusName[data];
+              },
+              createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData.projectStatus !== 0) {
+                  $(td).css("background-color", statusColor[cellData]);
+                }
+              }
+            },
+            { data: "saveStatus",
+              width: "70px",
+              render: function (data, type, row, meta) {
+                return statusName[data];
+              },
+              createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData.projectStatus !== 0) {
+                  $(td).css("background-color", statusColor[cellData]);
+                }
+              }
+            },
+            { data: "comment",
+              width: "100px",
+              render : function(data, type, row, meta) {
+                if (data.length > 10) {
+                  return '<span title="' + data + '">' + data.substr(0, 10) + '...</span>';
+                }
+                return data;
+              }
+            },
+            { data: "id",
+              "width": "40px",
+              render : function(data, type, row, meta) {
+                if (row.messageCount > 0) {
+                  return '<a target="_blank" style="margin-right: 5px;" class="btn btn-success btn-xs many-view" href="' + ctx + '/single/' + data + '">查看</a>';
+                }
+                return '<a target="_blank" style="margin-right: 5px" class="btn btn-info btn-xs many-view" href="' + ctx + '/single/' + data + '">查看</a>';
+              }
+            }
+          ],
+          createdRow: function (row, data, index) {
+            $('td',row).css("border-top", '1px solid black');
+            if (data.projectStatus === 0) {
+              $(row).css('background', '#FF0000');
+            }
+          }
+        });
+        // 搜索
+        $("#btn_search").click(function () {
+          $.table.search({
+            taskQuery: $("#taskQuery").val(),
+            statusQuery : $("#statusQuery").val()
+          });
+        });
+      });
+
+    </script>
+</body>
+</html>
+
+
